@@ -1,0 +1,93 @@
+// Quasar SCSS (& Sass) Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass/SCSS variables found in Quasar's source Sass/SCSS files.
+
+// Check documentation for full list of Quasar variables
+
+// Your own variables (that are declared here) and Quasar's own
+// ones will be available out of the box in your .vue/.scss/.sass files
+
+// It's highly recommended to change the default colors
+// to match your app's branding.
+// Tip: Use the "Theme Builder" on Quasar's documentation website.
+
+// Custom
+$primary: #3eaa79;
+$secondary: #3a5d7c;
+$accent: #7098b2;
+
+// Quasar base
+// $primary: #1976d2;
+// $secondary: #26a69a;
+// $accent: #9c27b0;
+
+$dark : #1d1d1d;
+$dark-page : #242424;
+
+$positive : #009623;
+$negative : #ff001e;
+$info : #0099b8;
+$warning : #ffbb00;
+
+:root {
+  --text-base: #213547;
+  --title-text: #1f1f1f;
+  --legend: #1f1f1f;
+  --x-hours-gridline: #5f5f5f78;
+  --x-hours-labels: #1f1f1f;
+  --x-categories-gridline: #5f5f5f78;
+  --x-categories-labels: #1f1f1f;
+  --y-gridline: #5f5f5f78;
+  --y-plotlines: #0b7fab;
+  --y-plotlines-label: #383838;
+  --y-plotbands-label: #1f1f1f;
+  --y-plotbands-odd: rgba(0, 0, 0, 0);
+  --y-plotbands-even: rgba(68, 170, 213, 0.1);
+  --y-title: #1f1f1f;
+  --y-labels: #1f1f1f;
+  --temp-series-max-temp: #ec644b;
+  --temp-series-max-feel-temp: #ec644b;
+  --temp-series-min-temp: #1e8bc3;
+  --temp-series-min-feel-temp: #1e8bc3;
+  --precipitation: #006992;
+  --clouds: #fad859;
+  --wind-speed: #006992;
+  --humidity: #03a678;
+  --air-pressure-high: #f2784b;
+  --air-pressure-low: #006992;
+  --air-pressure-break: #1e8bc3;
+
+  body {
+    &.body {
+      &--dark {
+        --text-base: rgba(255, 255, 255, .87);
+        --title-text: #dbdbdb;
+        --legend: #dbdbdb;
+        --x-hours-gridline: #85858578;
+        --x-hours-labels: #dbdbdb;
+        --x-categories-gridline: #85858578;
+        --x-categories-labels: #dbdbdb;
+        --y-gridline: #858585;
+        --y-plotlines: #0b7fab;
+        --y-plotlines-label: #dbdbdb;
+        --y-plotbands: #c0c0c0;
+        --y-plotbands-label: #dbdbdb;
+        --y-plotbands-odd: rgba(0, 0, 0, 0);
+        --y-plotbands-even: rgba(68, 170, 213, 0.1);
+        --y-title: #dbdbdb;
+        --y-labels: #dbdbdb;
+        --temp-series-max-temp: #ec644b;
+        --temp-series-max-feel-temp: #ec644b;
+        --temp-series-min-temp: #1e8bc3;
+        --temp-series-min-feel-temp: #1e8bc3;
+        --precipitation: #006992;
+        --clouds: #fad859;
+        --wind-speed: #006992;
+        --humidity: #03a678;
+        --air-pressure-high: #f2784b;
+        --air-pressure-low: #006992;
+      }
+    }
+  }
+}
