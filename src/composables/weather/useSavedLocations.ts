@@ -1,16 +1,10 @@
-import { ref, reactive, toRefs } from 'vue'
-
-/* Defining the shape of the object Location. */
-interface Location {
-  lat: string
-  lng: string
-  title: string
-}
+import { ref, reactive, toRefs, onBeforeMount } from 'vue'
+import TSavedLocation from '@/types/weather/TSavedLocation'
 
 /* Defining the shape of the object State. */
 interface State {
   hasSavedLocations: boolean
-  savedLocations: Location[]
+  savedLocations: TSavedLocation[]
 }
 
 /* Creating a reactive object that is of type State. */
@@ -24,20 +18,31 @@ const state = reactive<State>({
  * @returns An object with the saveLocation function and the state object.
  */
 export default function useSavedLocations() {
-  function saveLocation(coordinates: string[], activeLocation: string): void {
-    const newLocation = ref<Location>({
+
+  const checkForSavedLocations = () => {
+    onBeforeMount(() => {
+      if (localStorage.getItem('the_app-weather-locations')) {
+        state.savedLocations = JSON.parse(localStorage.getItem('the_app-weather-locations') as string)
+        state.hasSavedLocations = true
+      }
+    })
+  }
+
+  function saveLocation(coordinates: string[], activeLocation: string, activeRegion: string): void {
+    const newLocation = ref<TSavedLocation>({
       lat: coordinates[0],
       lng: coordinates[1],
       title: activeLocation,
+      region: activeRegion
     })
     let storageValue = []
 
-    if (localStorage.getItem('savedLocations')) {
+    if (localStorage.getItem('the_app-weather-locations')) {
       /* Parsing the string that is stored in localStorage to an array of objects. */
-      storageValue = JSON.parse(localStorage.getItem('savedLocations') as string)
+      storageValue = JSON.parse(localStorage.getItem('the_app-weather-locations') as string)
 
       /* Checking if the location is already saved. */
-      if (storageValue.some((e: Location) => e.title === newLocation.value.title)) {
+      if (storageValue.some((e: TSavedLocation) => e.title === newLocation.value.title)) {
         return
       }
 
@@ -46,27 +51,42 @@ export default function useSavedLocations() {
       if (storageValue.length > 2) {
         storageValue.pop()
         storageValue.unshift(newLocation.value)
-        localStorage.setItem('savedLocations', JSON.stringify(storageValue))
+        localStorage.setItem('the_app-weather-locations', JSON.stringify(storageValue))
         state.savedLocations = storageValue
         return
       }
 
       /* Adding the newLocation to the beginning of the array and then saving it to localStorage. */
       storageValue.unshift(newLocation.value)
-      localStorage.setItem('savedLocations', JSON.stringify(storageValue))
+      localStorage.setItem('the_app-weather-locations', JSON.stringify(storageValue))
       state.savedLocations = storageValue
       return
     }
 
     /* Adding the newLocation to the storageValue array and then saving it to localStorage. */
     storageValue.push(newLocation.value)
-    localStorage.setItem('savedLocations', JSON.stringify(storageValue))
+    localStorage.setItem('the_app-weather-locations', JSON.stringify(storageValue))
     state.savedLocations = storageValue
     state.hasSavedLocations = true
   }
 
+  const removeSavedLocation = (title: string) => {
+    let storageValue = JSON.parse(localStorage.getItem('the_app-weather-locations') as string)
+    const newFavourites = storageValue.filter((location: TSavedLocation) => {
+      return location.title !== title
+    })
+    storageValue = newFavourites
+    if (storageValue.length === 0) {
+      state.hasSavedLocations = false
+    }
+    localStorage.setItem('the_app-weather-locations', JSON.stringify(storageValue))
+    state.savedLocations = storageValue
+  }
+
   return {
+    checkForSavedLocations,
     saveLocation,
+    removeSavedLocation,
     /* A function that is provided by Vue. It is used to convert a reactive object into a plain object
     with reactive properties. */
     ...toRefs(state),

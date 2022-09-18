@@ -21,7 +21,9 @@ const coordinates = ref<string[]>([])
 const theme = ref<string>('')
 const timeseries = ref<TTimeSeries[]>([])
 
-const { hasSavedLocations } = useSavedLocations()
+const { hasSavedLocations, checkForSavedLocations } = useSavedLocations()
+
+checkForSavedLocations()
 
 // A function that is called when the `weatherData` is emitted from the `Search` component. It sets the
 // `weatherData` and `timeseries` refs.
@@ -84,7 +86,8 @@ watch(activeRegion, (value: string) => {
   <q-page class="page-weather">
     <Search @weatherData="onWeatherData" @activeLocation="onActiveLocation" @activeRegion="onActiveRegion"
       @coordinates="onCoordinates" />
-    <SavedLocations v-if="hasSavedLocations" />
+    <SavedLocations @weatherData="onWeatherData" @activeLocation="onActiveLocation" @activeRegion="onActiveRegion"
+      v-if="hasSavedLocations" />
     <template v-if="weatherData">
       <Now :timeSeries="weatherData.properties.timeseries" :activeLocation="activeLocation" :activeRegion="activeRegion"
         :units="weatherData.properties.meta.units" :coordinates="coordinates" />
@@ -106,15 +109,6 @@ watch(activeRegion, (value: string) => {
 
 <style lang="scss" scoped>
 .page-weather {
-  // background: #141e30;
-  // /* fallback for old browsers */
-  // background: -webkit-linear-gradient(to top, #141e30, #243b55);
-  // /* Chrome 10-25, Safari 5.1-6 */
-  // background: linear-gradient(to top,
-  //     #141e30,
-  //     #243b55);
-  // /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  // justify-content: center;
 
   .fav-loc {
     position: fixed;

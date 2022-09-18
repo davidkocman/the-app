@@ -30,7 +30,7 @@ const props = defineProps({
 
 const { timeSeries } = toRefs(props)
 const { minTemp, maxTemp } = useFindMinMaxTemp(timeSeries)
-const { saveLocation } = useSavedLocations()
+const { saveLocation, savedLocations } = useSavedLocations()
 </script>
 
 <template>
@@ -40,8 +40,8 @@ const { saveLocation } = useSavedLocations()
         <div class="text-h4 text-weight-bold q-mb-l text-spacing-2">
           {{ activeLocation }}
           <span>
-            <q-icon color="orange-7" name="add_location" class="cursor-pointer"
-              @click="saveLocation(coordinates, activeLocation)">
+            <q-icon v-if="!savedLocations.some(el => el.title === activeLocation)" color="orange-7" name="add_location"
+              class="cursor-pointer" @click="saveLocation(coordinates, activeLocation, activeRegion)">
               <q-tooltip transition-show="scale" transition-hide="scale" class="bg-primary text-body2">Uložit lokalitu
               </q-tooltip>
             </q-icon>

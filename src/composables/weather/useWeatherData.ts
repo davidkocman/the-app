@@ -1,4 +1,5 @@
 import TWeatherData from '@/types/weather/TWeatherData'
+import TSavedLocation from '@/types/weather/TSavedLocation'
 import MWeatherData from '@/model/weather/MWeatherData'
 import TModel from '@/types/weather/TModel'
 import { ref } from 'vue'
@@ -52,9 +53,24 @@ export default function useWeatherData() {
         `https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${val.lat}&lon=${val.lng}`
       )
       weatherData.value = await response.json()
+    } catch (error) {
+      console.log(error)
+    } finally {
       $q.loading.hide()
-    } catch (e) {
-      console.log(e)
+    }
+  }
+
+  const getSavedLocationWeatherData = async (location: TSavedLocation): Promise<void> => {
+    $q.loading.show()
+    try {
+      const response = await fetch(
+        `https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${location.lat}&lon=${location.lng}`
+      )
+      weatherData.value = await response.json()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      $q.loading.hide()
     }
   }
 
@@ -63,6 +79,7 @@ export default function useWeatherData() {
     model,
     filterFn,
     getWeatherData,
+    getSavedLocationWeatherData,
     weatherData,
   }
 }
