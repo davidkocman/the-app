@@ -86,8 +86,8 @@ watch(activeRegion, (value: string) => {
   <q-page class="page-weather">
     <Search @weatherData="onWeatherData" @activeLocation="onActiveLocation" @activeRegion="onActiveRegion"
       @coordinates="onCoordinates" />
-    <SavedLocations @weatherData="onWeatherData" @activeLocation="onActiveLocation" @activeRegion="onActiveRegion"
-      v-if="hasSavedLocations" />
+    <SavedLocations v-if="hasSavedLocations" @weatherData="onWeatherData" @activeLocation="onActiveLocation"
+      @activeRegion="onActiveRegion" />
     <template v-if="weatherData">
       <Now :timeSeries="weatherData.properties.timeseries" :activeLocation="activeLocation" :activeRegion="activeRegion"
         :units="weatherData.properties.meta.units" :coordinates="coordinates" />

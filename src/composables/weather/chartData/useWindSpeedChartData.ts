@@ -12,7 +12,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
   }
 
   function getCategories() {
-    const weekday = ['Nedela', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota']
+    const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sobota']
     const categories: string[] = []
     timeseries.value.forEach((item: TTimeSeries) => {
       categories.push(
@@ -47,7 +47,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
       useGPUTranslations: true,
     },
     title: {
-      text: 'Rýchlosť vetra',
+      text: 'Wind speed',
       style: {
         color: 'var(--title-text)',
       },
@@ -128,7 +128,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           color: 'var(--y-plotbands-even)',
           label: {
             x: 20,
-            text: 'Vánok',
+            text: 'Breeze',
             style: {
               color: 'var(--y-plotbands-label)',
             },
@@ -140,7 +140,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           color: 'var(--y-plotbands-odd)',
           label: {
             x: 20,
-            text: 'Slabý vietor',
+            text: 'Light wind',
             style: {
               color: 'var(--y-plotbands-label)',
             },
@@ -152,7 +152,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           color: 'var(--y-plotbands-even)',
           label: {
             x: 20,
-            text: 'Mierny vietor',
+            text: 'Moderate wind',
             style: {
               color: 'var(--y-plotbands-label)',
             },
@@ -164,7 +164,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           color: 'var(--y-plotbands-odd)',
           label: {
             x: 20,
-            text: 'Dosť čerstvý vietor',
+            text: 'Fairly fresh wind',
             style: {
               color: 'var(--y-plotbands-label)',
             },
@@ -176,7 +176,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           color: 'var(--y-plotbands-even)',
           label: {
             x: 20,
-            text: 'Čerstvý vietor',
+            text: 'Fresh wind',
             style: {
               color: 'var(--y-plotbands-label)',
             },
@@ -188,7 +188,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           color: 'var(--y-plotbands-odd)',
           label: {
             x: 20,
-            text: 'Silný vietor',
+            text: 'Strong wind',
             style: {
               color: 'var(--y-plotbands-label)',
             },
@@ -200,7 +200,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           color: 'var(--y-plotbands-even)',
           label: {
             x: 20,
-            text: 'Prudký vietor',
+            text: 'Stronger wind',
             style: {
               color: 'var(--y-plotbands-label)',
             },
@@ -212,7 +212,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           color: 'var(--y-plotbands-odd)',
           label: {
             x: 20,
-            text: 'Búrlivý vietor',
+            text: 'Stormy wind',
             style: {
               color: 'var(--y-plotbands-label)',
             },
@@ -224,7 +224,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           color: 'var(--y-plotbands-even)',
           label: {
             x: 20,
-            text: 'Víchrica',
+            text: 'A gale',
             style: {
               color: 'var(--y-plotbands-label)',
             },
@@ -236,7 +236,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           color: 'var(--y-plotbands-odd)',
           label: {
             x: 20,
-            text: 'Silná víchrica',
+            text: 'Strong gale',
             style: {
               color: 'var(--y-plotbands-label)',
             },
@@ -248,7 +248,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           color: 'var(--y-plotbands-even)',
           label: {
             x: 20,
-            text: 'Mohutná víchrica',
+            text: 'A massive gale',
             style: {
               color: 'var(--y-plotbands-label)',
             },
@@ -259,7 +259,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           color: 'var(--y-plotbands-odd)',
           label: {
             x: 20,
-            text: 'Orkán',
+            text: 'Hurricane',
             style: {
               color: 'var(--y-plotbands-label)',
             },
@@ -269,7 +269,7 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
     },
     series: [
       {
-        name: 'Rýchlosť vetra',
+        name: 'Wind speed',
         data: getWindSpeed(),
         type: 'spline',
         marker: {

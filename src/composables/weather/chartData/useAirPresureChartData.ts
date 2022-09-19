@@ -20,7 +20,7 @@ export default function useAirPresureChartData(timeseries: Ref<TTimeSeries[]>) {
    * @returns Array of strings
    */
   function getCategories() {
-    const weekday = ['Nedela', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota']
+    const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
     const categories: string[] = []
     timeseries.value.forEach((item: TTimeSeries) => {
       categories.push(
@@ -60,7 +60,7 @@ export default function useAirPresureChartData(timeseries: Ref<TTimeSeries[]>) {
       useGPUTranslations: true,
     },
     title: {
-      text: 'Tlak vzduchu',
+      text: 'Atmospheric Pressure',
       style: {
         color: 'var(--title-text)',
       },
@@ -119,7 +119,7 @@ export default function useAirPresureChartData(timeseries: Ref<TTimeSeries[]>) {
           value: 1013.25,
           zIndex: 4,
           label: {
-            text: 'Štandardný tlak 1013.25 hPa',
+            text: 'Standard pressure 1013.25 hPa',
             style: {
               color: 'var(--y-plotlines-label)',
             },
@@ -140,7 +140,7 @@ export default function useAirPresureChartData(timeseries: Ref<TTimeSeries[]>) {
     },
     series: [
       {
-        name: 'Tlak vzduchu',
+        name: 'Atmospheric Pressure',
         data: getAirPresure(),
         type: 'spline',
         marker: {

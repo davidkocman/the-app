@@ -20,7 +20,7 @@ export default function useCloudChartData(timeseries: Ref<TTimeSeries[]>) {
    * @returns Array of strings
    */
   function getCategories() {
-    const weekday = ['Nedela', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota']
+    const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
     const categories: string[] = []
     timeseries.value.forEach((item: TTimeSeries) => {
       categories.push(
@@ -59,7 +59,7 @@ export default function useCloudChartData(timeseries: Ref<TTimeSeries[]>) {
       useGPUTranslations: true,
     },
     title: {
-      text: 'Oblačnosť',
+      text: 'Clouds',
       style: {
         color: 'var(--title-text)',
       },
@@ -125,7 +125,7 @@ export default function useCloudChartData(timeseries: Ref<TTimeSeries[]>) {
     },
     series: [
       {
-        name: 'Oblačnosť',
+        name: 'Clouds',
         data: getCloudAreaFraction(),
         type: 'column',
         marker: {

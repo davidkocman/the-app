@@ -22,8 +22,11 @@ export default function useSavedLocations() {
   const checkForSavedLocations = () => {
     onBeforeMount(() => {
       if (localStorage.getItem('the_app-weather-locations')) {
-        state.savedLocations = JSON.parse(localStorage.getItem('the_app-weather-locations') as string)
-        state.hasSavedLocations = true
+        const storageValue = JSON.parse(localStorage.getItem('the_app-weather-locations') || '')
+        if (storageValue.length > 0) {
+          state.savedLocations = storageValue
+          state.hasSavedLocations = true
+        }
       }
     })
   }
@@ -78,6 +81,9 @@ export default function useSavedLocations() {
     storageValue = newFavourites
     if (storageValue.length === 0) {
       state.hasSavedLocations = false
+      localStorage.removeItem('the_app-weather-locations')
+      state.savedLocations = storageValue
+      return
     }
     localStorage.setItem('the_app-weather-locations', JSON.stringify(storageValue))
     state.savedLocations = storageValue

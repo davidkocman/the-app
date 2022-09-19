@@ -12,7 +12,7 @@ export default function useHumidityChartData(timeseries: Ref<TTimeSeries[]>) {
   }
 
   function getCategories() {
-    const weekday = ['Nedela', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota']
+    const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
     const categories: string[] = []
     timeseries.value.forEach((item: TTimeSeries) => {
       categories.push(
@@ -47,7 +47,7 @@ export default function useHumidityChartData(timeseries: Ref<TTimeSeries[]>) {
       useGPUTranslations: true,
     },
     title: {
-      text: 'Relatívna vlhkosť',
+      text: 'Relative humidity',
       style: {
         color: 'var(--title-text)',
       },
@@ -113,7 +113,7 @@ export default function useHumidityChartData(timeseries: Ref<TTimeSeries[]>) {
     },
     series: [
       {
-        name: 'Vlhkosť vzduchu',
+        name: 'Humidity',
         data: getRelativeHumidity(),
         type: 'column',
         marker: {

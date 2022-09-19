@@ -21,7 +21,7 @@ watch(weatherData, (value): void => {
 <template>
   <div class="relative-position q-mx-auto q-px-md search-location">
     <div>
-      <q-select v-model="model" borderless clearable hide-dropdown-icon input-debounce="300" label="Location"
+      <q-select v-model="model" standout clearable hide-dropdown-icon input-debounce="300" label="Search"
         label-color="var(--text-base)" :options="options" option-value="value" transition-show="fade"
         transition-hide="fade" use-input @filter="filterFn" @keyup.enter="($event.target as HTMLElement).blur()">
         <template #no-option>
@@ -30,7 +30,7 @@ watch(weatherData, (value): void => {
           </q-item>
         </template>
         <template v-slot:prepend>
-          <q-icon color="green-7" name="place"></q-icon>
+          <q-icon color="green-7" name="search"></q-icon>
         </template>
       </q-select>
     </div>

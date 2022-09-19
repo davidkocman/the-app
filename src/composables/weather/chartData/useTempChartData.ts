@@ -20,7 +20,7 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
    * @returns Array of strings
    */
   function getCategories() {
-    const weekday = ['Nedela', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota']
+    const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
     const categories: string[] = []
     timeseries.value.forEach((item: TTimeSeries) => {
       categories.push(
@@ -158,7 +158,7 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
       useGPUTranslations: true,
     },
     title: {
-      text: 'Predpoveď teplôt',
+      text: 'Temperature forecast',
       style: {
         color: 'var(--title-text)',
       },
@@ -232,7 +232,7 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
     },
     series: [
       {
-        name: 'Maximálna teplota',
+        name: 'Max. temp.',
         data: getMaxTemperature(),
         type: 'column',
         marker: {
@@ -247,7 +247,7 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
         color: 'var(--temp-series-max-temp)',
       },
       {
-        name: 'Maximálna pocitová teplota',
+        name: 'Max. feel temp.',
         data: getMaxFeelTemperature(),
         type: 'spline',
         zIndex: '5',
@@ -263,7 +263,7 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
         color: 'var(--temp-series-max-feel-temp)',
       },
       {
-        name: 'Minimálna teplota',
+        name: 'Min. temp.',
         data: getMinTemperature(),
         type: 'column',
         marker: {
@@ -278,7 +278,7 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
         color: 'var(--temp-series-min-temp)',
       },
       {
-        name: 'Minimálna pocitová teplota',
+        name: 'Min. feel temp.',
         data: getMinFeelTemperature(),
         type: 'spline',
         zIndex: '5',

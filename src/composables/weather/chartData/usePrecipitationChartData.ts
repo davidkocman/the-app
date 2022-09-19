@@ -12,7 +12,7 @@ export default function usePrecipitationChartData(timeseries: Ref<TTimeSeries[]>
   }
 
   function getCategories() {
-    const weekday = ['Nedela', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota']
+    const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
     const categories: string[] = []
     timeseries.value.forEach((item: TTimeSeries) => {
       categories.push(
@@ -52,7 +52,7 @@ export default function usePrecipitationChartData(timeseries: Ref<TTimeSeries[]>
       useGPUTranslations: true,
     },
     title: {
-      text: 'Množstvo zrážok',
+      text: 'Amount of precipitation',
       style: {
         color: 'var(--title-text)',
       },
@@ -117,7 +117,7 @@ export default function usePrecipitationChartData(timeseries: Ref<TTimeSeries[]>
     },
     series: [
       {
-        name: 'Zrážky',
+        name: 'Precipitation',
         data: getPrecipitationAmount(),
         type: 'column',
         marker: {

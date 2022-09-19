@@ -1,5 +1,5 @@
 import { Ref, computed } from 'vue'
-import TTimeSeries from '@/types/TTimeSeries'
+import TTimeSeries from '@/types/weather/TTimeSeries'
 
 /**
  * It takes an array of time series data as an argument and returns the minimum and maximum temperature

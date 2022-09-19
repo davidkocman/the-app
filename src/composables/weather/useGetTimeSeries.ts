@@ -1,6 +1,6 @@
 import { ref } from 'vue'
-import TWeatherData from '@/types/TWeatherData'
-import TTimeSeries from '@/types/TTimeSeries'
+import TWeatherData from '@/types/weather/TWeatherData'
+import TTimeSeries from '@/types/weather/TTimeSeries'
 
 /**
  * It loops through the next 7 days, and for each day it loops through the time marks, and for each
