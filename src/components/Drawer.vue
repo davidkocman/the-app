@@ -17,6 +17,15 @@ const appStore = useAppStore()
             Dashboard
           </q-item-section>
         </q-item>
+        <q-item clickable v-ripple to="/news">
+          <q-item-section avatar>
+            <q-icon name="newspaper" />
+          </q-item-section>
+
+          <q-item-section>
+            News
+          </q-item-section>
+        </q-item>
         <q-item clickable v-ripple to="/weather">
           <q-item-section avatar>
             <q-icon name="thermostat" />

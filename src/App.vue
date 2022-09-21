@@ -16,6 +16,8 @@ onBeforeMount(() => {
 </template>
 
 <style lang="scss">
+@import '@/assets/scss/app.scss';
+
 body {
   color: var(--text-base) !important;
 }

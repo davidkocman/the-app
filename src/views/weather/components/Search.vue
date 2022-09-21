@@ -41,7 +41,7 @@ watch(weatherData, (value): void => {
 .search-location {
   border-radius: 8px;
   top: 16px;
-  max-width: 50%;
+  max-width: 80%;
   color: var(--text-base);
 }
 </style>

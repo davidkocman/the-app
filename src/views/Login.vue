@@ -3,7 +3,7 @@ import { reactive } from "vue"
 import { useUserStore } from "@/store/user"
 const userStore = useUserStore()
 
-const userData = reactive({
+const loginData = reactive({
   email: '',
   password: ''
 })
@@ -26,12 +26,11 @@ const userData = reactive({
       </q-card-section>
       <q-card-section>
         <q-form class="q-gutter-md">
-          <q-input square filled v-model="userData.email" type="email" label="email" lazy-rules />
-
-          <q-input square filled v-model="userData.password" type="password" label="password" autocomplete lazy-rules />
-
+          <q-input square filled v-model="loginData.email" type="email" label="email" lazy-rules />
+          <q-input square filled v-model="loginData.password" type="password" label="password" autocomplete
+            lazy-rules />
           <div>
-            <q-btn label="Login" @click="userStore.loginUser(userData.email, userData.password)" type="button"
+            <q-btn label="Login" @click="userStore.loginUser(loginData.email, loginData.password)" type="button"
               color="primary" />
           </div>
         </q-form>

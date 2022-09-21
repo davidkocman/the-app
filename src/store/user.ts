@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { auth } from '@/firebaseConfig'
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
 import getErrorMessage from '@/utils/handleCatchErrors'
 import router from '@/router'
 
@@ -30,7 +30,8 @@ export const useUserStore = defineStore('user', {
         const { user } = await createUserWithEmailAndPassword(auth, email, password)
         this.userData = {
           email: user.email,
-          uid: user.uid
+          uid: user.uid,
+          name: user.displayName
         } as IUserData
         router.push('/')
       } catch (e) {
@@ -72,7 +73,8 @@ export const useUserStore = defineStore('user', {
             if (user) {
               this.userData = {
                 email: user.email,
-                uid: user.uid
+                uid: user.uid,
+                name: user.displayName
               } as IUserData
             }
             resolve(user)
@@ -84,6 +86,15 @@ export const useUserStore = defineStore('user', {
         )
         unsubscribe()
       })
+    },
+    async updateUserProfile(name: string) {
+      if (auth.currentUser) {
+        try {
+          await updateProfile(auth.currentUser, { displayName: name })
+        } catch (error) {
+          this.reportError({ message: getErrorMessage(error) })
+        }
+      }
     }
   }
 })
