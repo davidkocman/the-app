@@ -32,14 +32,18 @@ watch(weatherData, (value): void => {
 </script>
 
 <template>
-  <q-btn v-if="hasSavedLocations" icon="star_rate" color="primary" @click="open('right')" class="fav-loc absolute">
+  <q-btn v-if="hasSavedLocations" icon="star_rate" color="primary" size="16px" flat dense @click="open('right')">
     <q-tooltip>Saved locations</q-tooltip>
   </q-btn>
   <q-dialog v-model="dialog" :position="position">
     <q-card>
-      <q-card-section v-for="location in savedLocations" class="locations row items-center justify-between no-wrap">
-        <span class="text-subtitle2" @click="[getSavedLocationWeatherData(location), updateRegion(location)]">{{
-        location.title
+      <q-card-section
+        v-for="(location, index) in savedLocations"
+        :key="index"
+        class="locations row items-center justify-between no-wrap"
+      >
+        <span class="text-subtitle2" @click=";[getSavedLocationWeatherData(location), updateRegion(location)]">{{
+          location.title
         }}</span>
         <q-btn icon="close" color="negative" flat @click="removeSavedLocation(location.title)"></q-btn>
       </q-card-section>
@@ -48,11 +52,6 @@ watch(weatherData, (value): void => {
 </template>
 
 <style lang="scss" scoped>
-.fav-loc {
-  top: 10px;
-  right: 10px;
-}
-
 .locations {
   cursor: pointer;
   gap: 10px;

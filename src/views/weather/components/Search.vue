@@ -5,7 +5,7 @@ import useWeatherData from '@/composables/weather/useWeatherData'
 const emit = defineEmits(['weatherData', 'activeLocation', 'activeRegion', 'coordinates'])
 const { options, model, filterFn, getWeatherData, weatherData } = useWeatherData()
 
-watch(model, (value): void => {
+watch(model, (value) => {
   if (value) {
     emit('activeLocation', value.label)
     emit('activeRegion', value.admin_name)
@@ -13,7 +13,7 @@ watch(model, (value): void => {
     getWeatherData(value)
   }
 })
-watch(weatherData, (value): void => {
+watch(weatherData, (value) => {
   emit('weatherData', value)
 })
 </script>
@@ -21,9 +21,22 @@ watch(weatherData, (value): void => {
 <template>
   <div class="relative-position q-mx-auto q-px-md search-location">
     <div>
-      <q-select v-model="model" standout clearable hide-dropdown-icon input-debounce="300" label="Search"
-        label-color="var(--text-base)" :options="options" option-value="value" transition-show="fade"
-        transition-hide="fade" use-input @filter="filterFn" @keyup.enter="($event.target as HTMLElement).blur()">
+      <q-select
+        v-model="model"
+        standout
+        clearable
+        hide-dropdown-icon
+        input-debounce="300"
+        label="Search"
+        label-color="var(--text-base)"
+        :options="options"
+        option-value="value"
+        transition-show="fade"
+        transition-hide="fade"
+        use-input
+        @filter="filterFn"
+        @keyup.enter="($event.target as HTMLElement).blur()"
+      >
         <template #no-option>
           <q-item>
             <q-item-section class="text-grey">No results</q-item-section>

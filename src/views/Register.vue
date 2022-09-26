@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useUserStore } from "@/store/user"
+import { useUserStore } from '@/store/user'
 import { reactive } from 'vue'
 
 const userStore = useUserStore()
 const userData = reactive({
   email: '',
-  pass: ''
+  pass: '',
 })
 </script>
 

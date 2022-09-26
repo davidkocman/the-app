@@ -1,5 +1,5 @@
 export default interface IUserData {
   email: string
-  uid: string,
+  uid: string
   name: string
-} 
+}

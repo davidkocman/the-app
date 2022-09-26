@@ -40,9 +40,15 @@ const { saveLocation, savedLocations } = useSavedLocations()
         <div class="text-h4 text-weight-bold q-mb-l text-spacing-2">
           {{ activeLocation }}
           <span>
-            <q-icon v-if="!savedLocations.some(el => el.title === activeLocation)" color="orange-7" name="add_location"
-              class="cursor-pointer" @click="saveLocation(coordinates, activeLocation, activeRegion)">
-              <q-tooltip transition-show="scale" transition-hide="scale" class="bg-primary text-body2">Uložit lokalitu
+            <q-icon
+              v-if="!savedLocations.some((el) => el.title === activeLocation)"
+              color="orange-7"
+              name="add_location"
+              class="cursor-pointer"
+              @click="saveLocation(coordinates, activeLocation, activeRegion)"
+            >
+              <q-tooltip transition-show="scale" transition-hide="scale" class="bg-primary text-body2"
+                >Uložit lokalitu
               </q-tooltip>
             </q-icon>
           </span>
@@ -51,12 +57,15 @@ const { saveLocation, savedLocations } = useSavedLocations()
       </div>
     </div>
     <div class="row justify-center items-center q-mb-md">
-      <q-img class="col-auto q-mr-5"
-        :src="'/images/weathericons/' + timeSeries[0].data.next_1_hours.summary.symbol_code + '.svg'" width="160px"
-        height="160px" />
+      <q-img
+        class="col-auto q-mr-5"
+        :src="'/images/weathericons/' + timeSeries[0].data.next_1_hours.summary.symbol_code + '.svg'"
+        width="160px"
+        height="160px"
+      />
       <div class="col-auto q-my-lg q-ml-sm relative-position">
         <span class="text-h1 text-weight-bold">{{
-        Math.round(timeSeries[0].data.instant.details.air_temperature)
+          Math.round(timeSeries[0].data.instant.details.air_temperature)
         }}</span>
         <span class="text-h4 relative-position degree text-weight-bold q-ml-xs">&deg;C</span>
         <div class="min-max absolute text-subtitle1">
@@ -75,18 +84,21 @@ const { saveLocation, savedLocations } = useSavedLocations()
       <div class="row items-center q-mr-sm">
         <q-icon color="blue-7" name="air" title="Wind speed" style="font-size: 1.5em"></q-icon>
         <span class="text-subtitle1 q-mr-xs">{{
-        Math.round(timeSeries[0].data.instant.details.wind_speed) + units.wind_speed
+          Math.round(timeSeries[0].data.instant.details.wind_speed) + units.wind_speed
         }}</span>
         <div class="compass relative-position">
-          <span class="arrow" :style="{
-            transform: 'rotate(' + Math.round(timeSeries[0].data.instant.details.wind_from_direction) + 'deg)',
-          }"></span>
+          <span
+            class="arrow"
+            :style="{
+              transform: 'rotate(' + Math.round(timeSeries[0].data.instant.details.wind_from_direction) + 'deg)',
+            }"
+          ></span>
         </div>
       </div>
       <div class="row items-center q-mr-sm">
         <q-icon color="blue-7" name="water_drop" title="Relative humidity" style="font-size: 1.5em"></q-icon>
         <span class="text-subtitle1">{{
-        Math.round(timeSeries[0].data.instant.details.relative_humidity) + units.relative_humidity
+          Math.round(timeSeries[0].data.instant.details.relative_humidity) + units.relative_humidity
         }}</span>
       </div>
       <div class="row items-center q-mr-sm">

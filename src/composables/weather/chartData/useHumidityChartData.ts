@@ -17,11 +17,11 @@ export default function useHumidityChartData(timeseries: Ref<TTimeSeries[]>) {
     timeseries.value.forEach((item: TTimeSeries) => {
       categories.push(
         weekday[new Date(item.time).getDay()] +
-        '<br>' +
-        new Date(item.time).getDate() +
-        '.' +
-        (new Date(item.time).getMonth() + 1) +
-        '.'
+          '<br>' +
+          new Date(item.time).getDate() +
+          '.' +
+          (new Date(item.time).getMonth() + 1) +
+          '.'
       )
     })
 

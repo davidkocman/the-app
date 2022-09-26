@@ -5,7 +5,7 @@ type ErrorWithMessage = {
 /**
  * "If the error is an object with a message property that is a string, then it is an
  * ErrorWithMessage."
- * 
+ *
  * The above function is a type guard. It's a function that takes an unknown value and returns a
  * boolean. If the boolean is true, then the unknown value is of the type that the type guard is
  * checking for

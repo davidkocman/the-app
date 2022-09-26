@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { useAppStore } from "@/store/app"
-import { useUserStore } from "@/store/user"
-import DarkMode from "@/components/header/DarkMode.vue";
+import { useAppStore } from '@/store/app'
+import { useUserStore } from '@/store/user'
+import DarkMode from '@/components/header/DarkMode.vue'
 
 const appStore = useAppStore()
 const userStore = useUserStore()
-
 </script>
 
 <template>
@@ -18,9 +17,7 @@ const userStore = useUserStore()
       <q-toolbar-title>The App</q-toolbar-title>
       <DarkMode />
       <q-btn flat round dense icon="logout" @click="userStore.logoutUser">
-        <q-tooltip>
-          Logout
-        </q-tooltip>
+        <q-tooltip> Logout </q-tooltip>
       </q-btn>
     </q-toolbar>
   </q-header>

@@ -18,7 +18,6 @@ const state = reactive<State>({
  * @returns An object with the saveLocation function and the state object.
  */
 export default function useSavedLocations() {
-
   const checkForSavedLocations = () => {
     onBeforeMount(() => {
       if (localStorage.getItem('the_app-weather-locations')) {
@@ -36,7 +35,7 @@ export default function useSavedLocations() {
       lat: coordinates[0],
       lng: coordinates[1],
       title: activeLocation,
-      region: activeRegion
+      region: activeRegion,
     })
     let storageValue = []
 

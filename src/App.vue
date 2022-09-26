@@ -8,7 +8,6 @@ onBeforeMount(() => {
     $q.dark.set(true)
   }
 })
-
 </script>
 
 <template>

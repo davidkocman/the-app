@@ -13,7 +13,6 @@ const requireAuth = async (_to: RouteLocationNormalized, _from: RouteLocationNor
   next()
 }
 
-
 const routes = [
   {
     path: '/default',
@@ -21,17 +20,17 @@ const routes = [
     children: [
       {
         path: '/register',
-        component: () => import('@/views/Register.vue')
+        component: () => import('@/views/Register.vue'),
       },
       {
         path: '/login',
-        component: () => import('@/views/Login.vue')
-      }
-    ]
+        component: () => import('@/views/Login.vue'),
+      },
+    ],
   },
   {
     path: '/user',
-    component: () => import(/* webpackChunkName: "User" */'@/layouts/User.vue'),
+    component: () => import(/* webpackChunkName: "User" */ '@/layouts/User.vue'),
     beforeEnter: requireAuth,
     children: [
       {
@@ -40,17 +39,21 @@ const routes = [
       },
       {
         path: '/news',
-        component: () => import(/* webpackChunkName: "News" */'@/views/news/News.vue')
+        component: () => import(/* webpackChunkName: "News" */ '@/views/news/News.vue'),
+      },
+      {
+        path: '/notes',
+        component: () => import(/* webpackChunkName: "Notes" */ '@/views/notes/Notes.vue'),
       },
       {
         path: '/weather',
-        component: () => import(/* webpackChunkName: "Weather" */'@/views/weather/Weather.vue')
+        component: () => import(/* webpackChunkName: "Weather" */ '@/views/weather/Weather.vue'),
       },
       {
         path: '/profile',
-        component: () => import(/* webpackChunkName: "Profile" */'@/views/profile/Profile.vue')
+        component: () => import(/* webpackChunkName: "Profile" */ '@/views/profile/Profile.vue'),
       },
-    ]
+    ],
   },
 ]
 

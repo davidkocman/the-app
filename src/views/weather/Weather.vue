@@ -84,13 +84,29 @@ watch(activeRegion, (value: string) => {
 
 <template>
   <q-page class="page-weather q-pa-md">
-    <Search @weatherData="onWeatherData" @activeLocation="onActiveLocation" @activeRegion="onActiveRegion"
-      @coordinates="onCoordinates" />
-    <SavedLocations v-if="hasSavedLocations" @weatherData="onWeatherData" @activeLocation="onActiveLocation"
-      @activeRegion="onActiveRegion" />
+    <div class="row justify-between items-center">
+      <h1 class="text-h6">Weather</h1>
+      <SavedLocations
+        v-if="hasSavedLocations"
+        @weatherData="onWeatherData"
+        @activeLocation="onActiveLocation"
+        @activeRegion="onActiveRegion"
+      />
+    </div>
+    <Search
+      @weatherData="onWeatherData"
+      @activeLocation="onActiveLocation"
+      @activeRegion="onActiveRegion"
+      @coordinates="onCoordinates"
+    />
     <template v-if="weatherData">
-      <Now :timeSeries="weatherData.properties.timeseries" :activeLocation="activeLocation" :activeRegion="activeRegion"
-        :units="weatherData.properties.meta.units" :coordinates="coordinates" />
+      <Now
+        :timeSeries="weatherData.properties.timeseries"
+        :activeLocation="activeLocation"
+        :activeRegion="activeRegion"
+        :units="weatherData.properties.meta.units"
+        :coordinates="coordinates"
+      />
       <div class="row justify-center q-mb-lg">
         <TemperatureChart :timeseries="timeseries" />
         <PrecipitationChart :timeseries="timeseries" />
@@ -109,7 +125,6 @@ watch(activeRegion, (value: string) => {
 
 <style lang="scss" scoped>
 .page-weather {
-
   .fav-loc {
     position: fixed;
     right: 10px;

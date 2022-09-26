@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { useUserStore } from "@/store/user"
+import { useUserStore } from '@/store/user'
 
 const userStore = useUserStore()
 </script>
 
 <template>
-  <q-page class="profile q-pa-md">
+  <q-page class="page-profile q-pa-md">
+    <div class="row justify-between items-center">
+      <h1 class="text-h6">Profile</h1>
+    </div>
     <div class="row">
       <div class="col">
         <q-card class="my-card">
