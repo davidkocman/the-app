@@ -40,32 +40,32 @@ export default function useHumidityChartData(timeseries: Ref<TTimeSeries[]>) {
     chart: {
       backgroundColor: '',
       style: {
-        fontFamily: 'Roboto',
-      },
+        fontFamily: 'Roboto'
+      }
     },
     boost: {
-      useGPUTranslations: true,
+      useGPUTranslations: true
     },
     title: {
       text: 'Relative humidity',
       style: {
-        color: 'var(--title-text)',
-      },
+        color: 'var(--title-text)'
+      }
     },
     tooltip: {
       shared: true,
       crosshairs: true,
       useHTML: true,
-      headerFormat: '<span style="font-size: 10px">{point.key}:00</span><br/>',
+      headerFormat: '<span style="font-size: 10px">{point.key}:00</span><br/>'
     },
     legend: {
       itemStyle: {
         color: 'var(--legend)',
-        fontWeight: 'bold',
+        fontWeight: 'bold'
       },
       itemHoverStyle: {
-        color: 'grey',
-      },
+        color: 'grey'
+      }
     },
     xAxis: [
       {
@@ -74,9 +74,9 @@ export default function useHumidityChartData(timeseries: Ref<TTimeSeries[]>) {
         gridLineColor: 'var(--x-hours-gridline)',
         labels: {
           style: {
-            color: 'var(--x-hours-labels)',
-          },
-        },
+            color: 'var(--x-hours-labels)'
+          }
+        }
       },
       {
         categories: getCategories(),
@@ -90,10 +90,10 @@ export default function useHumidityChartData(timeseries: Ref<TTimeSeries[]>) {
         labels: {
           align: 'left',
           style: {
-            color: 'var(--x-categories-labels)',
-          },
-        },
-      },
+            color: 'var(--x-categories-labels)'
+          }
+        }
+      }
     ],
     yAxis: {
       gridLineDashStyle: 'dash',
@@ -102,14 +102,14 @@ export default function useHumidityChartData(timeseries: Ref<TTimeSeries[]>) {
       title: {
         text: '(%)',
         style: {
-          color: 'var(--y-title)',
-        },
+          color: 'var(--y-title)'
+        }
       },
       labels: {
         style: {
-          color: 'var(--y-labels)',
-        },
-      },
+          color: 'var(--y-labels)'
+        }
+      }
     },
     series: [
       {
@@ -117,21 +117,21 @@ export default function useHumidityChartData(timeseries: Ref<TTimeSeries[]>) {
         data: getRelativeHumidity(),
         type: 'column',
         marker: {
-          enabled: false,
+          enabled: false
         },
         dataGrouping: {
-          enabled: false,
+          enabled: false
         },
         tooltip: {
-          valueSuffix: ' %',
+          valueSuffix: ' %'
         },
         maxPointWidth: 10,
-        color: 'var(--humidity)',
-      },
+        color: 'var(--humidity)'
+      }
     ],
     credits: {
-      enabled: false,
-    },
+      enabled: false
+    }
   }))
 
   return { chartOptions }

@@ -13,7 +13,7 @@ export default function useGetTimeSeries(data: TWeatherData) {
     new Date(new Date().setHours(2, 0, 0)),
     new Date(new Date().setHours(8, 0, 0)),
     new Date(new Date().setHours(14, 0, 0)),
-    new Date(new Date().setHours(20, 0, 0)),
+    new Date(new Date().setHours(20, 0, 0))
   ]
 
   let day: Date | string = ''

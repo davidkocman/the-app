@@ -10,7 +10,7 @@ interface State {
 /* Creating a reactive object that is of type State. */
 const state = reactive<State>({
   hasSavedLocations: false,
-  savedLocations: [],
+  savedLocations: []
 })
 
 /**
@@ -35,7 +35,7 @@ export default function useSavedLocations() {
       lat: coordinates[0],
       lng: coordinates[1],
       title: activeLocation,
-      region: activeRegion,
+      region: activeRegion
     })
     let storageValue = []
 
@@ -94,6 +94,6 @@ export default function useSavedLocations() {
     removeSavedLocation,
     /* A function that is provided by Vue. It is used to convert a reactive object into a plain object
     with reactive properties. */
-    ...toRefs(state),
+    ...toRefs(state)
   }
 }

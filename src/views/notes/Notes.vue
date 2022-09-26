@@ -20,8 +20,8 @@ const saveNotes = (): void => {
       <h1 class="text-h6">Notes</h1>
     </div>
     <q-editor
-        v-model="editor"
-        :definitions="{
+      v-model="editor"
+      :definitions="{
         save: {
           tip: 'Save notes',
           icon: 'save',
@@ -35,10 +35,10 @@ const saveNotes = (): void => {
           handler: saveNotes
         }
       } as IDefinitions"
-        :toolbar="[
-          ['bold', 'italic', 'underline', 'strike', 'undo', 'redo'],
-          ['save', 'upload'],
-        ]"
-      />
+      :toolbar="[
+        ['bold', 'italic', 'underline', 'strike', 'undo', 'redo'],
+        ['save', 'upload']
+      ]"
+    />
   </q-page>
 </template>

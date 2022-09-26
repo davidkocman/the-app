@@ -5,7 +5,7 @@ import { reactive } from 'vue'
 const userStore = useUserStore()
 const userData = reactive({
   email: '',
-  pass: '',
+  pass: ''
 })
 </script>
 

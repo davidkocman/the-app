@@ -17,36 +17,36 @@ const create = (): TTimeSeries => {
           relative_humidity: 0,
           ultraviolet_index_clear_sky: 0,
           wind_from_direction: 0,
-          wind_speed: 0,
-        },
+          wind_speed: 0
+        }
       },
       next_12_hours: {
         summary: {
-          symbol_code: '',
-        },
+          symbol_code: ''
+        }
       },
       next_1_hours: {
         summary: {
-          symbol_code: '',
+          symbol_code: ''
         },
         details: {
-          precipitation_amount: 0,
-        },
+          precipitation_amount: 0
+        }
       },
       next_6_hours: {
         summary: {
-          symbol_code: '',
+          symbol_code: ''
         },
         details: {
           air_temperature_max: 0,
           air_temperature_min: 0,
-          precipitation_amount: 0,
-        },
-      },
-    },
+          precipitation_amount: 0
+        }
+      }
+    }
   }
 }
 
 export default {
-  create,
+  create
 }

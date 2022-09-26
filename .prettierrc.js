@@ -2,5 +2,6 @@ module.exports = {
   printWidth: 120,
   semi: false,
   singleQuote: true,
-  vueIndentScriptAndStyle: false
+  vueIndentScriptAndStyle: false,
+  trailingComma: 'none'
 }

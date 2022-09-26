@@ -6,8 +6,8 @@ import usePrecipitationChartData from '@/composables/weather/chartData/usePrecip
 const props = defineProps({
   timeseries: {
     required: true,
-    type: Object as PropType<TTimeSeries[]>,
-  },
+    type: Object as PropType<TTimeSeries[]>
+  }
 })
 
 /**

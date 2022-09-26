@@ -6,8 +6,8 @@ import useAirPresureChartData from '@/composables/weather/chartData/useAirPresur
 const props = defineProps({
   timeseries: {
     required: true,
-    type: Object as PropType<TTimeSeries[]>,
-  },
+    type: Object as PropType<TTimeSeries[]>
+  }
 })
 
 /**

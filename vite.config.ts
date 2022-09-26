@@ -6,15 +6,15 @@ import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 export default defineConfig({
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
-    },
+      '@': resolve(__dirname, 'src')
+    }
   },
   plugins: [
     vue({
-      template: { transformAssetUrls },
+      template: { transformAssetUrls }
     }),
     quasar({
-      sassVariables: 'src/assets/scss/quasar-variables.scss',
-    }),
-  ],
+      sassVariables: 'src/assets/scss/quasar-variables.scss'
+    })
+  ]
 })

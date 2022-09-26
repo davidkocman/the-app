@@ -29,6 +29,13 @@
       "error",
       "single",
       "avoid-escape"
-    ]
+    ],
+    "comma-dangle": ["error", {
+      "arrays": "never",
+      "objects": "never",
+      "imports": "never",
+      "exports": "never",
+      "functions": "never"
+    }]
   }
 }

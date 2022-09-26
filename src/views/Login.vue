@@ -5,7 +5,7 @@ const userStore = useUserStore()
 
 const loginData = reactive({
   email: '',
-  password: '',
+  password: ''
 })
 </script>
 

@@ -6,8 +6,8 @@ import useHumidityChartData from '@/composables/weather/chartData/useHumidityCha
 const props = defineProps({
   timeseries: {
     required: true,
-    type: Object as PropType<TTimeSeries[]>,
-  },
+    type: Object as PropType<TTimeSeries[]>
+  }
 })
 
 /**

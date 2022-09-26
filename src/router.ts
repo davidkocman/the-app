@@ -20,13 +20,13 @@ const routes = [
     children: [
       {
         path: '/register',
-        component: () => import('@/views/Register.vue'),
+        component: () => import('@/views/Register.vue')
       },
       {
         path: '/login',
-        component: () => import('@/views/Login.vue'),
-      },
-    ],
+        component: () => import('@/views/Login.vue')
+      }
+    ]
   },
   {
     path: '/user',
@@ -35,33 +35,33 @@ const routes = [
     children: [
       {
         path: '/',
-        component: () => import(/* webpackChunkName: "Dashboard" */ '@/views/dashboard/Dashboard.vue'),
+        component: () => import(/* webpackChunkName: "Dashboard" */ '@/views/dashboard/Dashboard.vue')
       },
       {
         path: '/news',
-        component: () => import(/* webpackChunkName: "News" */ '@/views/news/News.vue'),
+        component: () => import(/* webpackChunkName: "News" */ '@/views/news/News.vue')
       },
       {
         path: '/notes',
-        component: () => import(/* webpackChunkName: "Notes" */ '@/views/notes/Notes.vue'),
+        component: () => import(/* webpackChunkName: "Notes" */ '@/views/notes/Notes.vue')
       },
       {
         path: '/weather',
-        component: () => import(/* webpackChunkName: "Weather" */ '@/views/weather/Weather.vue'),
+        component: () => import(/* webpackChunkName: "Weather" */ '@/views/weather/Weather.vue')
       },
       {
         path: '/profile',
-        component: () => import(/* webpackChunkName: "Profile" */ '@/views/profile/Profile.vue'),
-      },
-    ],
-  },
+        component: () => import(/* webpackChunkName: "Profile" */ '@/views/profile/Profile.vue')
+      }
+    ]
+  }
 ]
 
 const history = createWebHistory()
 
 const router = createRouter({
   routes,
-  history,
+  history
 } as RouterOptions)
 
 export default router

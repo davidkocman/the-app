@@ -151,32 +151,32 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
     chart: {
       backgroundColor: '',
       style: {
-        fontFamily: 'Roboto',
-      },
+        fontFamily: 'Roboto'
+      }
     },
     boost: {
-      useGPUTranslations: true,
+      useGPUTranslations: true
     },
     title: {
       text: 'Temperature forecast',
       style: {
-        color: 'var(--title-text)',
-      },
+        color: 'var(--title-text)'
+      }
     },
     tooltip: {
       shared: true,
       crosshairs: true,
       useHTML: true,
-      headerFormat: '<span style="font-size: 10px">{point.key}:00</span><br/>',
+      headerFormat: '<span style="font-size: 10px">{point.key}:00</span><br/>'
     },
     legend: {
       itemStyle: {
         color: 'var(--legend)',
-        fontWeight: 'bold',
+        fontWeight: 'bold'
       },
       itemHoverStyle: {
-        color: 'grey',
-      },
+        color: 'grey'
+      }
     },
     xAxis: [
       {
@@ -185,9 +185,9 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
         gridLineColor: 'var(--x-hours-gridline)',
         labels: {
           style: {
-            color: 'var(--x-hours-labels)',
-          },
-        },
+            color: 'var(--x-hours-labels)'
+          }
+        }
       },
       {
         categories: getCategories(),
@@ -201,10 +201,10 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
         labels: {
           align: 'left',
           style: {
-            color: 'var(--x-categories-labels)',
-          },
-        },
-      },
+            color: 'var(--x-categories-labels)'
+          }
+        }
+      }
     ],
     yAxis: {
       gridLineDashStyle: 'dash',
@@ -215,20 +215,20 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
           dashStyle: 'solid',
           width: 1,
           value: 0,
-          zIndex: 2,
-        },
+          zIndex: 2
+        }
       ],
       title: {
         text: '(°C)',
         style: {
-          color: 'var(--y-title)',
-        },
+          color: 'var(--y-title)'
+        }
       },
       labels: {
         style: {
-          color: 'var(--y-labels)',
-        },
-      },
+          color: 'var(--y-labels)'
+        }
+      }
     },
     series: [
       {
@@ -236,15 +236,15 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
         data: getMaxTemperature(),
         type: 'column',
         marker: {
-          enabled: false,
+          enabled: false
         },
         tooltip: {
-          valueSuffix: '°C',
+          valueSuffix: '°C'
         },
         dataGrouping: {
-          enabled: false,
+          enabled: false
         },
-        color: 'var(--temp-series-max-temp)',
+        color: 'var(--temp-series-max-temp)'
       },
       {
         name: 'Max. feel temp.',
@@ -252,30 +252,30 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
         type: 'spline',
         zIndex: '5',
         marker: {
-          enabled: false,
+          enabled: false
         },
         dataGrouping: {
-          enabled: false,
+          enabled: false
         },
         tooltip: {
-          valueSuffix: '°C',
+          valueSuffix: '°C'
         },
-        color: 'var(--temp-series-max-feel-temp)',
+        color: 'var(--temp-series-max-feel-temp)'
       },
       {
         name: 'Min. temp.',
         data: getMinTemperature(),
         type: 'column',
         marker: {
-          enabled: false,
+          enabled: false
         },
         dataGrouping: {
-          enabled: false,
+          enabled: false
         },
         tooltip: {
-          valueSuffix: '°C',
+          valueSuffix: '°C'
         },
-        color: 'var(--temp-series-min-temp)',
+        color: 'var(--temp-series-min-temp)'
       },
       {
         name: 'Min. feel temp.',
@@ -283,20 +283,20 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
         type: 'spline',
         zIndex: '5',
         marker: {
-          enabled: false,
+          enabled: false
         },
         dataGrouping: {
-          enabled: false,
+          enabled: false
         },
         tooltip: {
-          valueSuffix: '°C',
+          valueSuffix: '°C'
         },
-        color: 'var(--temp-series-min-feel-temp)',
-      },
+        color: 'var(--temp-series-min-feel-temp)'
+      }
     ],
     credits: {
-      enabled: false,
-    },
+      enabled: false
+    }
   }))
 
   return { chartOptions }

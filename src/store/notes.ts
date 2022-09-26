@@ -13,6 +13,6 @@ export const useNotesStore = defineStore('notes', {
     },
     async removeNote() {
       console.log('removing')
-    },
-  },
+    }
+  }
 })

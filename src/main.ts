@@ -17,7 +17,7 @@ myApp.use(createPinia())
 myApp.use(router)
 myApp.use(Quasar, {
   plugins: {
-    Loading,
+    Loading
   }, // import Quasar plugins and add here
   config: {
     extras: [
@@ -30,14 +30,14 @@ myApp.use(Quasar, {
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font-latin-ext', // optional, you are not bound to it
-      'material-icons', // optional, you are not bound to it
+      'material-icons' // optional, you are not bound to it
     ],
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
       config: {
         loading: {
-          spinner: 'QSpinner',
-        },
+          spinner: 'QSpinner'
+        }
       },
 
       // iconSet: 'material-icons', // Quasar icon set
@@ -51,9 +51,9 @@ myApp.use(Quasar, {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Loading'],
-    },
-  },
+      plugins: ['Loading']
+    }
+  }
 })
 
 myApp.mount('#app')

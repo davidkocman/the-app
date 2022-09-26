@@ -40,32 +40,32 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
     chart: {
       backgroundColor: '',
       style: {
-        fontFamily: 'Roboto',
-      },
+        fontFamily: 'Roboto'
+      }
     },
     boost: {
-      useGPUTranslations: true,
+      useGPUTranslations: true
     },
     title: {
       text: 'Wind speed',
       style: {
-        color: 'var(--title-text)',
-      },
+        color: 'var(--title-text)'
+      }
     },
     tooltip: {
       shared: true,
       crosshairs: true,
       useHTML: true,
-      headerFormat: '<span style="font-size: 10px">{point.key}:00</span><br/>',
+      headerFormat: '<span style="font-size: 10px">{point.key}:00</span><br/>'
     },
     legend: {
       itemStyle: {
         color: 'var(--legend)',
-        fontWeight: 'bold',
+        fontWeight: 'bold'
       },
       itemHoverStyle: {
-        color: 'grey',
-      },
+        color: 'grey'
+      }
     },
     xAxis: [
       {
@@ -74,9 +74,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
         gridLineColor: 'var(--x-hours-gridline)',
         labels: {
           style: {
-            color: 'var(--x-hours-labels)',
-          },
-        },
+            color: 'var(--x-hours-labels)'
+          }
+        }
       },
       {
         categories: getCategories(),
@@ -90,10 +90,10 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
         labels: {
           align: 'left',
           style: {
-            color: 'var(--x-categories-labels)',
-          },
-        },
-      },
+            color: 'var(--x-categories-labels)'
+          }
+        }
+      }
     ],
     yAxis: {
       gridLineDashStyle: 'none',
@@ -102,13 +102,13 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
       title: {
         text: '(m/s)',
         style: {
-          color: 'var(--y-title)',
-        },
+          color: 'var(--y-title)'
+        }
       },
       labels: {
         style: {
-          color: 'var(--y-labels)',
-        },
+          color: 'var(--y-labels)'
+        }
       },
       plotBands: [
         {
@@ -118,9 +118,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
           label: {
             text: '',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
+              color: 'var(--y-plotbands-label)'
+            }
+          }
         },
         {
           from: 0.3,
@@ -130,9 +130,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
             x: 20,
             text: 'Breeze',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
+              color: 'var(--y-plotbands-label)'
+            }
+          }
         },
         {
           from: 1.6,
@@ -142,9 +142,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
             x: 20,
             text: 'Light wind',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
+              color: 'var(--y-plotbands-label)'
+            }
+          }
         },
         {
           from: 3.4,
@@ -154,9 +154,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
             x: 20,
             text: 'Moderate wind',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
+              color: 'var(--y-plotbands-label)'
+            }
+          }
         },
         {
           from: 5.5,
@@ -166,9 +166,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
             x: 20,
             text: 'Fairly fresh wind',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
+              color: 'var(--y-plotbands-label)'
+            }
+          }
         },
         {
           from: 8,
@@ -178,9 +178,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
             x: 20,
             text: 'Fresh wind',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
+              color: 'var(--y-plotbands-label)'
+            }
+          }
         },
         {
           from: 10.8,
@@ -190,9 +190,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
             x: 20,
             text: 'Strong wind',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
+              color: 'var(--y-plotbands-label)'
+            }
+          }
         },
         {
           from: 13.9,
@@ -202,9 +202,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
             x: 20,
             text: 'Stronger wind',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
+              color: 'var(--y-plotbands-label)'
+            }
+          }
         },
         {
           from: 17.2,
@@ -214,9 +214,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
             x: 20,
             text: 'Stormy wind',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
+              color: 'var(--y-plotbands-label)'
+            }
+          }
         },
         {
           from: 20.8,
@@ -226,9 +226,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
             x: 20,
             text: 'A gale',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
+              color: 'var(--y-plotbands-label)'
+            }
+          }
         },
         {
           from: 24.5,
@@ -238,9 +238,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
             x: 20,
             text: 'Strong gale',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
+              color: 'var(--y-plotbands-label)'
+            }
+          }
         },
         {
           from: 28.5,
@@ -250,9 +250,9 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
             x: 20,
             text: 'A massive gale',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
+              color: 'var(--y-plotbands-label)'
+            }
+          }
         },
         {
           from: 32.7,
@@ -261,11 +261,11 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
             x: 20,
             text: 'Hurricane',
             style: {
-              color: 'var(--y-plotbands-label)',
-            },
-          },
-        },
-      ],
+              color: 'var(--y-plotbands-label)'
+            }
+          }
+        }
+      ]
     },
     series: [
       {
@@ -273,20 +273,20 @@ export default function useWindSpeedChartData(timeseries: Ref<TTimeSeries[]>) {
         data: getWindSpeed(),
         type: 'spline',
         marker: {
-          enabled: false,
+          enabled: false
         },
         dataGrouping: {
-          enabled: false,
+          enabled: false
         },
         tooltip: {
-          valueSuffix: ' m/s',
+          valueSuffix: ' m/s'
         },
-        color: 'var(--wind-speed)',
-      },
+        color: 'var(--wind-speed)'
+      }
     ],
     credits: {
-      enabled: false,
-    },
+      enabled: false
+    }
   }))
 
   return { chartOptions }

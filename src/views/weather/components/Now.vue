@@ -8,24 +8,24 @@ import { PropType, toRefs } from 'vue'
 const props = defineProps({
   timeSeries: {
     required: true,
-    type: Object as PropType<TTimeSeries[]>,
+    type: Object as PropType<TTimeSeries[]>
   },
   activeLocation: {
     required: true,
-    type: String,
+    type: String
   },
   activeRegion: {
     required: true,
-    type: String,
+    type: String
   },
   units: {
     required: true,
-    type: Object as PropType<TUnits>,
+    type: Object as PropType<TUnits>
   },
   coordinates: {
     required: true,
-    type: Object as PropType<string[]>,
-  },
+    type: Object as PropType<string[]>
+  }
 })
 
 const { timeSeries } = toRefs(props)
@@ -90,7 +90,7 @@ const { saveLocation, savedLocations } = useSavedLocations()
           <span
             class="arrow"
             :style="{
-              transform: 'rotate(' + Math.round(timeSeries[0].data.instant.details.wind_from_direction) + 'deg)',
+              transform: 'rotate(' + Math.round(timeSeries[0].data.instant.details.wind_from_direction) + 'deg)'
             }"
           ></span>
         </div>

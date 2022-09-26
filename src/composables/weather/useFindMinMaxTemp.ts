@@ -42,6 +42,6 @@ export default function useFindMinMaxTemp(timeseries: Ref<TTimeSeries[]>) {
 
   return {
     minTemp,
-    maxTemp,
+    maxTemp
   }
 }

@@ -5,7 +5,7 @@ const create = (): WeatherData => {
     type: '',
     geometry: {
       type: '',
-      coordinates: [],
+      coordinates: []
     },
     properties: {
       meta: {
@@ -25,8 +25,8 @@ const create = (): WeatherData => {
           relative_humidity: '',
           ultraviolet_index_clear_sky: '',
           wind_from_direction: '',
-          wind_speed: '',
-        },
+          wind_speed: ''
+        }
       },
       timeseries: [
         {
@@ -45,39 +45,39 @@ const create = (): WeatherData => {
                 relative_humidity: 0,
                 ultraviolet_index_clear_sky: 0,
                 wind_from_direction: 0,
-                wind_speed: 0,
-              },
+                wind_speed: 0
+              }
             },
             next_12_hours: {
               summary: {
-                symbol_code: '',
-              },
+                symbol_code: ''
+              }
             },
             next_1_hours: {
               summary: {
-                symbol_code: '',
+                symbol_code: ''
               },
               details: {
-                precipitation_amount: 0,
-              },
+                precipitation_amount: 0
+              }
             },
             next_6_hours: {
               summary: {
-                symbol_code: '',
+                symbol_code: ''
               },
               details: {
                 air_temperature_max: 0,
                 air_temperature_min: 0,
-                precipitation_amount: 0,
-              },
-            },
-          },
-        },
-      ],
-    },
+                precipitation_amount: 0
+              }
+            }
+          }
+        }
+      ]
+    }
   }
 }
 
 export default {
-  create,
+  create
 }
