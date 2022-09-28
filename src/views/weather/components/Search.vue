@@ -16,6 +16,10 @@ watch(model, (value) => {
 watch(weatherData, (value) => {
   emit('weatherData', value)
 })
+
+const keyUpEvent = (target: HTMLElement) => {
+  target.blur()
+}
 </script>
 
 <template>
@@ -35,7 +39,7 @@ watch(weatherData, (value) => {
         transition-hide="fade"
         use-input
         @filter="filterFn"
-        @keyup.enter="($event.target as HTMLElement).blur()"
+        @keyup.enter="keyUpEvent($event.target as HTMLElement)"
       >
         <template #no-option>
           <q-item>
