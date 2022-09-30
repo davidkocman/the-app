@@ -3,15 +3,17 @@ import { ref } from 'vue'
 import { QEditorProps } from 'quasar'
 import { useNotesStore } from '@/store/notes'
 
-const dialog = ref(true)
+const notesStore = useNotesStore()
+const dialog = ref(false)
+const noteName = ref('')
+const noteContent = ref('')
+
 interface IDefinitions {
   [key: string]: QEditorProps['definitions']
 }
 
-const notesStore = useNotesStore()
-const notesContent = ref('')
-const saveNotes = (): void => {
-  notesStore.saveNote(notesContent.value)
+const save = (): void => {
+  if(noteName.value !== '' && noteContent.value !== '') notesStore.saveNewNote(noteContent.value)
 }
 </script>
 
@@ -25,32 +27,34 @@ const saveNotes = (): void => {
       <q-card class="bg-dark-page">
         <q-bar>
           <q-space />
-          <q-btn dense flat icon="close" v-close-popup>
+          <q-btn dense flat icon="close" v-close-popup @click="noteContent = '', noteName = ''">
             <q-tooltip class="bg-white text-primary">Close</q-tooltip>
           </q-btn>
         </q-bar>
 
-        <q-card-section>
-          <div class="text-body-1">Notes</div>
+        <q-card-section class="q-mb-sm">
+          <div class="text-body-1">New note</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
           <div class="row">
-            <div class="col q-pa-sm">
+            <div class="col">
+              <q-input dense v-model="noteName" label="Note name" type="text" />
               <q-editor
-                v-model="notesContent"
+                v-model="noteContent"
+                class="q-mt-md"
                 :definitions="{
                   save: {
                     tip: 'Save notes',
                     icon: 'save',
                     label: 'Save',
-                    handler: saveNotes
+                    handler: save
                   },
                   upload: {
                     tip: 'Upload to cloud',
                     icon: 'cloud_upload',
                     label: 'Upload',
-                    handler: saveNotes
+                    handler: save
                   }
                 } as IDefinitions"
                 :toolbar="[
@@ -59,8 +63,8 @@ const saveNotes = (): void => {
                 ]"
               />
             </div>
-            <div class="col q-pa-sm">
-              <div class="text-body-1" v-html="notesContent"></div>
+            <div class="col">
+              <div class="text-body-1" v-html="noteContent"></div>
             </div>
           </div>
         </q-card-section>

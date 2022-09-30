@@ -2,28 +2,24 @@ import { defineStore } from 'pinia'
 import { auth } from '@/firebaseConfig'
 import {
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
-  updateProfile
+  updateProfile,
+  User
 } from 'firebase/auth'
+import { useAppStore } from './app'
 import getErrorMessage from '@/utils/handleCatchErrors'
 import router from '@/router'
-
 import IUserData from '@/types/IUserData'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
     userData: null as IUserData | null,
-    loadingUser: false,
-    loading: false
+    loadingUser: false
   }),
   actions: {
-    reportError({ message }: { message: string }) {
-      console.log('*** Loging Error ***')
-      console.log(message)
-      console.log('*** *** ***')
-    },
     /**
      * It creates a new user with the given email and password, and if successful, it sets the userData
      * property to the user's email and uid, and redirects to the home page
@@ -34,6 +30,7 @@ export const useUserStore = defineStore('user', {
       this.loadingUser = true
       try {
         const { user } = await createUserWithEmailAndPassword(auth, email, password)
+        await sendEmailVerification(auth.currentUser as User)
         this.userData = {
           email: user.email,
           uid: user.uid,
@@ -41,7 +38,8 @@ export const useUserStore = defineStore('user', {
         } as IUserData
         router.push('/')
       } catch (e) {
-        reportError({ message: getErrorMessage(e) })
+        const appStore = useAppStore()
+        appStore.reportError({ message: getErrorMessage(e) })
         this.userData = null
       } finally {
         this.loadingUser = false
@@ -57,7 +55,8 @@ export const useUserStore = defineStore('user', {
         } as IUserData
         router.push('/')
       } catch (error) {
-        reportError({ message: getErrorMessage(error) })
+        const appStore = useAppStore()
+        appStore.reportError({ message: getErrorMessage(error) })
       } finally {
         this.loadingUser = false
       }
@@ -68,7 +67,8 @@ export const useUserStore = defineStore('user', {
         this.userData = null
         router.push('/login')
       } catch (error) {
-        this.reportError({ message: getErrorMessage(error) })
+        const appStore = useAppStore()
+        appStore.reportError({ message: getErrorMessage(error) })
       }
     },
     currentUser() {
@@ -86,7 +86,8 @@ export const useUserStore = defineStore('user', {
             resolve(user)
           },
           (error) => {
-            reportError({ message: getErrorMessage(error) })
+            const appStore = useAppStore()
+            appStore.reportError({ message: getErrorMessage(error) })
             reject(error)
           }
         )
@@ -98,7 +99,8 @@ export const useUserStore = defineStore('user', {
         try {
           await updateProfile(auth.currentUser, { displayName: name })
         } catch (error) {
-          this.reportError({ message: getErrorMessage(error) })
+          const appStore = useAppStore()
+          appStore.reportError({ message: getErrorMessage(error) })
         }
       }
     }

@@ -3,9 +3,11 @@ import { defineStore } from 'pinia'
 // import { addDoc } from 'firebase/firestore'
 
 export const useNotesStore = defineStore('notes', {
-  state: () => ({}),
+  state: () => ({
+    notes: []
+  }),
   actions: {
-    async saveNote(payload: string) {
+    async saveNewNote(payload: string) {
       console.log('saving')
     },
     async editNote() {
