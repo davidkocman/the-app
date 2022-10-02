@@ -10,6 +10,7 @@ import {
   User
 } from 'firebase/auth'
 import { useAppStore } from './app'
+import { useNotesStore } from './notes'
 import getErrorMessage from '@/utils/handleCatchErrors'
 import router from '@/router'
 import IUserData from '@/types/IUserData'
@@ -54,21 +55,25 @@ export const useUserStore = defineStore('user', {
           uid: user.uid
         } as IUserData
         router.push('/')
-      } catch (error) {
+      } catch (e) {
         const appStore = useAppStore()
-        appStore.reportError({ message: getErrorMessage(error) })
+        appStore.reportError({ message: getErrorMessage(e) })
       } finally {
         this.loadingUser = false
       }
     },
     async logoutUser() {
+      const notesStore = useNotesStore()
       try {
         await signOut(auth)
         this.userData = null
         router.push('/login')
-      } catch (error) {
+      } catch (e) {
         const appStore = useAppStore()
-        appStore.reportError({ message: getErrorMessage(error) })
+        appStore.reportError({ message: getErrorMessage(e) })
+      } finally {
+        this.userData = null
+        notesStore.$reset()
       }
     },
     currentUser() {
@@ -76,19 +81,23 @@ export const useUserStore = defineStore('user', {
         const unsubscribe = onAuthStateChanged(
           auth,
           (user) => {
+            const notesStore = useNotesStore()
             if (user) {
               this.userData = {
                 email: user.email,
                 uid: user.uid,
                 name: user.displayName
               } as IUserData
+            } else {
+              this.userData = null
+              notesStore.$reset()
             }
             resolve(user)
           },
-          (error) => {
+          (e) => {
             const appStore = useAppStore()
-            appStore.reportError({ message: getErrorMessage(error) })
-            reject(error)
+            appStore.reportError({ message: getErrorMessage(e) })
+            reject(e)
           }
         )
         unsubscribe()
@@ -98,9 +107,9 @@ export const useUserStore = defineStore('user', {
       if (auth.currentUser) {
         try {
           await updateProfile(auth.currentUser, { displayName: name })
-        } catch (error) {
+        } catch (e) {
           const appStore = useAppStore()
-          appStore.reportError({ message: getErrorMessage(error) })
+          appStore.reportError({ message: getErrorMessage(e) })
         }
       }
     }

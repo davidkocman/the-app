@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { QEditorProps } from 'quasar'
 import { useNotesStore } from '@/store/notes'
+import INote from '@/types/INote'
 
 const notesStore = useNotesStore()
 const dialog = ref(false)
@@ -12,8 +13,20 @@ interface IDefinitions {
   [key: string]: QEditorProps['definitions']
 }
 
+
 const save = (): void => {
-  if(noteName.value !== '' && noteContent.value !== '') notesStore.saveNewNote(noteContent.value)
+  if (noteName.value !== '' && noteContent.value !== '') {
+    const newNote: INote = {
+      name: noteName.value,
+      content: noteContent.value
+    }
+    notesStore.saveNewNote(newNote)
+  }
+}
+
+const resetNote = () => {
+  noteContent.value = ''
+  noteName.value = ''
 }
 </script>
 
@@ -27,7 +40,7 @@ const save = (): void => {
       <q-card class="bg-dark-page">
         <q-bar>
           <q-space />
-          <q-btn dense flat icon="close" v-close-popup @click="noteContent = '', noteName = ''">
+          <q-btn dense flat icon="close" v-close-popup @click="resetNote">
             <q-tooltip class="bg-white text-primary">Close</q-tooltip>
           </q-btn>
         </q-bar>
@@ -38,7 +51,7 @@ const save = (): void => {
 
         <q-card-section class="q-pt-none">
           <div class="row">
-            <div class="col">
+            <div class="col q-pa-sm">
               <q-input dense v-model="noteName" label="Note name" type="text" />
               <q-editor
                 v-model="noteContent"
@@ -63,7 +76,7 @@ const save = (): void => {
                 ]"
               />
             </div>
-            <div class="col">
+            <div class="col q-pa-sm">
               <div class="text-body-1" v-html="noteContent"></div>
             </div>
           </div>

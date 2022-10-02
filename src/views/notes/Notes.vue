@@ -1,5 +1,18 @@
 <script setup lang="ts">
+import { computed, onBeforeMount, ComputedRef } from 'vue'
+import { useNotesStore } from '@/store/notes'
 import NewNote from './components/NewNote.vue'
+import INewNote from '@/types/INewNote'
+
+const notesStore = useNotesStore()
+
+onBeforeMount(() => {
+  notesStore.getNotes()
+})
+
+const savedNotes: ComputedRef<INewNote[] | []> = computed(() => {
+  return notesStore.notes
+})
 </script>
 
 <template>
@@ -9,8 +22,9 @@ import NewNote from './components/NewNote.vue'
       <NewNote />
     </div>
     <div class="row">
-      <div class="col"></div>
-      <div class="col"></div>
+      <template v-if="savedNotes.length !== 0">
+        <div v-for="note in savedNotes" class="col">{{ note.name }}</div>
+      </template>
     </div>
   </q-page>
 </template>
