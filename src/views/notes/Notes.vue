@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, onBeforeMount, ComputedRef } from 'vue'
 import { useNotesStore } from '@/store/notes'
+import toMarkDown from '@/utils/toMarkdown'
 import NewNote from './components/NewNote.vue'
-import INewNote from '@/types/INewNote'
+import INewNote from '@/types/notes/INewNote'
 
 const notesStore = useNotesStore()
-
 onBeforeMount(() => {
   notesStore.getNotes()
 })
@@ -17,13 +17,27 @@ const savedNotes: ComputedRef<INewNote[] | []> = computed(() => {
 
 <template>
   <q-page class="page-notes q-pa-md">
-    <div class="row justify-between items-center">
-      <h1 class="text-h6">Notes</h1>
+    <div class="row justify-between items-center q-mb-sm">
+      <h6 class="text-h6">Notes</h6>
       <NewNote />
     </div>
     <div class="row">
       <template v-if="savedNotes.length !== 0">
-        <div v-for="note in savedNotes" class="col">{{ note.name }}</div>
+        <q-expansion-item
+          v-for="(note, index) in savedNotes"
+          :key="index"
+          dense
+          dense-toggle
+          expand-separator
+          class="col"
+          :label="note.name"
+        >
+          <q-card>
+            <q-card-section>
+              <div v-html="toMarkDown(note.content)"></div>
+            </q-card-section>
+          </q-card>
+        </q-expansion-item>
       </template>
     </div>
   </q-page>

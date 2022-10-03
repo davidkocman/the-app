@@ -1,14 +1,15 @@
 import { defineStore } from 'pinia'
 import { useAppStore } from './app'
-import { addDoc, collection, getDocs, query, where, DocumentReference, doc } from 'firebase/firestore'
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
 import { auth, db } from '@/firebaseConfig'
 import getErrorMessage from '@/utils/handleCatchErrors'
-import INewNote from '@/types/INewNote'
-import INote from '@/types/INote'
+import INewNote from '@/types/notes/INewNote'
+import INote from '@/types/notes/INote'
+import INoteResponse from '@/types/notes/INoteResponse'
 
 export const useNotesStore = defineStore('notes', {
   state: () => ({
-    notes: []
+    notes: [] as INoteResponse[] | []
   }),
   actions: {
     async saveNewNote(payload: INote) {
@@ -22,9 +23,9 @@ export const useNotesStore = defineStore('notes', {
         }
         const q = collection(db, 'notes')
         const docRef = await addDoc(q, newNote)
-        this.notes.push({id: docRef.id, ...newNote})
+        this.notes.push({ id: docRef.id, ...newNote })
         console.log(docRef.id)
-      } catch(e) {
+      } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
         appStore.loading = false
@@ -36,9 +37,9 @@ export const useNotesStore = defineStore('notes', {
     async removeNote() {
       console.log('removing')
     },
-    async getNotes () {
+    async getNotes() {
       const appStore = useAppStore()
-      if (this.notes.length !== 0 ) {
+      if (this.notes.length !== 0) {
         return
       }
       appStore.loading = true
@@ -46,13 +47,13 @@ export const useNotesStore = defineStore('notes', {
       const q = query(collection(db, 'notes'), where('user', '==', auth.currentUser?.uid))
       try {
         const querySnapshot = await getDocs(q)
-        querySnapshot.forEach(note => {
+        querySnapshot.forEach((note) => {
           this.notes.push({
             id: note.id,
             ...note.data()
           })
         })
-      } catch(e) {
+      } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
         appStore.loading = false

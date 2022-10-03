@@ -1,32 +1,35 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { QEditorProps } from 'quasar'
+import { ref, computed } from 'vue'
 import { useNotesStore } from '@/store/notes'
-import INote from '@/types/INote'
+import toMarkDown from '@/utils/toMarkdown'
+import INote from '@/types/notes/INote'
 
 const notesStore = useNotesStore()
 const dialog = ref(false)
-const noteName = ref('')
-const noteContent = ref('')
-
-interface IDefinitions {
-  [key: string]: QEditorProps['definitions']
-}
-
+const name = ref('')
+const content = ref('')
 
 const save = (): void => {
-  if (noteName.value !== '' && noteContent.value !== '') {
+  if (name.value !== '' && content.value !== '') {
     const newNote: INote = {
-      name: noteName.value,
-      content: noteContent.value
+      name: name.value,
+      content: content.value
     }
     notesStore.saveNewNote(newNote)
   }
 }
 
+const noteContent = computed(() => {
+  return toMarkDown(content.value)
+})
+
+const hasValues = computed(() => {
+  return name.value !== '' && content.value !== '' ? true : false
+})
+
 const resetNote = () => {
-  noteContent.value = ''
-  noteName.value = ''
+  content.value = ''
+  name.value = ''
 }
 </script>
 
@@ -45,35 +48,34 @@ const resetNote = () => {
           </q-btn>
         </q-bar>
 
-        <q-card-section class="q-mb-sm">
-          <div class="text-body-1">New note</div>
+        <q-card-section>
+          <div class="row justify-between items-center">
+            <h6 class="text-h6">New note</h6>
+            <q-btn
+              color="primary"
+              icon="save"
+              size="16px"
+              class="q-pa-none"
+              flat
+              dense
+              :disable="!hasValues"
+              @click="save"
+            >
+              <q-tooltip>Save note</q-tooltip>
+            </q-btn>
+          </div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
           <div class="row">
-            <div class="col q-pa-sm">
-              <q-input dense v-model="noteName" label="Note name" type="text" />
-              <q-editor
-                v-model="noteContent"
-                class="q-mt-md"
-                :definitions="{
-                  save: {
-                    tip: 'Save notes',
-                    icon: 'save',
-                    label: 'Save',
-                    handler: save
-                  },
-                  upload: {
-                    tip: 'Upload to cloud',
-                    icon: 'cloud_upload',
-                    label: 'Upload',
-                    handler: save
-                  }
-                } as IDefinitions"
-                :toolbar="[
-                  ['bold', 'italic', 'underline', 'strike', 'undo', 'redo'],
-                  ['save', 'upload']
-                ]"
+            <div class="col q-pr-sm q-pb-sm">
+              <q-input dense v-model="name" label="Note name" type="text" />
+              <q-input
+                type="textarea"
+                dense
+                v-model="content"
+                :input-style="{ minHeight: '600px' }"
+                placeholder="Note content"
               />
             </div>
             <div class="col q-pa-sm">

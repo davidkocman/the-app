@@ -12,7 +12,7 @@ const userData = reactive({
 })
 
 const handleSubmit = async () => {
-  if(userData.email === '' || userData.pass.length === 0 || userData.pass.length < 6) {
+  if (userData.email === '' || userData.pass.length === 0 || userData.pass.length < 6) {
     alert('error in registration data')
   }
   try {
