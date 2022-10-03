@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useNotesStore } from '@/store/notes'
+import { useAppStore } from '@/store/app'
 import toMarkDown from '@/utils/toMarkdown'
 import INote from '@/types/notes/INote'
 
 const notesStore = useNotesStore()
+const appStore = useAppStore()
 const dialog = ref(false)
 const name = ref('')
 const content = ref('')
@@ -58,7 +60,7 @@ const resetNote = () => {
               class="q-pa-none"
               flat
               dense
-              :disable="!hasValues"
+              :disable="!hasValues || appStore.loading"
               @click="save"
             >
               <q-tooltip>Save note</q-tooltip>

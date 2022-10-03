@@ -3,6 +3,7 @@ import { computed, onBeforeMount, ComputedRef } from 'vue'
 import { useNotesStore } from '@/store/notes'
 import toMarkDown from '@/utils/toMarkdown'
 import NewNote from './components/NewNote.vue'
+import EditNote from './components/EditNote.vue'
 import INewNote from '@/types/notes/INewNote'
 
 const notesStore = useNotesStore()
@@ -26,14 +27,13 @@ const savedNotes: ComputedRef<INewNote[] | []> = computed(() => {
         <q-expansion-item
           v-for="(note, index) in savedNotes"
           :key="index"
-          dense
-          dense-toggle
-          expand-separator
-          class="col"
+          
+          class="col col-12"
           :label="note.name"
         >
           <q-card>
-            <q-card-section>
+            <q-card-section class="q-px-lg">
+              <EditNote :note="note" />
               <div v-html="toMarkDown(note.content)"></div>
             </q-card-section>
           </q-card>

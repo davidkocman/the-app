@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useAppStore } from './app'
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
+import { addDoc, doc, collection, getDocs, query, where, getDoc, updateDoc } from 'firebase/firestore'
 import { auth, db } from '@/firebaseConfig'
 import getErrorMessage from '@/utils/handleCatchErrors'
 import INewNote from '@/types/notes/INewNote'
@@ -31,8 +31,33 @@ export const useNotesStore = defineStore('notes', {
         appStore.loading = false
       }
     },
-    async editNote() {
-      console.log('editing')
+    async editNote(id: string, content: string) {
+      const appStore = useAppStore()
+      appStore.loading = true
+      try {
+        const docRef = doc(db, 'notes', id)
+        const docSnap = await getDoc(docRef)
+        
+        if(!docSnap.exists()) {
+          throw new Error('There is no such doc!')
+        }
+        
+        if(docSnap.data().user === auth.currentUser?.uid) {
+          await updateDoc(docRef, {
+            content
+          })
+          this.notes = this.notes.map( (item: INoteResponse) => {
+            item.id === id ? console.log({...item}) : console.log(item)            
+            // item.id === id ? {...item, content: content} : item
+          })
+        } else {
+          throw new Error('There is no such user.')
+        }
+      } catch(e) {
+        appStore.reportError({ message: getErrorMessage(e) })
+      } finally {
+        appStore.loading = false
+      }
     },
     async removeNote() {
       console.log('removing')
@@ -47,7 +72,7 @@ export const useNotesStore = defineStore('notes', {
       const q = query(collection(db, 'notes'), where('user', '==', auth.currentUser?.uid))
       try {
         const querySnapshot = await getDocs(q)
-        querySnapshot.forEach((note) => {
+        querySnapshot.forEach(note => {
           this.notes.push({
             id: note.id,
             ...note.data()
