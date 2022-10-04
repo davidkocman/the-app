@@ -37,18 +37,18 @@ export const useNotesStore = defineStore('notes', {
       try {
         const docRef = doc(db, 'notes', id)
         const docSnap = await getDoc(docRef)
-        
+
         if(!docSnap.exists()) {
           throw new Error('There is no such doc!')
         }
         
         if(docSnap.data().user === auth.currentUser?.uid) {
           await updateDoc(docRef, {
-            content
+            content: content
           })
-          this.notes = this.notes.map( (item: INoteResponse) => {
-            item.id === id ? console.log({...item}) : console.log(item)            
-            // item.id === id ? {...item, content: content} : item
+          
+          this.notes = this.notes.map((item: INoteResponse) => {            
+            return item.id === id ? { ...item, content: content } : item
           })
         } else {
           throw new Error('There is no such user.')

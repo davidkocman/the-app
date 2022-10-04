@@ -4,14 +4,14 @@ import { useNotesStore } from '@/store/notes'
 import toMarkDown from '@/utils/toMarkdown'
 import NewNote from './components/NewNote.vue'
 import EditNote from './components/EditNote.vue'
-import INewNote from '@/types/notes/INewNote'
+import INoteResponse from '@/types/notes/INoteResponse'
 
 const notesStore = useNotesStore()
 onBeforeMount(() => {
   notesStore.getNotes()
 })
 
-const savedNotes: ComputedRef<INewNote[] | []> = computed(() => {
+const savedNotes: ComputedRef<INoteResponse[] | []> = computed(() => {
   return notesStore.notes
 })
 </script>

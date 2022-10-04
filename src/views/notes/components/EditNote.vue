@@ -13,12 +13,14 @@
     }
   })
 
+  const { note } = toRefs(props)
+
   const notesStore = useNotesStore()
   const appStore = useAppStore()
   const dialog = ref(false)
-  const id = ref(props.note.id)
-  const name = ref(props.note.name)
-  const content = ref(props.note.content)
+  const id = ref(note.value.id)
+  const name = ref(note.value.name)
+  const content = ref(note.value.content)
   
   const save = async () => {
     if (name.value !== '' && content.value !== '') {
@@ -28,7 +30,6 @@
       }
       await notesStore.editNote(id.value, note.content)
       dialog.value = false
-      resetNote()
     }
   }
   
@@ -39,11 +40,6 @@
   const hasValues = computed(() => {
     return name.value !== '' && content.value !== '' ? true : false
   })
-  
-  const resetNote = () => {
-    content.value = ''
-    name.value = ''
-  }
   </script>
   
   <template>
@@ -56,14 +52,14 @@
         <q-card class="bg-dark-page">
           <q-bar>
             <q-space />
-            <q-btn dense flat icon="close" v-close-popup @click="resetNote">
+            <q-btn dense flat icon="close" v-close-popup>
               <q-tooltip class="bg-white text-primary">Close</q-tooltip>
             </q-btn>
           </q-bar>
   
           <q-card-section>
             <div class="row justify-between items-center">
-              <h6 class="text-h6">New note</h6>
+              <h6 class="text-h6">Editing note</h6>
               <q-btn
                 color="primary"
                 icon="save"
