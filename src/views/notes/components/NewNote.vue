@@ -11,13 +11,14 @@ const dialog = ref(false)
 const name = ref('')
 const content = ref('')
 
-const save = (): void => {
+const save = async () => {
   if (name.value !== '' && content.value !== '') {
     const newNote: INote = {
       name: name.value,
       content: content.value
     }
-    notesStore.saveNewNote(newNote)
+    await notesStore.saveNewNote(newNote)
+    dialog.value = false
   }
 }
 

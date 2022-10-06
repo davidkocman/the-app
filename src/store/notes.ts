@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useAppStore } from './app'
-import { addDoc, doc, collection, getDocs, query, where, getDoc, updateDoc } from 'firebase/firestore'
+import { addDoc, doc, collection, getDocs, query, where, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { auth, db } from '@/firebaseConfig'
 import getErrorMessage from '@/utils/handleCatchErrors'
 import INewNote from '@/types/notes/INewNote'
@@ -24,7 +24,6 @@ export const useNotesStore = defineStore('notes', {
         const q = collection(db, 'notes')
         const docRef = await addDoc(q, newNote)
         this.notes.push({ id: docRef.id, ...newNote })
-        console.log(docRef.id)
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
@@ -38,29 +37,48 @@ export const useNotesStore = defineStore('notes', {
         const docRef = doc(db, 'notes', id)
         const docSnap = await getDoc(docRef)
 
-        if(!docSnap.exists()) {
-          throw new Error('There is no such doc!')
+        if (!docSnap.exists()) {
+          throw new Error('There is no such note in DB!')
         }
-        
-        if(docSnap.data().user === auth.currentUser?.uid) {
+
+        if (docSnap.data().user === auth.currentUser?.uid) {
           await updateDoc(docRef, {
             content: content
           })
-          
-          this.notes = this.notes.map((item: INoteResponse) => {            
+
+          this.notes = this.notes.map((item: INoteResponse) => {
             return item.id === id ? { ...item, content: content } : item
           })
         } else {
-          throw new Error('There is no such user.')
+          throw new Error('You are not a creator of this note!')
         }
-      } catch(e) {
+      } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
         appStore.loading = false
       }
     },
-    async removeNote() {
-      console.log('removing')
+    async removeNote(id: string) {
+      const appStore = useAppStore()
+      appStore.loading = true
+      try {
+        const docRef = doc(db, 'notes', id)
+        const docSnap = await getDoc(docRef)
+
+        if (!docSnap.exists()) {
+          throw new Error('There is no such note in DB!')
+        }
+        if (docSnap.data().user === auth.currentUser?.uid) {
+          await deleteDoc(docRef)
+          this.notes = this.notes.filter((item: INoteResponse) => item.id !== id)
+        } else {
+          throw new Error('You are not a creator of this note!')
+        }
+      } catch (e) {
+        appStore.reportError({ message: getErrorMessage(e) })
+      } finally {
+        appStore.loading = false
+      }
     },
     async getNotes() {
       const appStore = useAppStore()
@@ -72,7 +90,7 @@ export const useNotesStore = defineStore('notes', {
       const q = query(collection(db, 'notes'), where('user', '==', auth.currentUser?.uid))
       try {
         const querySnapshot = await getDocs(q)
-        querySnapshot.forEach(note => {
+        querySnapshot.forEach((note) => {
           this.notes.push({
             id: note.id,
             ...note.data()
