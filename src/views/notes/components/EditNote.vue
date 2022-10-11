@@ -93,7 +93,7 @@ const hasValues = computed(() => {
                 type="textarea"
                 dense
                 v-model="content"
-                :input-style="{ minHeight: '600px' }"
+                :input-style="{ minHeight: '750px' }"
                 placeholder="Note content"
               />
             </div>

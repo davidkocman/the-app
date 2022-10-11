@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useMeta } from 'quasar'
 import TWeatherData from '@/types/weather/TWeatherData'
 import TTimeSeries from '@/types/weather/TTimeSeries'
 import useGetTimeSeries from '@/composables/weather/useGetTimeSeries'
@@ -13,6 +14,18 @@ import WindSpeedChart from '@/views/weather/components/charts/WindSpeedChart.vue
 import HumidityChart from '@/views/weather/components/charts/HumidityChart.vue'
 import AirPresureChart from '@/views/weather/components/charts/AirPresureChart.vue'
 import SavedLocations from '@/views/weather/components/SavedLocations.vue'
+
+const pageTitle = ref('Weather | The App')
+useMeta(() => {
+  return {
+    title: pageTitle.value,
+    meta: {
+      description: { name: 'description', content: 'Weather' },
+      keywords: { name: 'keywords', content: 'weather, forecast, slovakia weather, charts' },
+      equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' }
+    }
+  }
+})
 
 const weatherData = ref<TWeatherData | null>(null)
 const activeLocation = ref<string>('')

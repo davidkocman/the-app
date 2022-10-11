@@ -1,10 +1,23 @@
 <script setup lang="ts">
-import { computed, onBeforeMount, ComputedRef } from 'vue'
+import { ref, computed, onBeforeMount, ComputedRef } from 'vue'
 import { useNotesStore } from '@/store/notes'
+import { useMeta } from 'quasar'
 import toMarkDown from '@/utils/toMarkdown'
 import NewNote from './components/NewNote.vue'
 import EditNote from './components/EditNote.vue'
 import INoteResponse from '@/types/notes/INoteResponse'
+
+const pageTitle = ref('Notes | The App')
+useMeta(() => {
+  return {
+    title: pageTitle.value,
+    meta: {
+      description: { name: 'description', content: 'Notes' },
+      keywords: { name: 'keywords', content: 'notes, note, markdown, .md' },
+      equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' }
+    }
+  }
+})
 
 const notesStore = useNotesStore()
 onBeforeMount(() => {
@@ -24,7 +37,13 @@ const savedNotes: ComputedRef<INoteResponse[] | []> = computed(() => {
     </div>
     <div class="row">
       <template v-if="savedNotes.length !== 0">
-        <q-expansion-item v-for="(note, index) in savedNotes" :key="index" class="col col-12" :label="note.name">
+        <q-expansion-item
+          v-for="(note, index) in savedNotes"
+          :key="index"
+          class="col col-12"
+          :label="note.name"
+          header-class="text-weight-medium"
+        >
           <q-card>
             <q-card-section class="q-px-lg">
               <EditNote :note="note" />

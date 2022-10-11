@@ -6,7 +6,7 @@ const userStore = useUserStore()
 
 <template>
   <q-page class="page-profile q-pa-md">
-    <div class="row justify-between items-center">
+    <div class="row justify-between items-center q-mb-sm">
       <h1 class="text-h6">Profile</h1>
     </div>
     <div class="row">
