@@ -39,7 +39,7 @@ const resetNote = () => {
 <template>
   <div>
     <q-btn color="primary" icon="add" size="16px" class="q-pa-none" flat dense @click="dialog = true">
-      <q-tooltip>Create new notes</q-tooltip>
+      <q-tooltip>New</q-tooltip>
     </q-btn>
 
     <q-dialog v-model="dialog" persistent maximized transition-show="slide-up" transition-hide="slide-down">

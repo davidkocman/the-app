@@ -111,7 +111,7 @@ const hasValues = computed(() => {
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn color="negative" flat label="Remove" v-close-popup @click="removeNote" />
+          <q-btn color="negative" icon="delete" flat v-close-popup @click="removeNote" />
         </q-card-actions>
       </q-card>
     </q-dialog>

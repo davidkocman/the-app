@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { useAppStore } from './app'
 import { addDoc, doc, collection, getDocs, query, where, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { auth, db } from '@/firebaseConfig'
-import { Loading, QSpinnerPuff as spinner } from 'quasar'
+import spinner from '@/utils/spinner'
 import getErrorMessage from '@/utils/handleCatchErrors'
 import INewNote from '@/types/notes/INewNote'
 import INote from '@/types/notes/INote'
@@ -15,11 +15,7 @@ export const useNotesStore = defineStore('notes', {
   actions: {
     async saveNewNote(payload: INote) {
       const appStore = useAppStore()
-      Loading.show({
-        spinner: spinner,
-        spinnerSize: 60
-      })
-      appStore.loading = true
+      spinner(true)
       try {
         const newNote: INewNote = {
           name: payload.name,
@@ -32,17 +28,12 @@ export const useNotesStore = defineStore('notes', {
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
-        Loading.hide()
-        appStore.loading = false
+        spinner(false)
       }
     },
     async editNote(id: string, content: string) {
       const appStore = useAppStore()
-      Loading.show({
-        spinner: spinner,
-        spinnerSize: 60
-      })
-      appStore.loading = true
+      spinner(true)
       try {
         const docRef = doc(db, 'notes', id)
         const docSnap = await getDoc(docRef)
@@ -65,17 +56,12 @@ export const useNotesStore = defineStore('notes', {
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
-        Loading.hide()
-        appStore.loading = false
+        spinner(false)
       }
     },
     async removeNote(id: string) {
       const appStore = useAppStore()
-      Loading.show({
-        spinner: spinner,
-        spinnerSize: 60
-      })
-      appStore.loading = true
+      spinner(true)
       try {
         const docRef = doc(db, 'notes', id)
         const docSnap = await getDoc(docRef)
@@ -92,8 +78,7 @@ export const useNotesStore = defineStore('notes', {
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
-        Loading.hide()
-        appStore.loading = false
+        spinner(false)
       }
     },
     async getNotes() {
@@ -101,12 +86,7 @@ export const useNotesStore = defineStore('notes', {
       if (this.notes.length !== 0) {
         return
       }
-      Loading.show({
-        spinner: spinner,
-        spinnerColor: 'primary',
-        spinnerSize: 60
-      })
-      appStore.loading = true
+      spinner(true)
       this.notes = []
       const q = query(collection(db, 'notes'), where('user', '==', auth.currentUser?.uid))
       try {
@@ -120,8 +100,7 @@ export const useNotesStore = defineStore('notes', {
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
-        Loading.hide()
-        appStore.loading = false
+        spinner(false)
       }
     }
   }

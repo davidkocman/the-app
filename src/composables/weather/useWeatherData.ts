@@ -3,7 +3,7 @@ import TSavedLocation from '@/types/weather/TSavedLocation'
 import MWeatherData from '@/model/weather/MWeatherData'
 import TModel from '@/types/weather/TModel'
 import { ref } from 'vue'
-import { useQuasar } from 'quasar'
+import spinner from '@/utils/spinner'
 import cities from '@/assets/cities/sk.json'
 
 /**
@@ -16,7 +16,6 @@ import cities from '@/assets/cities/sk.json'
  * getWeatherData: The getWeatherData function
  */
 export default function useWeatherData() {
-  const $q = useQuasar()
   const options = ref(cities)
   const weatherData = ref<TWeatherData>(MWeatherData.create())
   const model = ref<TModel>()
@@ -47,7 +46,7 @@ export default function useWeatherData() {
    * @param {TModel} val - TModel - this is the type of the parameter that is passed to the function.
    */
   async function getWeatherData(val: TModel) {
-    $q.loading.show()
+    spinner(true)
     try {
       const response = await fetch(
         `https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${val.lat}&lon=${val.lng}`
@@ -56,12 +55,12 @@ export default function useWeatherData() {
     } catch (error) {
       console.log(error)
     } finally {
-      $q.loading.hide()
+      spinner(false)
     }
   }
 
   const getSavedLocationWeatherData = async (location: TSavedLocation): Promise<void> => {
-    $q.loading.show()
+    spinner(true)
     try {
       const response = await fetch(
         `https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${location.lat}&lon=${location.lng}`
@@ -70,7 +69,7 @@ export default function useWeatherData() {
     } catch (error) {
       console.log(error)
     } finally {
-      $q.loading.hide()
+      spinner(false)
     }
   }
 

@@ -1,7 +1,20 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useUserStore } from '@/store/user'
-
+import { useMeta } from 'quasar'
 const userStore = useUserStore()
+
+const pageTitle = ref(`Profile: ${userStore.userData?.name} | The App`)
+useMeta(() => {
+  return {
+    title: pageTitle.value,
+    meta: {
+      description: { name: 'description', content: 'Notes' },
+      keywords: { name: 'keywords', content: 'notes, note, markdown, .md' },
+      equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' }
+    }
+  }
+})
 </script>
 
 <template>
