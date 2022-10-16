@@ -30,7 +30,7 @@ const save = async () => {
       name: name.value,
       content: content.value
     }
-    await notesStore.editNote(id.value, note.content)
+    await notesStore.editNote(id.value, note)
     dialog.value = false
   }
 }

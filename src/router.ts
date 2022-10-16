@@ -28,6 +28,10 @@ const routes = [
       {
         path: '/login',
         component: () => import('@/views/Login.vue')
+      },
+      {
+        path: '/:pathMatch(.*)', 
+        component: () => import(/* webpackChunkName: Error */ '@/views/error/404.vue')
       }
     ]
   },

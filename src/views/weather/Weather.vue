@@ -96,7 +96,7 @@ watch(activeRegion, (value: string) => {
 </script>
 
 <template>
-  <q-page class="page-weather q-pa-md">
+  <q-page class="page-weather q-px-lg q-py-md">
     <div class="row justify-between items-center">
       <h1 class="text-h6">Weather</h1>
       <SavedLocations

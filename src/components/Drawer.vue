@@ -7,10 +7,7 @@ const appStore = useAppStore()
   <q-drawer
     v-model="appStore.drawer"
     show-if-above
-    :mini="appStore.miniState"
-    @mouseover="appStore.miniState = false"
-    @mouseout="appStore.miniState = true"
-    mini-to-overlay
+    :mini="!appStore.drawer || appStore.miniState"
     :width="200"
     :breakpoint="500"
     bordered
@@ -57,6 +54,18 @@ const appStore = useAppStore()
         </q-item>
       </q-list>
     </q-scroll-area>
+    <div class="absolute desktop-only" style="top: 20px; right: -12px">
+      <q-btn
+        dense
+        round
+        unelevated
+        color="primary"
+        size="sm"
+        @click="appStore.miniState = !appStore.miniState"
+      >
+        <q-icon :name="(appStore.miniState) ? 'chevron_right' : 'chevron_left'" />
+      </q-btn>
+    </div>
   </q-drawer>
 </template>
 

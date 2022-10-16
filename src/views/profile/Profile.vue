@@ -18,7 +18,7 @@ useMeta(() => {
 </script>
 
 <template>
-  <q-page class="page-profile q-pa-md">
+  <q-page class="page-profile q-px-lg q-py-md">
     <div class="row justify-between items-center q-mb-sm">
       <h1 class="text-h6">Profile</h1>
     </div>

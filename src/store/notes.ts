@@ -31,7 +31,7 @@ export const useNotesStore = defineStore('notes', {
         spinner(false)
       }
     },
-    async editNote(id: string, content: string) {
+    async editNote(id: string, note: INote) {
       const appStore = useAppStore()
       spinner(true)
       try {
@@ -44,11 +44,12 @@ export const useNotesStore = defineStore('notes', {
 
         if (docSnap.data().user === auth.currentUser?.uid) {
           await updateDoc(docRef, {
-            content: content
+            name: note.name,
+            content: note.content
           })
 
           this.notes = this.notes.map((item: INoteResponse) => {
-            return item.id === id ? { ...item, content: content } : item
+            return item.id === id ? { ...item, content: note.content, name: note.name } : item
           })
         } else {
           throw new Error('You are not a creator of this note!')

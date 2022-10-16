@@ -32,7 +32,7 @@ watch(weatherData, (value): void => {
 </script>
 
 <template>
-  <q-btn v-if="hasSavedLocations" icon="star_rate" color="primary" size="16px" flat dense @click="open('right')">
+  <q-btn v-if="hasSavedLocations" icon="star_rate" color="primary" size="md" flat dense @click="open('right')">
     <q-tooltip>Saved locations</q-tooltip>
   </q-btn>
   <q-dialog v-model="dialog" :position="position">
