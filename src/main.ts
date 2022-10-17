@@ -2,7 +2,7 @@ import router from '@/router'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import App from './App.vue'
-import { Quasar, Loading } from 'quasar'
+import { Quasar, Loading, Notify } from 'quasar'
 
 // Import icon libraries
 import '@quasar/extras/roboto-font-latin-ext/roboto-font-latin-ext.css'
@@ -17,7 +17,8 @@ myApp.use(createPinia())
 myApp.use(router)
 myApp.use(Quasar, {
   plugins: {
-    Loading
+    Loading,
+    Notify
   }, // import Quasar plugins and add here
   config: {
     extras: [

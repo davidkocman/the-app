@@ -4,8 +4,8 @@ import { Loading, QSpinnerPuff as spinner } from 'quasar'
 export default (visible: boolean) => {
   const appStore = useAppStore()
   appStore.loading = visible
-  
-  if(appStore.loading === true) {
+
+  if (appStore.loading === true) {
     Loading.show({
       spinner: spinner,
       spinnerSize: 60

@@ -35,7 +35,8 @@ export const useUserStore = defineStore('user', {
         this.userData = {
           email: user.email,
           uid: user.uid,
-          name: user.displayName
+          name: user.displayName,
+          emailVerified: user.emailVerified
         } as IUserData
         router.push('/')
       } catch (e) {
@@ -52,7 +53,9 @@ export const useUserStore = defineStore('user', {
         const { user } = await signInWithEmailAndPassword(auth, email, password)
         this.userData = {
           email: user.email,
-          uid: user.uid
+          uid: user.uid,
+          name: user.displayName,
+          emailVerified: user.emailVerified
         } as IUserData
         router.push('/')
       } catch (e) {
@@ -86,7 +89,8 @@ export const useUserStore = defineStore('user', {
               this.userData = {
                 email: user.email,
                 uid: user.uid,
-                name: user.displayName
+                name: user.displayName,
+                emailVerified: user.emailVerified
               } as IUserData
             } else {
               this.userData = null

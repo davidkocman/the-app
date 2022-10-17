@@ -37,20 +37,21 @@ const savedNotes: ComputedRef<INoteResponse[] | []> = computed(() => {
     </div>
     <div class="row">
       <template v-if="savedNotes.length !== 0">
-        <q-expansion-item
-          v-for="(note, index) in savedNotes"
-          :key="index"
-          class="col col-12"
-          :label="note.name"
-          header-class="text-weight-medium"
-        >
-          <q-card>
-            <q-card-section class="q-px-lg">
-              <EditNote :note="note" />
-              <div v-html="toMarkDown(note.content)"></div>
-            </q-card-section>
-          </q-card>
-        </q-expansion-item>
+        <q-list bordered separator class="col col-12">
+          <q-expansion-item
+            v-for="(note, index) in savedNotes"
+            :key="index"
+            :label="note.name"
+            header-class="text-weight-medium"
+          >
+            <q-card>
+              <q-card-section class="q-px-lg">
+                <EditNote :note="note" />
+                <div v-html="toMarkDown(note.content)"></div>
+              </q-card-section>
+            </q-card>
+          </q-expansion-item>
+        </q-list>
       </template>
     </div>
   </q-page>

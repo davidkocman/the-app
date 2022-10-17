@@ -13,7 +13,6 @@ useMeta(() => {
     }
   }
 })
-
 </script>
 
 <template>

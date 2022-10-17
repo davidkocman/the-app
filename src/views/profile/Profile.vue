@@ -27,7 +27,8 @@ useMeta(() => {
         <q-card class="my-card">
           <q-card-section>
             <h2 class="text-h6 q-my-xs">{{ userStore.userData?.name }}</h2>
-            <span class="text-caption">{{ userStore.userData?.email }}</span>
+            <h3 class="text-caption">Email: {{ userStore.userData?.email }}</h3>
+            <h3 class="text-caption">Verified: {{ userStore.userData?.emailVerified }}</h3>
           </q-card-section>
         </q-card>
       </div>

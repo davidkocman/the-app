@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { useQuasar } from 'quasar'
+import { useQuasar, Notify } from 'quasar'
 
 export const useAppStore = defineStore('app', {
   state: () => ({
@@ -17,6 +17,12 @@ export const useAppStore = defineStore('app', {
   actions: {
     reportError({ message }: { message: string }) {
       this.errorMessage = message
+      Notify.create({
+        message,
+        type: 'negative',
+        icon: 'error',
+        position: 'top'
+      })
       console.log('Reported error: ', message)
     }
   }

@@ -55,15 +55,8 @@ const appStore = useAppStore()
       </q-list>
     </q-scroll-area>
     <div class="absolute desktop-only" style="top: 20px; right: -12px">
-      <q-btn
-        dense
-        round
-        unelevated
-        color="primary"
-        size="sm"
-        @click="appStore.miniState = !appStore.miniState"
-      >
-        <q-icon :name="(appStore.miniState) ? 'chevron_right' : 'chevron_left'" />
+      <q-btn dense round unelevated color="primary" size="sm" @click="appStore.miniState = !appStore.miniState">
+        <q-icon :name="appStore.miniState ? 'chevron_right' : 'chevron_left'" />
       </q-btn>
     </div>
   </q-drawer>
