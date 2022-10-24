@@ -4,10 +4,10 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
-    "lint:markup": "vue-tsc --noEmit",
+    "lint:markup": "vue-tsc --noEmit --skipLibCheck",
     "lint:style": "stylelint src/**/*.{css,scss,vue}",
     "lint": "yarn lint:script ; yarn lint:style ; yarn lint:markup --no-error-on-unmatched-pattern",
     "lint:fix": "yarn lint:script ; yarn lint:style ; yarn lint:markup --no-error-on-unmatched-pattern --fix"

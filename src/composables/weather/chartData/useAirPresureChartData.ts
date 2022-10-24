@@ -1,5 +1,6 @@
 import TTimeSeries from '@/types/weather/TTimeSeries'
 import { computed, Ref } from 'vue'
+import type { Options as HighchartsOptions } from 'highcharts'
 
 export default function useAirPresureChartData(timeseries: Ref<TTimeSeries[]>) {
   /**
@@ -7,9 +8,9 @@ export default function useAirPresureChartData(timeseries: Ref<TTimeSeries[]>) {
    * @returns An array of hours from the timeseries data.
    */
   function getHours() {
-    const categories: number[] = []
+    const categories: string[] = []
     timeseries.value.forEach((item: TTimeSeries) => {
-      categories.push(new Date(item.time).getHours())
+      categories.push(new Date(item.time).getHours().toString())
     })
 
     return categories
@@ -49,125 +50,128 @@ export default function useAirPresureChartData(timeseries: Ref<TTimeSeries[]>) {
     return airPresure
   }
 
-  const chartOptions = computed(() => ({
-    chart: {
-      backgroundColor: '',
-      style: {
-        fontFamily: 'Roboto'
-      }
-    },
-    boost: {
-      useGPUTranslations: true
-    },
-    title: {
-      text: 'Atmospheric Pressure',
-      style: {
-        color: 'var(--title-text)'
-      }
-    },
-    tooltip: {
-      shared: true,
-      crosshairs: true,
-      useHTML: true,
-      headerFormat: '<span style="font-size: 10px">{point.key}:00</span><br/>'
-    },
-    legend: {
-      itemStyle: {
-        color: 'var(--legend)',
-        fontWeight: 'bold'
-      },
-      itemHoverStyle: {
-        color: 'grey'
-      }
-    },
-    xAxis: [
-      {
-        categories: getHours(),
-        type: 'category',
-        gridLineColor: 'var(--x-hours-gridline)',
-        labels: {
-          style: {
-            color: 'var(--x-hours-labels)'
-          }
+  const chartOptions = computed(() => {
+    const options: HighchartsOptions = {
+      chart: {
+        backgroundColor: '',
+        style: {
+          fontFamily: 'Roboto'
         }
       },
-      {
-        categories: getCategories(),
-        type: 'category',
-        tickInterval: 4,
-        gridLineWidth: 1,
-        gridLineColor: 'var(--x-categories-gridline)',
-        lineWidth: 0,
-        linkedTo: 0,
-        margin: 1,
-        labels: {
-          align: 'left',
-          style: {
-            color: 'var(--x-categories-labels)'
-          }
+      boost: {
+        useGPUTranslations: true
+      },
+      title: {
+        text: 'Atmospheric Pressure',
+        style: {
+          color: 'var(--title-text)'
         }
-      }
-    ],
-    yAxis: {
-      gridLineDashStyle: 'dash',
-      gridLineColor: 'var(--y-gridline)',
-      plotLines: [
+      },
+      tooltip: {
+        shared: true,
+        useHTML: true,
+        headerFormat: '<span style="font-size: 10px">{point.key}:00</span><br/>'
+      },
+      legend: {
+        itemStyle: {
+          color: 'var(--legend)',
+          fontWeight: 'bold'
+        },
+        itemHoverStyle: {
+          color: 'grey'
+        }
+      },
+      xAxis: [
         {
-          color: 'var(--y-gridline)',
-          dashStyle: 'solid',
-          width: 1,
-          value: 1013.25,
-          zIndex: 4,
-          label: {
-            text: 'Standard pressure 1013.25 hPa',
+          categories: getHours(),
+          type: 'category',
+          gridLineColor: 'var(--x-hours-gridline)',
+          labels: {
             style: {
-              color: 'var(--y-plotlines-label)'
+              color: 'var(--x-hours-labels)'
+            }
+          }
+        },
+        {
+          categories: getCategories(),
+          type: 'category',
+          tickInterval: 4,
+          gridLineWidth: 1,
+          gridLineColor: 'var(--x-categories-gridline)',
+          lineWidth: 0,
+          linkedTo: 0,
+          margin: 1,
+          labels: {
+            align: 'left',
+            style: {
+              color: 'var(--x-categories-labels)'
             }
           }
         }
       ],
-      title: {
-        text: '(hPa)',
-        style: {
-          color: 'var(--y-title)'
-        }
-      },
-      labels: {
-        style: {
-          color: 'var(--y-labels)'
-        }
-      }
-    },
-    series: [
-      {
-        name: 'Atmospheric Pressure',
-        data: getAirPresure(),
-        type: 'spline',
-        marker: {
-          enabled: false
-        },
-        tooltip: {
-          valueSuffix: ' hPa'
-        },
-        dataGrouping: {
-          enabled: false
-        },
-        zones: [
+      yAxis: {
+        gridLineDashStyle: 'Dash',
+        gridLineColor: 'var(--y-gridline)',
+        plotLines: [
           {
+            color: 'var(--y-gridline)',
+            dashStyle: 'Solid',
+            width: 1,
             value: 1013.25,
-            color: 'var(--air-pressure-low)'
-          },
-          {
-            color: 'var(--air-pressure-high)'
+            zIndex: 4,
+            label: {
+              text: 'Standard pressure 1013.25 hPa',
+              style: {
+                color: 'var(--y-plotlines-label)'
+              }
+            }
           }
         ],
-        color: 'var(--air-pressure-break)'
+        title: {
+          text: '(hPa)',
+          style: {
+            color: 'var(--y-title)'
+          }
+        },
+        labels: {
+          style: {
+            color: 'var(--y-labels)'
+          }
+        }
+      },
+      series: [
+        {
+          name: 'Atmospheric Pressure',
+          data: getAirPresure(),
+          type: 'spline',
+          marker: {
+            enabled: false
+          },
+          tooltip: {
+            valueSuffix: ' hPa'
+          },
+          dataGrouping: {
+            enabled: false
+          },
+          zones: [
+            {
+              value: 1013.25,
+              color: 'var(--air-pressure-low)'
+            },
+            {
+              color: 'var(--air-pressure-high)'
+            }
+          ],
+          color: 'var(--air-pressure-break)'
+        }
+      ],
+      credits: {
+        enabled: false
       }
-    ],
-    credits: {
-      enabled: false
     }
-  }))
+
+    return options
+  })
 
   return { chartOptions }
 }

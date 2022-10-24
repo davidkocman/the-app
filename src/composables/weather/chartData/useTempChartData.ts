@@ -1,5 +1,6 @@
 import TTimeSeries from '@/types/weather/TTimeSeries'
 import { computed, Ref } from 'vue'
+import type { Options as HighchartsOptions } from 'highcharts'
 
 export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
   /**
@@ -7,9 +8,9 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
    * @returns An array of hours from the timeseries data.
    */
   function getHours() {
-    const categories: number[] = []
+    const categories: string[] = []
     timeseries.value.forEach((item: TTimeSeries) => {
-      categories.push(new Date(item.time).getHours())
+      categories.push(new Date(item.time).getHours().toString())
     })
 
     return categories
@@ -147,157 +148,160 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
     return maxTemp
   }
 
-  const chartOptions = computed(() => ({
-    chart: {
-      backgroundColor: '',
-      style: {
-        fontFamily: 'Roboto'
-      }
-    },
-    boost: {
-      useGPUTranslations: true
-    },
-    title: {
-      text: 'Temperature forecast',
-      style: {
-        color: 'var(--title-text)'
-      }
-    },
-    tooltip: {
-      shared: true,
-      crosshairs: true,
-      useHTML: true,
-      headerFormat: '<span style="font-size: 10px">{point.key}:00</span><br/>'
-    },
-    legend: {
-      itemStyle: {
-        color: 'var(--legend)',
-        fontWeight: 'bold'
-      },
-      itemHoverStyle: {
-        color: 'grey'
-      }
-    },
-    xAxis: [
-      {
-        categories: getHours(),
-        type: 'category',
-        gridLineColor: 'var(--x-hours-gridline)',
-        labels: {
-          style: {
-            color: 'var(--x-hours-labels)'
-          }
+  const chartOptions = computed(() => {
+    const options: HighchartsOptions = {
+      chart: {
+        backgroundColor: '',
+        style: {
+          fontFamily: 'Roboto'
         }
       },
-      {
-        categories: getCategories(),
-        type: 'category',
-        tickInterval: 4,
-        gridLineWidth: 1,
-        gridLineColor: 'var(--x-categories-gridline)',
-        lineWidth: 0,
-        linkedTo: 0,
-        margin: 0,
-        labels: {
-          align: 'left',
-          style: {
-            color: 'var(--x-categories-labels)'
-          }
+      boost: {
+        useGPUTranslations: true
+      },
+      title: {
+        text: 'Temperature forecast',
+        style: {
+          color: 'var(--title-text)'
         }
-      }
-    ],
-    yAxis: {
-      gridLineDashStyle: 'dash',
-      gridLineColor: 'var(--y-gridline)',
-      plotLines: [
+      },
+      tooltip: {
+        shared: true,
+        useHTML: true,
+        headerFormat: '<span style="font-size: 10px">{point.key}:00</span><br/>'
+      },
+      legend: {
+        itemStyle: {
+          color: 'var(--legend)',
+          fontWeight: 'bold'
+        },
+        itemHoverStyle: {
+          color: 'grey'
+        }
+      },
+      xAxis: [
         {
-          color: 'var(--y-plotlines)',
-          dashStyle: 'solid',
-          width: 1,
-          value: 0,
-          zIndex: 2
+          categories: getHours(),
+          type: 'category',
+          gridLineColor: 'var(--x-hours-gridline)',
+          labels: {
+            style: {
+              color: 'var(--x-hours-labels)'
+            }
+          }
+        },
+        {
+          categories: getCategories(),
+          type: 'category',
+          tickInterval: 4,
+          gridLineWidth: 1,
+          gridLineColor: 'var(--x-categories-gridline)',
+          lineWidth: 0,
+          linkedTo: 0,
+          margin: 0,
+          labels: {
+            align: 'left',
+            style: {
+              color: 'var(--x-categories-labels)'
+            }
+          }
         }
       ],
-      title: {
-        text: '(°C)',
-        style: {
-          color: 'var(--y-title)'
+      yAxis: {
+        gridLineDashStyle: 'Dash',
+        gridLineColor: 'var(--y-gridline)',
+        plotLines: [
+          {
+            color: 'var(--y-plotlines)',
+            dashStyle: 'Solid',
+            width: 1,
+            value: 0,
+            zIndex: 2
+          }
+        ],
+        title: {
+          text: '(°C)',
+          style: {
+            color: 'var(--y-title)'
+          }
+        },
+        labels: {
+          style: {
+            color: 'var(--y-labels)'
+          }
         }
       },
-      labels: {
-        style: {
-          color: 'var(--y-labels)'
+      series: [
+        {
+          name: 'Max. temp.',
+          data: getMaxTemperature(),
+          type: 'column',
+          marker: {
+            enabled: false
+          },
+          tooltip: {
+            valueSuffix: '°C'
+          },
+          dataGrouping: {
+            enabled: false
+          },
+          color: 'var(--temp-series-max-temp)'
+        },
+        {
+          name: 'Max. feel temp.',
+          data: getMaxFeelTemperature(),
+          type: 'spline',
+          zIndex: 5,
+          marker: {
+            enabled: false
+          },
+          dataGrouping: {
+            enabled: false
+          },
+          tooltip: {
+            valueSuffix: '°C'
+          },
+          color: 'var(--temp-series-max-feel-temp)'
+        },
+        {
+          name: 'Min. temp.',
+          data: getMinTemperature(),
+          type: 'column',
+          marker: {
+            enabled: false
+          },
+          dataGrouping: {
+            enabled: false
+          },
+          tooltip: {
+            valueSuffix: '°C'
+          },
+          color: 'var(--temp-series-min-temp)'
+        },
+        {
+          name: 'Min. feel temp.',
+          data: getMinFeelTemperature(),
+          type: 'spline',
+          zIndex: 5,
+          marker: {
+            enabled: false
+          },
+          dataGrouping: {
+            enabled: false
+          },
+          tooltip: {
+            valueSuffix: '°C'
+          },
+          color: 'var(--temp-series-min-feel-temp)'
         }
+      ],
+      credits: {
+        enabled: false
       }
-    },
-    series: [
-      {
-        name: 'Max. temp.',
-        data: getMaxTemperature(),
-        type: 'column',
-        marker: {
-          enabled: false
-        },
-        tooltip: {
-          valueSuffix: '°C'
-        },
-        dataGrouping: {
-          enabled: false
-        },
-        color: 'var(--temp-series-max-temp)'
-      },
-      {
-        name: 'Max. feel temp.',
-        data: getMaxFeelTemperature(),
-        type: 'spline',
-        zIndex: '5',
-        marker: {
-          enabled: false
-        },
-        dataGrouping: {
-          enabled: false
-        },
-        tooltip: {
-          valueSuffix: '°C'
-        },
-        color: 'var(--temp-series-max-feel-temp)'
-      },
-      {
-        name: 'Min. temp.',
-        data: getMinTemperature(),
-        type: 'column',
-        marker: {
-          enabled: false
-        },
-        dataGrouping: {
-          enabled: false
-        },
-        tooltip: {
-          valueSuffix: '°C'
-        },
-        color: 'var(--temp-series-min-temp)'
-      },
-      {
-        name: 'Min. feel temp.',
-        data: getMinFeelTemperature(),
-        type: 'spline',
-        zIndex: '5',
-        marker: {
-          enabled: false
-        },
-        dataGrouping: {
-          enabled: false
-        },
-        tooltip: {
-          valueSuffix: '°C'
-        },
-        color: 'var(--temp-series-min-feel-temp)'
-      }
-    ],
-    credits: {
-      enabled: false
     }
-  }))
+
+    return options
+  })
 
   return { chartOptions }
 }
