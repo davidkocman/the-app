@@ -87,7 +87,7 @@ const hasValues = computed(() => {
 
         <q-card-section class="q-pt-none">
           <div class="row">
-            <div class="col q-pr-sm q-pb-sm">
+            <div class="col-12 col-md-6 editor">
               <q-input dense v-model="name" label="Note name" type="text" />
               <q-input
                 type="textarea"
@@ -97,7 +97,7 @@ const hasValues = computed(() => {
                 placeholder="Note content"
               />
             </div>
-            <div class="col q-pa-sm">
+            <div class="col-12 col-md-6 preview">
               <div class="text-body-1" v-html="noteContent"></div>
             </div>
           </div>
@@ -122,5 +122,17 @@ const hasValues = computed(() => {
 .edit-note {
   top: 16px;
   right: 16px;
+}
+.editor {
+  margin-bottom: 16px;
+  @media (min-width: $breakpoint-sm-max) {
+    margin-bottom: 0;
+  }
+}
+.preview {
+  padding-left: 16px;
+  @media (min-width: $breakpoint-sm-max) {
+    padding-left: 24px;
+  }
 }
 </style>
