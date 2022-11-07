@@ -10,10 +10,10 @@ import TTimeSeries from '@/types/weather/TTimeSeries'
  */
 export default function useGetTimeSeries(data: TWeatherData) {
   const timeMarks: Date[] = [
-    new Date(new Date().setHours(2, 0, 0)),
-    new Date(new Date().setHours(8, 0, 0)),
-    new Date(new Date().setHours(14, 0, 0)),
-    new Date(new Date().setHours(20, 0, 0))
+    new Date(new Date().setUTCHours(0, 0, 0)),
+    new Date(new Date().setUTCHours(6, 0, 0)),
+    new Date(new Date().setUTCHours(12, 0, 0)),
+    new Date(new Date().setUTCHours(18, 0, 0))
   ]
 
   let day: Date | string = ''
