@@ -1,15 +1,15 @@
-import TTimeSeries from '@/types/weather/TTimeSeries'
+import { TimeSeries } from '@/types/weather'
 import { computed, Ref } from 'vue'
 import type { Options as HighchartsOptions } from 'highcharts'
 
-export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
+export default function useTempChartData(timeseries: Ref<TimeSeries[]>) {
   /**
    * It takes the time property of each item in the timeseries array and returns an array of hours
    * @returns An array of hours from the timeseries data.
    */
   function getHours() {
     const categories: string[] = []
-    timeseries.value.forEach((item: TTimeSeries) => {
+    timeseries.value.forEach((item: TimeSeries) => {
       categories.push(new Date(item.time).getHours().toString())
     })
 
@@ -23,7 +23,7 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
   function getCategories() {
     const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
     const categories: string[] = []
-    timeseries.value.forEach((item: TTimeSeries) => {
+    timeseries.value.forEach((item: TimeSeries) => {
       categories.push(
         weekday[new Date(item.time).getDay()] +
           '<br>' +
@@ -54,7 +54,7 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
    */
   function getMinFeelTemperature(): number[] {
     const minFeelTemp: number[] = []
-    timeseries.value.forEach((item: TTimeSeries) => {
+    timeseries.value.forEach((item: TimeSeries) => {
       if (item.data.next_6_hours) {
         const minFTemp: number =
           item.data.next_6_hours.details.air_temperature_min +
@@ -87,7 +87,7 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
   function getMaxFeelTemperature(): number[] {
     const maxFeelTemp: number[] = []
 
-    timeseries.value.forEach((item: TTimeSeries) => {
+    timeseries.value.forEach((item: TimeSeries) => {
       if (item.data.next_6_hours) {
         const maxFTemp: number =
           item.data.next_6_hours.details.air_temperature_max +
@@ -120,7 +120,7 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
   function getMinTemperature(): number[] {
     const minTemp: number[] = []
 
-    timeseries.value.forEach((item: TTimeSeries) => {
+    timeseries.value.forEach((item: TimeSeries) => {
       if (item.data.next_6_hours) {
         minTemp.push(item.data.next_6_hours.details.air_temperature_min)
       } else {
@@ -137,7 +137,7 @@ export default function useTempChartData(timeseries: Ref<TTimeSeries[]>) {
    */
   function getMaxTemperature(): number[] {
     const maxTemp: number[] = []
-    timeseries.value.forEach((item: TTimeSeries) => {
+    timeseries.value.forEach((item: TimeSeries) => {
       if (item.data.next_6_hours) {
         maxTemp.push(item.data.next_6_hours.details.air_temperature_max)
       } else {

@@ -13,11 +13,11 @@ import { useAppStore } from './app'
 import { useNotesStore } from './notes'
 import getErrorMessage from '@/utils/handleCatchErrors'
 import router from '@/router'
-import IUserData from '@/types/IUserData'
+import { UserData } from '@/types/user'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    userData: null as IUserData | null,
+    userData: null as UserData | null,
     loadingUser: false
   }),
   actions: {
@@ -37,7 +37,7 @@ export const useUserStore = defineStore('user', {
           uid: user.uid,
           name: user.displayName,
           emailVerified: user.emailVerified
-        } as IUserData
+        } as UserData
         router.push('/')
       } catch (e) {
         const appStore = useAppStore()
@@ -56,7 +56,7 @@ export const useUserStore = defineStore('user', {
           uid: user.uid,
           name: user.displayName,
           emailVerified: user.emailVerified
-        } as IUserData
+        } as UserData
         router.push('/')
       } catch (e) {
         const appStore = useAppStore()
@@ -91,7 +91,7 @@ export const useUserStore = defineStore('user', {
                 uid: user.uid,
                 name: user.displayName,
                 emailVerified: user.emailVerified
-              } as IUserData
+              } as UserData
             } else {
               this.userData = null
               notesStore.$reset()

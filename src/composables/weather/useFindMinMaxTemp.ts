@@ -1,5 +1,5 @@
 import { Ref, computed } from 'vue'
-import TTimeSeries from '@/types/weather/TTimeSeries'
+import { TimeSeries } from '@/types/weather'
 
 /**
  * It takes an array of time series data as an argument and returns the minimum and maximum temperature
@@ -7,20 +7,20 @@ import TTimeSeries from '@/types/weather/TTimeSeries'
  * @param timeseries - Ref<TTimeSeries[]>
  * @returns An object with two computed properties.
  */
-export default function useFindMinMaxTemp(timeseries: Ref<TTimeSeries[]>) {
+export default function useFindMinMaxTemp(timeseries: Ref<TimeSeries[]>) {
   /* Getting the current date in ISO format and splitting it at the 'T' character. */
   const dateIsoString: string = new Date(new Date()).toISOString().split('T')[0]
 
   /* A computed property that returns the minimum temperature of the day. */
   const minTemp = computed(() => {
-    const todaySeries: TTimeSeries[] = []
-    timeseries.value.forEach((item: TTimeSeries) => {
+    const todaySeries: TimeSeries[] = []
+    timeseries.value.forEach((item: TimeSeries) => {
       if (item.time.includes(dateIsoString)) {
         todaySeries.push(item)
       }
     })
     return todaySeries.reduce(
-      (min, p: TTimeSeries) =>
+      (min, p: TimeSeries) =>
         p.data.instant.details.air_temperature < min ? p.data.instant.details.air_temperature : min,
       todaySeries[0].data.instant.details.air_temperature
     )
@@ -28,8 +28,8 @@ export default function useFindMinMaxTemp(timeseries: Ref<TTimeSeries[]>) {
 
   /* A computed property that returns the maximum temperature of the day. */
   const maxTemp = computed(() => {
-    const todaySeries: TTimeSeries[] = []
-    timeseries.value.forEach((item: TTimeSeries) => {
+    const todaySeries: TimeSeries[] = []
+    timeseries.value.forEach((item: TimeSeries) => {
       if (item.time.includes(dateIsoString)) {
         todaySeries.push(item)
       }

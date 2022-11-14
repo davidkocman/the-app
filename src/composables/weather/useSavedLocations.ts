@@ -1,10 +1,10 @@
 import { ref, reactive, toRefs, onBeforeMount } from 'vue'
-import TSavedLocation from '@/types/weather/TSavedLocation'
+import { SavedLocation } from '@/types/weather'
 
 /* Defining the shape of the object State. */
 interface State {
   hasSavedLocations: boolean
-  savedLocations: TSavedLocation[]
+  savedLocations: SavedLocation[]
 }
 
 /* Creating a reactive object that is of type State. */
@@ -31,7 +31,7 @@ export default function useSavedLocations() {
   }
 
   function saveLocation(coordinates: string[], activeLocation: string, activeRegion: string): void {
-    const newLocation = ref<TSavedLocation>({
+    const newLocation = ref<SavedLocation>({
       lat: coordinates[0],
       lng: coordinates[1],
       title: activeLocation,
@@ -44,7 +44,7 @@ export default function useSavedLocations() {
       storageValue = JSON.parse(localStorage.getItem('the_app-weather-locations') as string)
 
       /* Checking if the location is already saved. */
-      if (storageValue.some((e: TSavedLocation) => e.title === newLocation.value.title)) {
+      if (storageValue.some((e: SavedLocation) => e.title === newLocation.value.title)) {
         return
       }
 
@@ -74,7 +74,7 @@ export default function useSavedLocations() {
 
   const removeSavedLocation = (title: string) => {
     let storageValue = JSON.parse(localStorage.getItem('the_app-weather-locations') as string)
-    const newFavourites = storageValue.filter((location: TSavedLocation) => {
+    const newFavourites = storageValue.filter((location: SavedLocation) => {
       return location.title !== title
     })
     storageValue = newFavourites

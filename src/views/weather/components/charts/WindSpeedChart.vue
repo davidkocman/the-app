@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { PropType, toRefs } from 'vue'
 import { Chart } from 'highcharts-vue'
-import TTimeSeries from '@/types/weather/TTimeSeries'
+import { TimeSeries } from '@/types/weather'
 import useWindSpeedChartData from '@/composables/weather/chartData/useWindSpeedChartData'
 const props = defineProps({
   timeseries: {
     required: true,
-    type: Object as PropType<TTimeSeries[]>
+    type: Object as PropType<TimeSeries[]>
   }
 })
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { SavedLocation } from '@/types/weather'
 import useSavedLocations from '@/composables/weather/useSavedLocations'
 import useWeatherData from '@/composables/weather/useWeatherData'
-import TSavedLocation from '@/types/weather/TSavedLocation'
 
 type positionType = 'top' | 'right' | 'standard' | 'bottom' | 'left' | undefined
 const emit = defineEmits(['weatherData', 'activeLocation', 'activeRegion', 'coordinates'])
@@ -19,7 +19,7 @@ const open = (pos: positionType) => {
   position.value = pos
   dialog.value = true
 }
-const updateRegion = (location: TSavedLocation): void => {
+const updateRegion = (location: SavedLocation): void => {
   emit('activeLocation', location.title)
   emit('activeRegion', location.region)
   emit('coordinates', [location.lat, location.lng])

@@ -2,14 +2,13 @@
 import { ref, computed, PropType, toRefs } from 'vue'
 import { useNotesStore } from '@/store/notes'
 import { useAppStore } from '@/store/app'
+import { NoteResponse, Note } from '@/types/notes'
 import toMarkDown from '@/utils/toMarkdown'
-import INote from '@/types/notes/INote'
-import INoteResponse from '@/types/notes/INoteResponse'
 
 const props = defineProps({
   note: {
     required: true,
-    type: Object as PropType<INoteResponse>
+    type: Object as PropType<NoteResponse>
   }
 })
 
@@ -26,7 +25,7 @@ const content = ref(note.value.content)
 
 const save = async () => {
   if (name.value !== '' && content.value !== '') {
-    const note: INote = {
+    const note: Note = {
       name: name.value,
       content: content.value
     }
@@ -44,7 +43,7 @@ const noteContent = computed(() => {
   return toMarkDown(content.value)
 })
 
-const hasValues = computed(() => {
+const hasNameAndContent = computed(() => {
   return name.value !== '' && content.value !== '' ? true : false
 })
 </script>
@@ -77,7 +76,7 @@ const hasValues = computed(() => {
               class="q-pa-none"
               flat
               dense
-              :disable="!hasValues || appStore.loading"
+              :disable="!hasNameAndContent || appStore.loading"
               @click="save"
             >
               <q-tooltip>Save note</q-tooltip>

@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import TTimeSeries from '@/types/weather/TTimeSeries'
-import TUnits from '@/types/weather/TUnits'
+import { PropType, toRefs } from 'vue'
+import { TimeSeries, Units } from '@/types/weather'
 import useFindMinMaxTemp from '@/composables/weather/useFindMinMaxTemp'
 import useSavedLocations from '@/composables/weather/useSavedLocations'
-import { PropType, toRefs } from 'vue'
 
 const props = defineProps({
   timeSeries: {
     required: true,
-    type: Object as PropType<TTimeSeries[]>
+    type: Object as PropType<TimeSeries[]>
   },
   activeLocation: {
     required: true,
@@ -20,7 +19,7 @@ const props = defineProps({
   },
   units: {
     required: true,
-    type: Object as PropType<TUnits>
+    type: Object as PropType<Units>
   },
   coordinates: {
     required: true,

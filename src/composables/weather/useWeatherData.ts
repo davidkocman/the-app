@@ -1,8 +1,6 @@
-import TWeatherData from '@/types/weather/TWeatherData'
-import TSavedLocation from '@/types/weather/TSavedLocation'
-import MWeatherData from '@/model/weather/MWeatherData'
-import TModel from '@/types/weather/TModel'
 import { ref } from 'vue'
+import { WeatherData, SavedLocation, Model } from '@/types/weather'
+import MWeatherData from '@/model/weather/MWeatherData'
 import spinner from '@/utils/spinner'
 import cities from '@/assets/cities/sk.json'
 
@@ -17,8 +15,8 @@ import cities from '@/assets/cities/sk.json'
  */
 export default function useWeatherData() {
   const options = ref(cities)
-  const weatherData = ref<TWeatherData>(MWeatherData.create())
-  const model = ref<TModel>()
+  const weatherData = ref<WeatherData>(MWeatherData.create())
+  const model = ref<Model>()
 
   /**
    * It takes an input value, and returns a list of options that match the input value
@@ -45,7 +43,7 @@ export default function useWeatherData() {
    * It fetches the weather data from the met.no API and stores it in the weatherData variable
    * @param {TModel} val - TModel - this is the type of the parameter that is passed to the function.
    */
-  async function getWeatherData(val: TModel) {
+  async function getWeatherData(val: Model) {
     spinner(true)
     try {
       const response = await fetch(
@@ -59,7 +57,7 @@ export default function useWeatherData() {
     }
   }
 
-  const getSavedLocationWeatherData = async (location: TSavedLocation): Promise<void> => {
+  const getSavedLocationWeatherData = async (location: SavedLocation): Promise<void> => {
     spinner(true)
     try {
       const response = await fetch(

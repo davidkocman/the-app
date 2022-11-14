@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useMeta } from 'quasar'
-import TWeatherData from '@/types/weather/TWeatherData'
-import TTimeSeries from '@/types/weather/TTimeSeries'
+import { WeatherData, TimeSeries } from '@/types/weather'
 import useGetTimeSeries from '@/composables/weather/useGetTimeSeries'
 import useSavedLocations from '@/composables/weather/useSavedLocations'
 import Search from '@/views/weather/components/Search.vue'
@@ -27,12 +26,12 @@ useMeta(() => {
   }
 })
 
-const weatherData = ref<TWeatherData | null>(null)
+const weatherData = ref<WeatherData | null>(null)
 const activeLocation = ref<string>('')
 const activeRegion = ref<string>('')
 const coordinates = ref<string[]>([])
 const theme = ref<string>('')
-const timeseries = ref<TTimeSeries[]>([])
+const timeseries = ref<TimeSeries[]>([])
 
 const { hasSavedLocations, checkForSavedLocations } = useSavedLocations()
 
@@ -40,7 +39,7 @@ checkForSavedLocations()
 
 // A function that is called when the `weatherData` is emitted from the `Search` component. It sets the
 // `weatherData` and `timeseries` refs.
-function onWeatherData(data: TWeatherData) {
+function onWeatherData(data: WeatherData) {
   weatherData.value = data
   const { series } = useGetTimeSeries(data)
   timeseries.value = series.value

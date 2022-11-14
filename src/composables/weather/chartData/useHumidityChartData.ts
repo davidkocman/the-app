@@ -1,11 +1,11 @@
-import TTimeSeries from '@/types/weather/TTimeSeries'
+import { TimeSeries } from '@/types/weather'
 import { computed, Ref } from 'vue'
 import type { Options as HighchartsOptions } from 'highcharts'
 
-export default function useHumidityChartData(timeseries: Ref<TTimeSeries[]>) {
+export default function useHumidityChartData(timeseries: Ref<TimeSeries[]>) {
   function getHours() {
     const categories: string[] = []
-    timeseries.value.forEach((item: TTimeSeries) => {
+    timeseries.value.forEach((item: TimeSeries) => {
       categories.push(new Date(item.time).getHours().toString())
     })
 
@@ -15,7 +15,7 @@ export default function useHumidityChartData(timeseries: Ref<TTimeSeries[]>) {
   function getCategories() {
     const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
     const categories: string[] = []
-    timeseries.value.forEach((item: TTimeSeries) => {
+    timeseries.value.forEach((item: TimeSeries) => {
       categories.push(
         weekday[new Date(item.time).getDay()] +
           '<br>' +
@@ -31,7 +31,7 @@ export default function useHumidityChartData(timeseries: Ref<TTimeSeries[]>) {
 
   function getRelativeHumidity(): number[] {
     const relativeHumidity: number[] = []
-    timeseries.value.forEach((item: TTimeSeries) => {
+    timeseries.value.forEach((item: TimeSeries) => {
       relativeHumidity.push(item.data.instant.details.relative_humidity)
     })
     return relativeHumidity

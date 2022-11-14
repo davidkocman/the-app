@@ -4,20 +4,18 @@ import { addDoc, doc, collection, getDocs, query, where, getDoc, updateDoc, dele
 import { auth, db } from '@/firebaseConfig'
 import spinner from '@/utils/spinner'
 import getErrorMessage from '@/utils/handleCatchErrors'
-import INewNote from '@/types/notes/INewNote'
-import INote from '@/types/notes/INote'
-import INoteResponse from '@/types/notes/INoteResponse'
+import { NoteResponse, NewNote, Note } from '@/types/notes'
 
 export const useNotesStore = defineStore('notes', {
   state: () => ({
-    notes: [] as INoteResponse[] | []
+    notes: [] as NoteResponse[] | []
   }),
   actions: {
-    async saveNewNote(payload: INote) {
+    async saveNewNote(payload: Note) {
       const appStore = useAppStore()
       spinner(true)
       try {
-        const newNote: INewNote = {
+        const newNote: NewNote = {
           name: payload.name,
           content: payload.content,
           user: auth.currentUser?.uid
@@ -31,7 +29,7 @@ export const useNotesStore = defineStore('notes', {
         spinner(false)
       }
     },
-    async editNote(id: string, note: INote) {
+    async editNote(id: string, note: Note) {
       const appStore = useAppStore()
       spinner(true)
       try {
@@ -48,7 +46,7 @@ export const useNotesStore = defineStore('notes', {
             content: note.content
           })
 
-          this.notes = this.notes.map((item: INoteResponse) => {
+          this.notes = this.notes.map((item: NoteResponse) => {
             return item.id === id ? { ...item, content: note.content, name: note.name } : item
           })
         } else {
@@ -72,7 +70,7 @@ export const useNotesStore = defineStore('notes', {
         }
         if (docSnap.data().user === auth.currentUser?.uid) {
           await deleteDoc(docRef)
-          this.notes = this.notes.filter((item: INoteResponse) => item.id !== id)
+          this.notes = this.notes.filter((item: NoteResponse) => item.id !== id)
         } else {
           throw new Error('You are not a creator of this note!')
         }
