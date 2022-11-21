@@ -11,9 +11,10 @@ import {
 } from 'firebase/auth'
 import { useAppStore } from './app'
 import { useNotesStore } from './notes'
+import { UserData } from '@/types/user'
+import spinner from '@/utils/spinner'
 import getErrorMessage from '@/utils/handleCatchErrors'
 import router from '@/router'
-import { UserData } from '@/types/user'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -107,13 +108,19 @@ export const useUserStore = defineStore('user', {
         unsubscribe()
       })
     },
-    async updateUserProfile(name: string) {
+    async updateUserName(name: string) {
+      spinner(true)
+      const appStore = useAppStore()
+      appStore.loading = true
       if (auth.currentUser) {
         try {
           await updateProfile(auth.currentUser, { displayName: name })
+          this.userData.name = name
         } catch (e) {
-          const appStore = useAppStore()
           appStore.reportError({ message: getErrorMessage(e) })
+        } finally {
+          spinner(false)
+          appStore.loading = false
         }
       }
     }
