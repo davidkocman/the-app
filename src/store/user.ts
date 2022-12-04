@@ -37,7 +37,8 @@ export const useUserStore = defineStore('user', {
           email: user.email,
           uid: user.uid,
           name: user.displayName,
-          emailVerified: user.emailVerified
+          emailVerified: user.emailVerified,
+          photoUrl: user.photoURL
         } as UserData
         router.push('/')
       } catch (e) {
@@ -56,7 +57,8 @@ export const useUserStore = defineStore('user', {
           email: user.email,
           uid: user.uid,
           name: user.displayName,
-          emailVerified: user.emailVerified
+          emailVerified: user.emailVerified,
+          photoUrl: user.photoURL
         } as UserData
         router.push('/')
       } catch (e) {
@@ -91,7 +93,8 @@ export const useUserStore = defineStore('user', {
                 email: user.email,
                 uid: user.uid,
                 name: user.displayName,
-                emailVerified: user.emailVerified
+                emailVerified: user.emailVerified,
+                photoUrl: user.photoURL
               } as UserData
             } else {
               this.userData = null
@@ -116,6 +119,22 @@ export const useUserStore = defineStore('user', {
         try {
           await updateProfile(auth.currentUser, { displayName: name })
           this.userData.name = name
+        } catch (e) {
+          appStore.reportError({ message: getErrorMessage(e) })
+        } finally {
+          spinner(false)
+          appStore.loading = false
+        }
+      }
+    },
+    async updateUserAvatar(path: string | null) {
+      spinner(true)
+      const appStore = useAppStore()
+      appStore.loading = true
+      if (auth.currentUser) {
+        try {
+          await updateProfile(auth.currentUser, { displayName: this.userData.name, photoURL: path })
+          this.userData.photoUrl = path
         } catch (e) {
           appStore.reportError({ message: getErrorMessage(e) })
         } finally {

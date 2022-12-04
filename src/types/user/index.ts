@@ -3,6 +3,7 @@ type UserData = {
   uid: string
   name: string
   emailVerified: boolean
+  photoUrl?: string | null
 }
 
 export { UserData }

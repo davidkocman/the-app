@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app'
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check'
 import { getFirestore } from 'firebase/firestore'
+import { getStorage } from '@firebase/storage'
 import { getAuth } from 'firebase/auth'
 
 const firebaseConfig = {
@@ -20,5 +21,6 @@ const appCheck = initializeAppCheck(app, {
 
 const db = getFirestore()
 const auth = getAuth()
+const storage = getStorage(app, import.meta.env.VITE_FIREBASE_BUCKET_URL)
 
-export { db, auth, appCheck }
+export { db, auth, storage, appCheck }
