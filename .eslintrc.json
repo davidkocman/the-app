@@ -30,6 +30,7 @@
       "single",
       "avoid-escape"
     ],
+    "no-debugger": "off",
     "comma-dangle": ["error", {
       "arrays": "never",
       "objects": "never",

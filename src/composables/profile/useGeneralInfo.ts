@@ -26,8 +26,6 @@ export default function useGeneralInfo() {
 
   watch(file, (newValue) => {
     if (newValue) {
-      console.log('test')
-
       updateAvatar(newValue)
     }
   })
@@ -51,7 +49,7 @@ export default function useGeneralInfo() {
   const removeAvatar = async () => {
     if (userStore.userData?.photoUrl) {
       deleteFile(userStore.userData?.photoUrl)
-      userStore.updateUserAvatar(null)
+      userStore.updateUserAvatar('')
     }
   }
 

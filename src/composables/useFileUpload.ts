@@ -10,9 +10,9 @@ import {
 } from 'firebase/storage'
 import { useAppStore } from '@/store/app'
 import getErrorMessage from '@/utils/handleCatchErrors'
-import spinner from '@/utils/spinner'
 
 export default function useFileUpload() {
+  const appStore = useAppStore()
   const downloadUrl = ref('')
   const hasFailed = ref(false)
   const state = ref<TaskState>()
@@ -53,15 +53,12 @@ export default function useFileUpload() {
         downloadUrl.value = await getDownloadURL(uploadTask.snapshot.ref)
       }
     )
-
     return uploadTask
   }
 
   const deleteFile = async (filePath: string) => {
     const storage = getStorage()
     const fileRef = firebaseStorageRef(storage, filePath)
-    spinner(true)
-    const appStore = useAppStore()
     appStore.loading = true
     try {
       await deleteObject(fileRef)
@@ -69,7 +66,6 @@ export default function useFileUpload() {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {
       appStore.loading = false
-      spinner(false)
     }
   }
 
@@ -77,7 +73,6 @@ export default function useFileUpload() {
     if (denominator === 0) {
       return 0
     }
-
     return Math.round((numerator / denominator) * 100)
   }
 

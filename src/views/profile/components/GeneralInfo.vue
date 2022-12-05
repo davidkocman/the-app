@@ -32,9 +32,6 @@ const { nameModel, saveName, removeAvatar, userAvatar } = useGeneralInfo()
               @click="removeAvatar"
             ></q-btn>
             <FileInput v-else />
-            <!-- <q-file class="avatar__upload absolute" borderless v-model="file" :disable="state === 'running'">
-              <q-icon size="20px" name="photo_camera" color="white" />
-            </q-file> -->
           </q-avatar>
         </div>
         <div class="right">

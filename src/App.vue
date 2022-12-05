@@ -1,16 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { onBeforeMount } from 'vue'
+import { ref, watch, computed, onBeforeMount } from 'vue'
 import { useQuasar, useMeta } from 'quasar'
-const $q = useQuasar()
+import { useAppStore } from '@/store/app'
+import spinner from './utils/spinner'
 
-onBeforeMount(() => {
-  if (localStorage.getItem('the_app-mode') && localStorage.getItem('the_app-mode') === 'dark') {
-    $q.dark.set(true)
-  }
+const $q = useQuasar()
+const appStore = useAppStore()
+const pageTitle = ref('Welcome | The App')
+const isLoading = computed(() => {
+  return appStore.loading
 })
 
-const pageTitle = ref('Welcome | The App')
+onBeforeMount(() => {
+  if (localStorage.getItem('the_app-mode') && localStorage.getItem('the_app-mode') === 'dark') $q.dark.set(true)
+})
+
+watch(isLoading, (value) => {
+  spinner(false)
+  if (value) spinner(true)
+})
+
 useMeta(() => {
   return {
     title: pageTitle.value,

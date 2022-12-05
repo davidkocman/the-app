@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { useAppStore } from './app'
 import { addDoc, doc, collection, getDocs, query, where, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { auth, db } from '@/firebaseConfig'
-import spinner from '@/utils/spinner'
 import getErrorMessage from '@/utils/handleCatchErrors'
 import { NoteResponse, NewNote, Note } from '@/types/notes'
 
@@ -13,7 +12,7 @@ export const useNotesStore = defineStore('notes', {
   actions: {
     async saveNewNote(payload: Note) {
       const appStore = useAppStore()
-      spinner(true)
+      appStore.loading = true
       try {
         const newNote: NewNote = {
           name: payload.name,
@@ -26,12 +25,12 @@ export const useNotesStore = defineStore('notes', {
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
-        spinner(false)
+        appStore.loading = false
       }
     },
     async editNote(id: string, note: Note) {
       const appStore = useAppStore()
-      spinner(true)
+      appStore.loading = true
       try {
         const docRef = doc(db, 'notes', id)
         const docSnap = await getDoc(docRef)
@@ -55,12 +54,12 @@ export const useNotesStore = defineStore('notes', {
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
-        spinner(false)
+        appStore.loading = false
       }
     },
     async removeNote(id: string) {
       const appStore = useAppStore()
-      spinner(true)
+      appStore.loading = true
       try {
         const docRef = doc(db, 'notes', id)
         const docSnap = await getDoc(docRef)
@@ -77,7 +76,7 @@ export const useNotesStore = defineStore('notes', {
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
-        spinner(false)
+        appStore.loading = false
       }
     },
     async getNotes() {
@@ -85,7 +84,7 @@ export const useNotesStore = defineStore('notes', {
       if (this.notes.length !== 0) {
         return
       }
-      spinner(true)
+      appStore.loading = true
       this.notes = []
       const q = query(collection(db, 'notes'), where('user', '==', auth.currentUser?.uid))
       try {
@@ -99,7 +98,7 @@ export const useNotesStore = defineStore('notes', {
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
-        spinner(false)
+        appStore.loading = false
       }
     }
   }

@@ -12,7 +12,6 @@ import {
 import { useAppStore } from './app'
 import { useNotesStore } from './notes'
 import { UserData } from '@/types/user'
-import spinner from '@/utils/spinner'
 import getErrorMessage from '@/utils/handleCatchErrors'
 import router from '@/router'
 
@@ -29,6 +28,8 @@ export const useUserStore = defineStore('user', {
      * @param {string} password - string
      */
     async registerUser(email: string, password: string) {
+      const appStore = useAppStore()
+      appStore.loading = true
       this.loadingUser = true
       try {
         const { user } = await createUserWithEmailAndPassword(auth, email, password)
@@ -42,15 +43,17 @@ export const useUserStore = defineStore('user', {
         } as UserData
         router.push('/')
       } catch (e) {
-        const appStore = useAppStore()
         appStore.reportError({ message: getErrorMessage(e) })
         this.userData = null
       } finally {
+        appStore.loading = false
         this.loadingUser = false
       }
     },
     async loginUser(email: string, password: string) {
+      const appStore = useAppStore()
       this.loadingUser = true
+      appStore.loading = true
       try {
         const { user } = await signInWithEmailAndPassword(auth, email, password)
         this.userData = {
@@ -62,24 +65,26 @@ export const useUserStore = defineStore('user', {
         } as UserData
         router.push('/')
       } catch (e) {
-        const appStore = useAppStore()
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
+        appStore.loading = false
         this.loadingUser = false
       }
     },
     async logoutUser() {
+      const appStore = useAppStore()
       const notesStore = useNotesStore()
+      appStore.loading = true
       try {
         await signOut(auth)
         this.userData = null
         router.push('/login')
       } catch (e) {
-        const appStore = useAppStore()
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
         this.userData = null
         notesStore.$reset()
+        appStore.loading = false
       }
     },
     currentUser() {
@@ -112,7 +117,6 @@ export const useUserStore = defineStore('user', {
       })
     },
     async updateUserName(name: string) {
-      spinner(true)
       const appStore = useAppStore()
       appStore.loading = true
       if (auth.currentUser) {
@@ -122,23 +126,20 @@ export const useUserStore = defineStore('user', {
         } catch (e) {
           appStore.reportError({ message: getErrorMessage(e) })
         } finally {
-          spinner(false)
           appStore.loading = false
         }
       }
     },
-    async updateUserAvatar(path: string | null) {
-      spinner(true)
+    async updateUserAvatar(path: string) {
       const appStore = useAppStore()
       appStore.loading = true
       if (auth.currentUser) {
         try {
-          await updateProfile(auth.currentUser, { displayName: this.userData.name, photoURL: path })
+          await updateProfile(auth.currentUser, { photoURL: path })
           this.userData.photoUrl = path
         } catch (e) {
           appStore.reportError({ message: getErrorMessage(e) })
         } finally {
-          spinner(false)
           appStore.loading = false
         }
       }
