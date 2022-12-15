@@ -1,25 +1,38 @@
 <script setup lang="ts">
-import { watch } from 'vue'
-import useWeatherData from '@/composables/weather/useWeatherData'
+import { ref, watch } from 'vue'
+import { useWeatherStore } from '@/store/weather'
+import { Model } from '@/types/weather'
+import cities from '@/assets/cities/sk.json'
 
-const emit = defineEmits(['weatherData', 'activeLocation', 'activeRegion', 'coordinates'])
-const { options, model, filterFn, getWeatherData, weatherData } = useWeatherData()
+const weatherStore = useWeatherStore()
+const options = ref(cities)
+const model = ref<Model>()
 
-watch(model, (value) => {
-  if (value) {
-    emit('activeLocation', value.label)
-    emit('activeRegion', value.admin_name)
-    emit('coordinates', [value.lat, value.lng])
-    getWeatherData(value)
+const filterFn = (inputValue: string, doneFn: any, abortFn: any): void => {
+  if (inputValue.length < 1) {
+    abortFn()
+    return
   }
-})
-watch(weatherData, (value) => {
-  emit('weatherData', value)
-})
+  setTimeout(() => {
+    doneFn(() => {
+      const needle = inputValue.toLowerCase()
+      options.value = cities.filter((v) => v.label.toLowerCase().indexOf(needle) > -1)
+    })
+  }, 300)
+}
 
 const keyUpEvent = (target: HTMLElement) => {
   target.blur()
 }
+
+watch(model, (value) => {
+  if (value) {
+    weatherStore.activeLocation = value.label
+    weatherStore.activeRegion = value.admin_name
+    weatherStore.coordinates = [value.lat, value.lng]
+    weatherStore.getWeatherData(value.lat, value.lng)
+  }
+})
 </script>
 
 <template>

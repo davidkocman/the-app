@@ -30,6 +30,14 @@ export default function useSavedLocations() {
     })
   }
 
+  /**
+   * It saves the location to localStorage if it's not already saved, and if it is, it moves it to the
+   * top of the list
+   * @param {string[]} coordinates - string[] - The coordinates of the location that is being saved.
+   * @param {string} activeLocation - string - The name of the location that is currently active.
+   * @param {string} activeRegion - string - The region that the user is currently viewing.
+   * @returns void.
+   */
   function saveLocation(coordinates: string[], activeLocation: string, activeRegion: string): void {
     const newLocation = ref<SavedLocation>({
       lat: coordinates[0],
@@ -72,6 +80,11 @@ export default function useSavedLocations() {
     state.hasSavedLocations = true
   }
 
+  /**
+   * It removes a location from the saved locations array and updates the localStorage
+   * @param {string} title - string - The title of the location you want to remove.
+   * @returns the newFavourites array.
+   */
   const removeSavedLocation = (title: string) => {
     let storageValue = JSON.parse(localStorage.getItem('the_app-weather-locations') as string)
     const newFavourites = storageValue.filter((location: SavedLocation) => {

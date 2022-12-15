@@ -1,21 +1,35 @@
 import { TimeSeries } from '@/types/weather'
-import { computed, Ref } from 'vue'
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useWeatherStore } from '@/store/weather'
 import type { Options as HighchartsOptions } from 'highcharts'
 
-export default function usePrecipitationChartData(timeseries: Ref<TimeSeries[]>) {
+export default function usePrecipitationChartData() {
+  const weatherStore = useWeatherStore()
+  const { timeSeries } = storeToRefs(weatherStore)
+
+  /**
+   * It takes the timeSeries data and returns an array of strings that represent the hours of the day
+   * @returns An array of strings
+   */
   function getHours() {
     const categories: string[] = []
-    timeseries.value.forEach((item: TimeSeries) => {
+    timeSeries.value?.forEach((item: TimeSeries) => {
       categories.push(new Date(item.time).getHours().toString())
     })
 
     return categories
   }
 
+  /**
+   * It takes the timeSeries data and returns an array of strings that contain the day of the week and
+   * the date
+   * @returns An array of strings.
+   */
   function getCategories() {
     const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
     const categories: string[] = []
-    timeseries.value.forEach((item: TimeSeries) => {
+    timeSeries.value?.forEach((item: TimeSeries) => {
       categories.push(
         weekday[new Date(item.time).getDay()] +
           '<br>' +
@@ -29,9 +43,13 @@ export default function usePrecipitationChartData(timeseries: Ref<TimeSeries[]>)
     return categories
   }
 
+  /**
+   * It takes the timeSeries data and returns an array of precipitation amounts
+   * @returns An array of numbers
+   */
   function getPrecipitationAmount(): number[] {
     const precipitationAmount: number[] = []
-    timeseries.value.forEach((item: TimeSeries) => {
+    timeSeries.value?.forEach((item: TimeSeries) => {
       if (item.data.next_6_hours) {
         precipitationAmount.push(item.data.next_6_hours.details.precipitation_amount)
       } else {

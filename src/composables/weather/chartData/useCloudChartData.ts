@@ -1,15 +1,20 @@
 import { TimeSeries } from '@/types/weather'
-import { computed, Ref } from 'vue'
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useWeatherStore } from '@/store/weather'
 import type { Options as HighchartsOptions } from 'highcharts'
 
-export default function useCloudChartData(timeseries: Ref<TimeSeries[]>) {
+export default function useCloudChartData() {
+  const weatherStore = useWeatherStore()
+  const { timeSeries } = storeToRefs(weatherStore)
+
   /**
    * It takes the time property of each item in the timeseries array and returns an array of hours
    * @returns An array of hours from the timeseries data.
    */
   function getHours() {
     const categories: string[] = []
-    timeseries.value.forEach((item: TimeSeries) => {
+    timeSeries.value?.forEach((item: TimeSeries) => {
       categories.push(new Date(item.time).getHours().toString())
     })
 
@@ -23,7 +28,7 @@ export default function useCloudChartData(timeseries: Ref<TimeSeries[]>) {
   function getCategories() {
     const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
     const categories: string[] = []
-    timeseries.value.forEach((item: TimeSeries) => {
+    timeSeries.value?.forEach((item: TimeSeries) => {
       categories.push(
         weekday[new Date(item.time).getDay()] +
           '<br>' +
@@ -43,7 +48,7 @@ export default function useCloudChartData(timeseries: Ref<TimeSeries[]>) {
    */
   function getCloudAreaFraction(): number[] {
     const cloudAreaFraction: number[] = []
-    timeseries.value.forEach((item: TimeSeries) => {
+    timeSeries.value?.forEach((item: TimeSeries) => {
       cloudAreaFraction.push(item.data.instant.details.cloud_area_fraction)
     })
     return cloudAreaFraction

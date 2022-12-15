@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { SavedLocation } from '@/types/weather'
+import { useWeatherStore } from '@/store/weather'
+import { storeToRefs } from 'pinia'
 import useSavedLocations from '@/composables/weather/useSavedLocations'
-import useWeatherData from '@/composables/weather/useWeatherData'
 
 type positionType = 'top' | 'right' | 'standard' | 'bottom' | 'left' | undefined
-const emit = defineEmits(['weatherData', 'activeLocation', 'activeRegion', 'coordinates'])
 
+const weatherStore = useWeatherStore()
+const { activeLocation, activeRegion, coordinates } = storeToRefs(weatherStore)
 const { hasSavedLocations, savedLocations, removeSavedLocation } = useSavedLocations()
-const { getSavedLocationWeatherData, weatherData } = useWeatherData()
 
 const dialog = ref<boolean>(false)
 const position = ref<positionType>('top')
@@ -19,16 +20,14 @@ const open = (pos: positionType) => {
   position.value = pos
   dialog.value = true
 }
+// A function that is called when a saved location is clicked. It sets the active location, active
+// region, and coordinates to the location that was clicked. It then closes the dialog.
 const updateRegion = (location: SavedLocation): void => {
-  emit('activeLocation', location.title)
-  emit('activeRegion', location.region)
-  emit('coordinates', [location.lat, location.lng])
+  activeLocation.value = location.title
+  activeRegion.value = location.region
+  coordinates.value = [location.lat, location.lng]
   dialog.value = false
 }
-
-watch(weatherData, (value): void => {
-  emit('weatherData', value)
-})
 </script>
 
 <template>
@@ -42,9 +41,11 @@ watch(weatherData, (value): void => {
         :key="index"
         class="locations row items-center justify-between no-wrap"
       >
-        <span class="text-subtitle2" @click=";[getSavedLocationWeatherData(location), updateRegion(location)]">{{
-          location.title
-        }}</span>
+        <span
+          class="text-subtitle2"
+          @click=";[weatherStore.getWeatherData(location.lat, location.lng), updateRegion(location)]"
+          >{{ location.title }}</span
+        >
         <q-btn icon="close" color="negative" flat @click="removeSavedLocation(location.title)"></q-btn>
       </q-card-section>
     </q-card>

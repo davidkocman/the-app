@@ -87,6 +87,10 @@ export const useUserStore = defineStore('user', {
         appStore.loading = false
       }
     },
+    /**
+     * It returns a promise that resolves to the current user, or null if there is no current user
+     * @returns A promise that resolves to the current user.
+     */
     currentUser() {
       return new Promise((resolve, reject) => {
         const unsubscribe = onAuthStateChanged(

@@ -1,21 +1,35 @@
 import { TimeSeries } from '@/types/weather'
-import { computed, Ref } from 'vue'
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useWeatherStore } from '@/store/weather'
 import type { Options as HighchartsOptions } from 'highcharts'
 
-export default function useWindSpeedChartData(timeseries: Ref<TimeSeries[]>) {
+export default function useWindSpeedChartData() {
+  const weatherStore = useWeatherStore()
+  const { timeSeries } = storeToRefs(weatherStore)
+
+  /**
+   * It takes the time series data and returns an array of hours
+   * @returns An array of strings
+   */
   function getHours() {
     const categories: string[] = []
-    timeseries.value.forEach((item: TimeSeries) => {
+    timeSeries.value?.forEach((item: TimeSeries) => {
       categories.push(new Date(item.time).getHours().toString())
     })
 
     return categories
   }
 
+  /**
+   * It takes the timeSeries array and returns an array of strings with the day of the week and the
+   * date
+   * @returns Array of strings
+   */
   function getCategories() {
     const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sobota']
     const categories: string[] = []
-    timeseries.value.forEach((item: TimeSeries) => {
+    timeSeries.value?.forEach((item: TimeSeries) => {
       categories.push(
         weekday[new Date(item.time).getDay()] +
           '<br>' +
@@ -29,9 +43,14 @@ export default function useWindSpeedChartData(timeseries: Ref<TimeSeries[]>) {
     return categories
   }
 
+  /**
+   * It takes the timeSeries object, loops through each item in the value array, and pushes the wind
+   * speed value to a new array
+   * @returns An array of wind speeds
+   */
   function getWindSpeed(): number[] {
     const windSpeed: number[] = []
-    timeseries.value.forEach((item: TimeSeries) => {
+    timeSeries.value?.forEach((item: TimeSeries) => {
       windSpeed.push(item.data.instant.details.wind_speed)
     })
     return windSpeed

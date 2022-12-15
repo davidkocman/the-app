@@ -25,10 +25,10 @@ useMeta(() => {
       <h1 class="text-h6">Profile</h1>
     </div>
     <div class="row">
-      <div class="col">
+      <div class="col-12 col-md-6">
         <GeneralInfo />
       </div>
-      <div class="col"></div>
+      <div class="col-12 col-md-6"></div>
     </div>
   </q-page>
 </template>

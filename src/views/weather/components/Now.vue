@@ -1,39 +1,26 @@
 <script setup lang="ts">
-import { PropType, toRefs } from 'vue'
-import { TimeSeries, Units } from '@/types/weather'
+import { PropType } from 'vue'
+import { Units } from '@/types/weather'
+import { storeToRefs } from 'pinia'
+import { useWeatherStore } from '@/store/weather'
 import useFindMinMaxTemp from '@/composables/weather/useFindMinMaxTemp'
 import useSavedLocations from '@/composables/weather/useSavedLocations'
 
-const props = defineProps({
-  timeSeries: {
-    required: true,
-    type: Object as PropType<TimeSeries[]>
-  },
-  activeLocation: {
-    required: true,
-    type: String
-  },
-  activeRegion: {
-    required: true,
-    type: String
-  },
+defineProps({
   units: {
-    required: true,
-    type: Object as PropType<Units>
-  },
-  coordinates: {
-    required: true,
-    type: Object as PropType<string[]>
+    type: Object as PropType<Units>,
+    required: true
   }
 })
 
-const { timeSeries } = toRefs(props)
-const { minTemp, maxTemp } = useFindMinMaxTemp(timeSeries)
+const weatherStore = useWeatherStore()
+const { timeSeries, activeLocation, activeRegion, coordinates } = storeToRefs(weatherStore)
 const { saveLocation, savedLocations } = useSavedLocations()
+const { minTemp, maxTemp } = useFindMinMaxTemp()
 </script>
 
 <template>
-  <div class="column justify-center items-center text-center q-mb-lg q-mt-xl q-pt-xl">
+  <div v-if="timeSeries" class="column justify-center items-center text-center q-mb-lg q-mt-xl q-pt-xl">
     <div class="row">
       <div class="col-auto">
         <div class="text-h4 text-weight-bold q-mb-l text-spacing-2">
@@ -154,6 +141,11 @@ const { saveLocation, savedLocations } = useSavedLocations()
   bottom: 10px;
   line-height: 22px;
   right: 0;
+  .min,
+  .max {
+    display: flex;
+    gap: 2px;
+  }
 }
 
 .text-spacing-2 {

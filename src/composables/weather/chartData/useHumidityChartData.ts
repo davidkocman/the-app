@@ -1,21 +1,35 @@
 import { TimeSeries } from '@/types/weather'
-import { computed, Ref } from 'vue'
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useWeatherStore } from '@/store/weather'
 import type { Options as HighchartsOptions } from 'highcharts'
 
-export default function useHumidityChartData(timeseries: Ref<TimeSeries[]>) {
+export default function useHumidityChartData() {
+  const weatherStore = useWeatherStore()
+  const { timeSeries } = storeToRefs(weatherStore)
+
+  /**
+   * It takes the timeSeries data and returns an array of hours
+   * @returns An array of strings
+   */
   function getHours() {
     const categories: string[] = []
-    timeseries.value.forEach((item: TimeSeries) => {
+    timeSeries.value?.forEach((item: TimeSeries) => {
       categories.push(new Date(item.time).getHours().toString())
     })
 
     return categories
   }
 
+  /**
+   * It takes the timeSeries data and returns an array of strings that contain the day of the week and
+   * the date
+   * @returns An array of strings.
+   */
   function getCategories() {
     const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
     const categories: string[] = []
-    timeseries.value.forEach((item: TimeSeries) => {
+    timeSeries.value?.forEach((item: TimeSeries) => {
       categories.push(
         weekday[new Date(item.time).getDay()] +
           '<br>' +
@@ -29,9 +43,14 @@ export default function useHumidityChartData(timeseries: Ref<TimeSeries[]>) {
     return categories
   }
 
+  /**
+   * It takes the timeSeries object, loops through each item in the value array, and pushes the
+   * relative humidity value to a new array
+   * @returns An array of numbers
+   */
   function getRelativeHumidity(): number[] {
     const relativeHumidity: number[] = []
-    timeseries.value.forEach((item: TimeSeries) => {
+    timeSeries.value?.forEach((item: TimeSeries) => {
       relativeHumidity.push(item.data.instant.details.relative_humidity)
     })
     return relativeHumidity
