@@ -6,7 +6,7 @@ const { chartOptions } = useWindSpeedChartData()
 </script>
 
 <template>
-  <div class="col-12 col-lg-6">
+  <div class="col-12 col-md-6">
     <Chart :options="chartOptions" />
   </div>
 </template>

@@ -4,13 +4,13 @@ import { storeToRefs } from 'pinia'
 import { useWeatherStore } from '@/store/weather'
 import type { Options as HighchartsOptions } from 'highcharts'
 
-export default function useHumidityChartData() {
+export default function useAirPressureChartData() {
   const weatherStore = useWeatherStore()
   const { timeSeries } = storeToRefs(weatherStore)
 
   /**
-   * It takes the timeSeries data and returns an array of hours
-   * @returns An array of strings
+   * It takes the time property of each item in the timeseries array and returns an array of hours
+   * @returns An array of hours from the timeseries data.
    */
   function getHours() {
     const categories: string[] = []
@@ -22,9 +22,8 @@ export default function useHumidityChartData() {
   }
 
   /**
-   * It takes the timeSeries data and returns an array of strings that contain the day of the week and
-   * the date
-   * @returns An array of strings.
+   * It takes the timeseries array and creates a new array of categories
+   * @returns Array of strings
    */
   function getCategories() {
     const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
@@ -44,16 +43,16 @@ export default function useHumidityChartData() {
   }
 
   /**
-   * It takes the timeSeries object, loops through each item in the value array, and pushes the
-   * relative humidity value to a new array
+   * It takes the `timeseries` object, loops through each item in the `value` array, and pushes the
+   * `air_pressure_at_sea_level` value into a new array
    * @returns An array of numbers
    */
-  function getRelativeHumidity(): number[] {
-    const relativeHumidity: number[] = []
+  function getAirPresure(): number[] {
+    const airPresure: number[] = []
     timeSeries.value?.forEach((item: TimeSeries) => {
-      relativeHumidity.push(item.data.instant.details.relative_humidity)
+      airPresure.push(item.data.instant.details.air_pressure_at_sea_level)
     })
-    return relativeHumidity
+    return airPresure
   }
 
   const chartOptions = computed(() => {
@@ -68,7 +67,7 @@ export default function useHumidityChartData() {
         useGPUTranslations: true
       },
       title: {
-        text: 'Relative humidity',
+        text: 'Atmospheric Pressure',
         style: {
           color: 'var(--title-text)'
         }
@@ -118,9 +117,23 @@ export default function useHumidityChartData() {
       yAxis: {
         gridLineDashStyle: 'Dash',
         gridLineColor: 'var(--y-gridline)',
-        ceiling: 100,
+        plotLines: [
+          {
+            color: 'var(--y-gridline)',
+            dashStyle: 'Solid',
+            width: 1,
+            value: 1013.25,
+            zIndex: 4,
+            label: {
+              text: 'Standard pressure 1013.25 hPa',
+              style: {
+                color: 'var(--y-plotlines-label)'
+              }
+            }
+          }
+        ],
         title: {
-          text: '(%)',
+          text: '(hPa)',
           style: {
             color: 'var(--y-title)'
           }
@@ -133,19 +146,28 @@ export default function useHumidityChartData() {
       },
       series: [
         {
-          name: 'Humidity',
-          data: getRelativeHumidity(),
+          name: 'Atmospheric Pressure',
+          data: getAirPresure(),
           type: 'spline',
           marker: {
             enabled: false
           },
+          tooltip: {
+            valueSuffix: ' hPa'
+          },
           dataGrouping: {
             enabled: false
           },
-          tooltip: {
-            valueSuffix: ' %'
-          },
-          color: 'var(--humidity)'
+          zones: [
+            {
+              value: 1013.25,
+              color: 'var(--air-pressure-low)'
+            },
+            {
+              color: 'var(--air-pressure-high)'
+            }
+          ],
+          color: 'var(--air-pressure-break)'
         }
       ],
       credits: {

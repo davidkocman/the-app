@@ -6,51 +6,29 @@ import type { Options as HighchartsOptions } from 'highcharts'
 
 export default function useHumidityChartData() {
   const weatherStore = useWeatherStore()
-  const { timeSeries } = storeToRefs(weatherStore)
+  const { todaySeries } = storeToRefs(weatherStore)
 
   /**
-   * It takes the timeSeries data and returns an array of hours
+   * It takes the todaySeries data and returns an array of hours
    * @returns An array of strings
    */
   function getHours() {
     const categories: string[] = []
-    timeSeries.value?.forEach((item: TimeSeries) => {
-      categories.push(new Date(item.time).getHours().toString())
+    todaySeries.value?.forEach((item: TimeSeries) => {
+      categories.push(new Date(item.time).getHours().toString() + ':00')
     })
 
     return categories
   }
 
   /**
-   * It takes the timeSeries data and returns an array of strings that contain the day of the week and
-   * the date
-   * @returns An array of strings.
-   */
-  function getCategories() {
-    const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
-    const categories: string[] = []
-    timeSeries.value?.forEach((item: TimeSeries) => {
-      categories.push(
-        weekday[new Date(item.time).getDay()] +
-          '<br>' +
-          new Date(item.time).getDate() +
-          '.' +
-          (new Date(item.time).getMonth() + 1) +
-          '.'
-      )
-    })
-
-    return categories
-  }
-
-  /**
-   * It takes the timeSeries object, loops through each item in the value array, and pushes the
+   * It takes the todaySeries object, loops through each item in the value array, and pushes the
    * relative humidity value to a new array
    * @returns An array of numbers
    */
   function getRelativeHumidity(): number[] {
     const relativeHumidity: number[] = []
-    timeSeries.value?.forEach((item: TimeSeries) => {
+    todaySeries.value?.forEach((item: TimeSeries) => {
       relativeHumidity.push(item.data.instant.details.relative_humidity)
     })
     return relativeHumidity
@@ -97,22 +75,6 @@ export default function useHumidityChartData() {
               color: 'var(--x-hours-labels)'
             }
           }
-        },
-        {
-          categories: getCategories(),
-          type: 'category',
-          tickInterval: 4,
-          gridLineWidth: 1,
-          gridLineColor: 'var(--x-categories-gridline)',
-          lineWidth: 0,
-          linkedTo: 0,
-          margin: 1,
-          labels: {
-            align: 'left',
-            style: {
-              color: 'var(--x-categories-labels)'
-            }
-          }
         }
       ],
       yAxis: {
@@ -135,7 +97,7 @@ export default function useHumidityChartData() {
         {
           name: 'Humidity',
           data: getRelativeHumidity(),
-          type: 'spline',
+          type: 'column',
           marker: {
             enabled: false
           },

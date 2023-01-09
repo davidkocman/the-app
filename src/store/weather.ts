@@ -9,7 +9,8 @@ export const useWeatherStore = defineStore('weather', {
     activeRegion: '',
     coordinates: [] as string[],
     weatherData: null as WeatherData | null,
-    timeSeries: null as TimeSeries[] | null
+    timeSeries: null as TimeSeries[] | null,
+    todaySeries: null as TimeSeries[] | null
   }),
   actions: {
     /**
@@ -34,17 +35,20 @@ export const useWeatherStore = defineStore('weather', {
       }
     },
     createTimeseries() {
+      const today = new Date().toJSON().slice(0, 10)
       const timeMarks: Date[] = [
         new Date(new Date().setUTCHours(0, 0, 0)),
         new Date(new Date().setUTCHours(6, 0, 0)),
         new Date(new Date().setUTCHours(12, 0, 0)),
         new Date(new Date().setUTCHours(18, 0, 0))
       ]
-
       let day: Date | string = ''
       let result: TimeSeries
       const series: TimeSeries[] = []
 
+      this.todaySeries = this.weatherData.properties.timeseries.filter((timeStamp: TimeSeries) =>
+        timeStamp.time.includes(today)
+      )
       // loop to get next 7 days
       for (let i = 1; i <= 7; i++) {
         timeMarks.forEach((mark: Date) => {

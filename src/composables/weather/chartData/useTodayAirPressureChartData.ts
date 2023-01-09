@@ -4,52 +4,31 @@ import { storeToRefs } from 'pinia'
 import { useWeatherStore } from '@/store/weather'
 import type { Options as HighchartsOptions } from 'highcharts'
 
-export default function useAirPresureChartData() {
+export default function useTodayAirPressureChartData() {
   const weatherStore = useWeatherStore()
-  const { timeSeries } = storeToRefs(weatherStore)
+  const { todaySeries } = storeToRefs(weatherStore)
 
   /**
-   * It takes the time property of each item in the timeseries array and returns an array of hours
-   * @returns An array of hours from the timeseries data.
+   * It takes the time property of each item in the todaySeries array and returns an array of hours
+   * @returns An array of hours from the todaySeries data.
    */
   function getHours() {
     const categories: string[] = []
-    timeSeries.value?.forEach((item: TimeSeries) => {
-      categories.push(new Date(item.time).getHours().toString())
+    todaySeries.value?.forEach((item: TimeSeries) => {
+      categories.push(new Date(item.time).getHours().toString() + ':00')
     })
 
     return categories
   }
 
   /**
-   * It takes the timeseries array and creates a new array of categories
-   * @returns Array of strings
-   */
-  function getCategories() {
-    const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
-    const categories: string[] = []
-    timeSeries.value?.forEach((item: TimeSeries) => {
-      categories.push(
-        weekday[new Date(item.time).getDay()] +
-          '<br>' +
-          new Date(item.time).getDate() +
-          '.' +
-          (new Date(item.time).getMonth() + 1) +
-          '.'
-      )
-    })
-
-    return categories
-  }
-
-  /**
-   * It takes the `timeseries` object, loops through each item in the `value` array, and pushes the
+   * It takes the `todaySeries` object, loops through each item in the `value` array, and pushes the
    * `air_pressure_at_sea_level` value into a new array
    * @returns An array of numbers
    */
   function getAirPresure(): number[] {
     const airPresure: number[] = []
-    timeSeries.value?.forEach((item: TimeSeries) => {
+    todaySeries.value?.forEach((item: TimeSeries) => {
       airPresure.push(item.data.instant.details.air_pressure_at_sea_level)
     })
     return airPresure
@@ -94,22 +73,6 @@ export default function useAirPresureChartData() {
           labels: {
             style: {
               color: 'var(--x-hours-labels)'
-            }
-          }
-        },
-        {
-          categories: getCategories(),
-          type: 'category',
-          tickInterval: 4,
-          gridLineWidth: 1,
-          gridLineColor: 'var(--x-categories-gridline)',
-          lineWidth: 0,
-          linkedTo: 0,
-          margin: 1,
-          labels: {
-            align: 'left',
-            style: {
-              color: 'var(--x-categories-labels)'
             }
           }
         }

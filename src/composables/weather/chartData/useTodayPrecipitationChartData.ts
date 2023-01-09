@@ -4,56 +4,38 @@ import { storeToRefs } from 'pinia'
 import { useWeatherStore } from '@/store/weather'
 import type { Options as HighchartsOptions } from 'highcharts'
 
-export default function useHumidityChartData() {
+export default function usePrecipitationChartData() {
   const weatherStore = useWeatherStore()
-  const { timeSeries } = storeToRefs(weatherStore)
+  const { todaySeries } = storeToRefs(weatherStore)
 
   /**
-   * It takes the timeSeries data and returns an array of hours
+   * It takes the todaySeries data and returns an array of strings that represent the hours of the day
    * @returns An array of strings
    */
   function getHours() {
     const categories: string[] = []
-    timeSeries.value?.forEach((item: TimeSeries) => {
-      categories.push(new Date(item.time).getHours().toString())
+    todaySeries.value?.forEach((item: TimeSeries) => {
+      categories.push(new Date(item.time).getHours().toString() + ':00')
     })
 
     return categories
   }
 
   /**
-   * It takes the timeSeries data and returns an array of strings that contain the day of the week and
-   * the date
-   * @returns An array of strings.
-   */
-  function getCategories() {
-    const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
-    const categories: string[] = []
-    timeSeries.value?.forEach((item: TimeSeries) => {
-      categories.push(
-        weekday[new Date(item.time).getDay()] +
-          '<br>' +
-          new Date(item.time).getDate() +
-          '.' +
-          (new Date(item.time).getMonth() + 1) +
-          '.'
-      )
-    })
-
-    return categories
-  }
-
-  /**
-   * It takes the timeSeries object, loops through each item in the value array, and pushes the
-   * relative humidity value to a new array
+   * It takes the todaySeries data and returns an array of precipitation amounts
    * @returns An array of numbers
    */
-  function getRelativeHumidity(): number[] {
-    const relativeHumidity: number[] = []
-    timeSeries.value?.forEach((item: TimeSeries) => {
-      relativeHumidity.push(item.data.instant.details.relative_humidity)
+  function getPrecipitationAmount(): number[] {
+    const precipitationAmount: number[] = []
+    todaySeries.value?.forEach((item: TimeSeries) => {
+      if (item.data.next_6_hours) {
+        precipitationAmount.push(item.data.next_6_hours.details.precipitation_amount)
+      } else {
+        precipitationAmount.push(item.data.instant.details.air_temperature)
+      }
     })
-    return relativeHumidity
+
+    return precipitationAmount
   }
 
   const chartOptions = computed(() => {
@@ -68,7 +50,7 @@ export default function useHumidityChartData() {
         useGPUTranslations: true
       },
       title: {
-        text: 'Relative humidity',
+        text: 'Amount of precipitation',
         style: {
           color: 'var(--title-text)'
         }
@@ -97,30 +79,13 @@ export default function useHumidityChartData() {
               color: 'var(--x-hours-labels)'
             }
           }
-        },
-        {
-          categories: getCategories(),
-          type: 'category',
-          tickInterval: 4,
-          gridLineWidth: 1,
-          gridLineColor: 'var(--x-categories-gridline)',
-          lineWidth: 0,
-          linkedTo: 0,
-          margin: 1,
-          labels: {
-            align: 'left',
-            style: {
-              color: 'var(--x-categories-labels)'
-            }
-          }
         }
       ],
       yAxis: {
         gridLineDashStyle: 'Dash',
         gridLineColor: 'var(--y-gridline)',
-        ceiling: 100,
         title: {
-          text: '(%)',
+          text: '(mm)',
           style: {
             color: 'var(--y-title)'
           }
@@ -133,19 +98,19 @@ export default function useHumidityChartData() {
       },
       series: [
         {
-          name: 'Humidity',
-          data: getRelativeHumidity(),
-          type: 'spline',
+          name: 'Precipitation',
+          data: getPrecipitationAmount(),
+          type: 'column',
           marker: {
             enabled: false
+          },
+          tooltip: {
+            valueSuffix: 'mm'
           },
           dataGrouping: {
             enabled: false
           },
-          tooltip: {
-            valueSuffix: ' %'
-          },
-          color: 'var(--humidity)'
+          color: 'var(--precipitation)'
         }
       ],
       credits: {

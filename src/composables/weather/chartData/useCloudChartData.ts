@@ -54,6 +54,14 @@ export default function useCloudChartData() {
     return cloudAreaFraction
   }
 
+  function getFogAreaFraction(): number[] {
+    const fogAreaFraction: number[] = []
+    timeSeries.value?.forEach((item: TimeSeries) => {
+      fogAreaFraction.push(item.data.instant.details.fog_area_fraction)
+    })
+    return fogAreaFraction
+  }
+
   const chartOptions = computed(() => {
     const options: HighchartsOptions = {
       chart: {
@@ -66,7 +74,7 @@ export default function useCloudChartData() {
         useGPUTranslations: true
       },
       title: {
-        text: 'Clouds',
+        text: 'Clouds and fog',
         style: {
           color: 'var(--title-text)'
         }
@@ -83,6 +91,11 @@ export default function useCloudChartData() {
         },
         itemHoverStyle: {
           color: 'grey'
+        }
+      },
+      plotOptions: {
+        series: {
+          stacking: 'normal'
         }
       },
       xAxis: [
@@ -143,8 +156,22 @@ export default function useCloudChartData() {
           dataGrouping: {
             enabled: false
           },
-          maxPointWidth: 10,
           color: 'var(--clouds)'
+        },
+        {
+          name: 'Fog',
+          data: getFogAreaFraction(),
+          type: 'column',
+          marker: {
+            enabled: false
+          },
+          tooltip: {
+            valueSuffix: '%'
+          },
+          dataGrouping: {
+            enabled: false
+          },
+          color: 'var(--fog)'
         }
       ],
       credits: {

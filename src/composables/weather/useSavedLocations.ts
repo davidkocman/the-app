@@ -18,7 +18,7 @@ const state = reactive<State>({
  * @returns An object with the saveLocation function and the state object.
  */
 export default function useSavedLocations() {
-  const checkForSavedLocations = () => {
+  const resolveSavedLocations = () => {
     onBeforeMount(() => {
       if (localStorage.getItem('the_app-weather-locations')) {
         const storageValue = JSON.parse(localStorage.getItem('the_app-weather-locations') || '')
@@ -102,11 +102,9 @@ export default function useSavedLocations() {
   }
 
   return {
-    checkForSavedLocations,
+    ...toRefs(state),
+    resolveSavedLocations,
     saveLocation,
-    removeSavedLocation,
-    /* A function that is provided by Vue. It is used to convert a reactive object into a plain object
-    with reactive properties. */
-    ...toRefs(state)
+    removeSavedLocation
   }
 }
