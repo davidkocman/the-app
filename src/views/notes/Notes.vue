@@ -5,7 +5,7 @@ import { useMeta } from 'quasar'
 import toMarkDown from '@/utils/toMarkdown'
 import NewNote from './components/NewNote.vue'
 import EditNote from './components/EditNote.vue'
-import INoteResponse from '@/types/notes/INoteResponse'
+import { NoteResponse } from '@/types/notes/index'
 
 const pageTitle = ref('Notes | The App')
 useMeta(() => {
@@ -24,7 +24,7 @@ onBeforeMount(() => {
   notesStore.getNotes()
 })
 
-const savedNotes: ComputedRef<INoteResponse[] | []> = computed(() => {
+const savedNotes: ComputedRef<NoteResponse[] | []> = computed(() => {
   return notesStore.notes
 })
 </script>

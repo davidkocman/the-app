@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { useNotesStore } from '@/store/notes'
 import { useAppStore } from '@/store/app'
 import toMarkDown from '@/utils/toMarkdown'
-import INote from '@/types/notes/INote'
+import { Note } from '@/types/notes/index'
 
 const notesStore = useNotesStore()
 const appStore = useAppStore()
@@ -13,7 +13,7 @@ const content = ref('')
 
 const save = async () => {
   if (name.value !== '' && content.value !== '') {
-    const newNote: INote = {
+    const newNote: Note = {
       name: name.value,
       content: content.value
     }
