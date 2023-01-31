@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { useMoviesStore } from '@/store/movies'
 import Movie from '@/views/movies/components/Movie.vue'
+import TvShow from '@/views/movies/components/TvShow.vue'
 import Search from '@/views/movies/components/Search.vue'
+
+const moviesStore = useMoviesStore()
 </script>
 
 <template>
@@ -9,6 +13,7 @@ import Search from '@/views/movies/components/Search.vue'
       <h6 class="text-h6">Movies</h6>
     </div>
     <Search />
-    <Movie />
+    <Movie v-if="moviesStore.movie" />
+    <TvShow v-if="moviesStore.tvShow" />
   </q-page>
 </template>

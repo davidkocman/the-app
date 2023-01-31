@@ -4,23 +4,23 @@ import { storeToRefs } from 'pinia'
 import Image from '@/components/Image.vue'
 
 const moviesStore = useMoviesStore()
-const { movie } = storeToRefs(moviesStore)
+const { tvShow } = storeToRefs(moviesStore)
 </script>
 
 <template>
-  <div class="movie row">
+  <div class="tv-show row">
     <div class="col">
-      <template v-if="movie !== null">
-        <div class="movie__image relative">
-          <Image v-if="movie.backdrop_path" :path="movie.backdrop_path" />
-          <div class="movie__heading absolute q-pa-md">
-            <h3 class="movie__title text-h4 text-weight-medium">
-              {{ movie.original_title }}
+      <template v-if="tvShow !== null">
+        <div class="tv-show__image relative">
+          <Image v-if="tvShow.backdrop_path" :path="tvShow.backdrop_path" />
+          <div class="tv-show__heading absolute q-pa-md">
+            <h3 class="tv-show__name text-h4 text-weight-medium">
+              {{ tvShow.original_name }}
             </h3>
-            <p v-if="movie.tagline" class="text-caption q-mb-xs">{{ movie.tagline }}</p>
-            <div class="movie__genre">
+            <p v-if="tvShow.tagline" class="text-caption q-mb-xs">{{ tvShow.tagline }}</p>
+            <div class="tv-show__genre">
               <q-chip
-                v-for="genre in movie.genres"
+                v-for="genre in tvShow.genres"
                 :key="genre.id"
                 square
                 color="secondary"
@@ -31,7 +31,7 @@ const { movie } = storeToRefs(moviesStore)
               </q-chip>
             </div>
             <p class="text-body1 text-weight-regular q-mb-none">
-              {{ movie.overview }}
+              {{ tvShow.overview }}
             </p>
           </div>
         </div>
@@ -41,14 +41,14 @@ const { movie } = storeToRefs(moviesStore)
 </template>
 
 <style lang="scss" scoped>
-.movie {
+.tv-show {
   &__image {
     height: 500px;
     overflow: hidden;
     position: relative;
     &::after {
       background: rgb(0, 0, 0);
-      background: linear-gradient(0deg, rgba(36, 36, 36, 0.9) 0%, rgba(36, 36, 36, 0.4) 20%, rgba(0, 0, 0, 0) 60%);
+      background: linear-gradient(0deg, rgba(36, 36, 36, 0.9) 0%, rgba(36, 36, 36, 0.6) 20%, rgba(0, 0, 0, 0) 60%);
       bottom: 0;
       content: '';
       display: block;
@@ -60,7 +60,7 @@ const { movie } = storeToRefs(moviesStore)
         background: linear-gradient(
           0deg,
           rgba(243, 243, 243, 0.9) 0%,
-          rgba(243, 243, 243, 0.4) 20%,
+          rgba(243, 243, 243, 0.6) 20%,
           rgba(0, 0, 0, 0) 60%
         );
       }
@@ -74,7 +74,7 @@ const { movie } = storeToRefs(moviesStore)
       max-width: 75%;
     }
   }
-  &__title {
+  &__name {
     text-shadow: 0px 0px 5px var(--bg-base);
   }
 }

@@ -1,22 +1,18 @@
 import { defineStore } from 'pinia'
 import { useAppStore } from '@/store/app'
 import { URL, HEADERS } from '@/utils/requestParams'
+import { Selected, MovieData, TvShowData, MoviesResponse } from '@/types/movies'
 import getErrorMessage from '@/utils/handleCatchErrors'
-import { SelectedMovie, MovieData, MoviesResponse } from '@/types/movies'
 
 export const useMoviesStore = defineStore('movies', {
   state: () => ({
     searchResults: null as MoviesResponse | null,
-    selectedMovie: null as SelectedMovie | null,
-    movie: null as MovieData | null
+    selected: null as Selected | null,
+    movie: null as MovieData | null,
+    tvShow: null as TvShowData | null,
+    searchFor: 'movie' as 'movie' | 'tv'
   }),
   actions: {
-    /**
-     * It's an async function that takes a query string, sets the loading state to true, fetches the
-     * search results from the API, sets the searchResults state to the response, and finally sets the
-     * loading state to false
-     * @param {string} query - string - The search query.
-     */
     async searchMovie(query: string) {
       const appStore = useAppStore()
       try {
@@ -29,18 +25,42 @@ export const useMoviesStore = defineStore('movies', {
         appStore.loading = false
       }
     },
-    /**
-     * We're using the `useAppStore` hook to get the appStore, then we're setting the loading property
-     * to true, then we're making a fetch request to the API, then we're setting the movie property to
-     * the response, then we're setting the loading property to false
-     * @param {number} id - number - The id of the movie we want to fetch
-     */
+    async searchTvShow(query: string) {
+      const appStore = useAppStore()
+      try {
+        appStore.loading = true
+        const response = await fetch(`${URL}/search/tv?query=${query}`, { headers: HEADERS })
+        this.searchResults = await response.json()
+      } catch (e) {
+        appStore.reportError({ message: getErrorMessage(e) })
+      } finally {
+        appStore.loading = false
+      }
+    },
+    search(query: string) {
+      if (this.searchFor === 'movie') this.searchMovie(query)
+      if (this.searchFor === 'tv') this.searchTvShow(query)
+    },
     async getMovieData(id: number) {
       const appStore = useAppStore()
       try {
         appStore.loading = true
         const response = await fetch(`${URL}/movie/${id}`, { headers: HEADERS })
+        this.tvShow = null
         this.movie = await response.json()
+      } catch (e) {
+        appStore.reportError({ message: getErrorMessage(e) })
+      } finally {
+        appStore.loading = false
+      }
+    },
+    async getTvShowData(id: number) {
+      const appStore = useAppStore()
+      try {
+        appStore.loading = true
+        const response = await fetch(`${URL}/tv/${id}`, { headers: HEADERS })
+        this.movie = null
+        this.tvShow = await response.json()
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {
