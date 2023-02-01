@@ -3,15 +3,17 @@ withDefaults(
   defineProps<{
     path?: string
     height?: string
+    imgClass?: string
   }>(),
   {
     path: '',
-    height: 'auto'
+    height: 'auto',
+    imgClass: ''
   }
 )
 const imageUrl = import.meta.env.VITE_APP_TMDB_POSTER_URL
 </script>
 
 <template>
-  <q-img loading="lazy" :src="imageUrl + path" position="50% 0" fit="cover" :height="height" />
+  <q-img loading="lazy" :src="imageUrl + path" fit="cover" :height="height" :class="imgClass" />
 </template>
