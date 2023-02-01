@@ -38,14 +38,14 @@ const keyUpEvent = (target: HTMLElement) => {
 </script>
 
 <template>
-  <div class="search">
+  <div class="search q-my-sm">
     <q-select
       v-model="selected"
       standout
       clearable
       hide-dropdown-icon
       input-debounce="300"
-      label="Search"
+      :label="searchFor === 'movie' ? 'Search movie' : 'Search TV show'"
       label-color="var(--text-base)"
       :options="results"
       option-value="value"
@@ -71,20 +71,11 @@ const keyUpEvent = (target: HTMLElement) => {
           </q-item-section>
           <q-item-section>
             <q-item-label caption>
-              {{ new Date(searchFor === 'movie' ? scope.opt.release_date : scope.opt.first_air_date).getFullYear() }} -
-              {{ scope.opt.popularity }}</q-item-label
-            >
+              {{ new Date(searchFor === 'movie' ? scope.opt.release_date : scope.opt.first_air_date).getFullYear() }}
+            </q-item-label>
           </q-item-section>
         </q-item>
       </template>
     </q-select>
-    <div class="row">
-      <div class="col-1">
-        <q-radio v-model="searchFor" val="movie" label="Movies" />
-      </div>
-      <div class="col-1">
-        <q-radio v-model="searchFor" val="tv" label="TV Shows" />
-      </div>
-    </div>
   </div>
 </template>

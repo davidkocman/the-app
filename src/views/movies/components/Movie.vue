@@ -12,7 +12,7 @@ const { movie } = storeToRefs(moviesStore)
     <div class="col">
       <template v-if="movie !== null">
         <div class="movie__image relative">
-          <Image v-if="movie.backdrop_path" :path="movie.backdrop_path" />
+          <Image v-if="movie.backdrop_path" :path="movie.backdrop_path" :height="'600px'" />
           <div class="movie__heading absolute q-pa-md">
             <h3 class="movie__title text-h4 text-weight-medium">
               {{ movie.original_title }}
@@ -43,7 +43,6 @@ const { movie } = storeToRefs(moviesStore)
 <style lang="scss" scoped>
 .movie {
   &__image {
-    height: 500px;
     overflow: hidden;
     position: relative;
     &::after {

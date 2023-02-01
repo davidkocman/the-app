@@ -12,7 +12,7 @@ const { tvShow } = storeToRefs(moviesStore)
     <div class="col">
       <template v-if="tvShow !== null">
         <div class="tv-show__image relative">
-          <Image v-if="tvShow.backdrop_path" :path="tvShow.backdrop_path" />
+          <Image v-if="tvShow.backdrop_path" :path="tvShow.backdrop_path" :height="'600px'" />
           <div class="tv-show__heading absolute q-pa-md">
             <h3 class="tv-show__name text-h4 text-weight-medium">
               {{ tvShow.original_name }}
@@ -43,7 +43,6 @@ const { tvShow } = storeToRefs(moviesStore)
 <style lang="scss" scoped>
 .tv-show {
   &__image {
-    height: 500px;
     overflow: hidden;
     position: relative;
     &::after {

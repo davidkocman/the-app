@@ -30,7 +30,7 @@ const savedNotes: ComputedRef<NoteResponse[] | []> = computed(() => {
 </script>
 
 <template>
-  <q-page class="page-notes q-px-lg q-py-md">
+  <q-page class="page-notes q-pa-md">
     <div class="row justify-between items-center q-mb-sm">
       <h6 class="text-h6">Notes</h6>
       <NewNote />

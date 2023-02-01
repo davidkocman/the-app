@@ -46,7 +46,6 @@ export const useMoviesStore = defineStore('movies', {
       try {
         appStore.loading = true
         const response = await fetch(`${URL}/movie/${id}`, { headers: HEADERS })
-        this.tvShow = null
         this.movie = await response.json()
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
@@ -59,7 +58,6 @@ export const useMoviesStore = defineStore('movies', {
       try {
         appStore.loading = true
         const response = await fetch(`${URL}/tv/${id}`, { headers: HEADERS })
-        this.movie = null
         this.tvShow = await response.json()
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
