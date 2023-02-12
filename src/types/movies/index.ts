@@ -15,9 +15,29 @@ type Selected = {
   vote_average: number
 }
 
-type MoviesResponse = {
+type MoviesSearchResponse = {
   page: number
   results: Array<Selected>
+}
+
+type Reviews = {
+  page: number
+  results: Array<{
+    author: string
+    author_details: {
+      name: string
+      username: string
+      avatar_path: string | null
+      rating: number | null
+    }
+    content: string
+    created_at: string
+    id: string
+    updated_at: string
+    url: string
+  }>
+  total_pages: number
+  total_results: number
 }
 
 type MovieData = {
@@ -25,6 +45,34 @@ type MovieData = {
   backdrop_path: string | null
   belongs_to_collection: null | object
   budget: number
+  credits: {
+    cast: Array<{
+      adult: boolean
+      character: string
+      gender: number | null
+      id: number
+      known_for_department: string
+      name: string
+      original_name: string
+      popularity: number
+      profile_path: string | null
+      credit_id: string
+      order: number
+    }>
+    crew: Array<{
+      adult: boolean
+      gender: number | null
+      id: number
+      known_for_department: string
+      name: string
+      original_name: string
+      popularity: number
+      profile_path: string | null
+      credit_id: string
+      department: string
+      job: string
+    }>
+  }
   genres: Array<{
     id: number
     name: string
@@ -49,6 +97,7 @@ type MovieData = {
   }>
   release_date: string
   revenue: number
+  reviews: Reviews
   runtime: number | null
   spoken_languages: Array<{
     iso_639_1: string
@@ -71,6 +120,34 @@ type TvShowData = {
     gender: number
     profile_path: string | null
   }>
+  credits: {
+    cast: Array<{
+      adult: boolean
+      character: string
+      gender: number | null
+      id: number
+      known_for_department: string
+      name: string
+      original_name: string
+      popularity: number
+      profile_path: string | null
+      credit_id: string
+      order: number
+    }>
+    crew: Array<{
+      adult: boolean
+      gender: number | null
+      id: number
+      known_for_department: string
+      name: string
+      original_name: string
+      popularity: number
+      profile_path: string | null
+      credit_id: string
+      department: string
+      job: string
+    }>
+  }
   episode_run_time: number[]
   first_air_date: string
   genres: Array<{
@@ -120,6 +197,7 @@ type TvShowData = {
     iso_3166_1: string
     name: string
   }>
+  reviews: Reviews
   seasons: Array<{
     air_date: string
     episode_count: number
@@ -141,4 +219,4 @@ type TvShowData = {
   vote_count: number
 }
 
-export { Selected, MovieData, TvShowData, MoviesResponse }
+export { Selected, MovieData, TvShowData, MoviesSearchResponse }

@@ -15,5 +15,5 @@ const imageUrl = import.meta.env.VITE_APP_TMDB_POSTER_URL
 </script>
 
 <template>
-  <q-img loading="lazy" :src="imageUrl + path" fit="cover" :height="height" :class="imgClass" />
+  <q-img loading="lazy" :src="imageUrl + path" fit="cover" position="50% 50%" :height="height" :class="imgClass" />
 </template>

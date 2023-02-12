@@ -1,32 +1,37 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useMoviesStore } from '@/store/movies'
 import { storeToRefs } from 'pinia'
 import Image from '@/components/Image.vue'
 
+const IMAGE_URL = import.meta.env.VITE_APP_TMDB_POSTER_URL
+
 const moviesStore = useMoviesStore()
 const { movie } = storeToRefs(moviesStore)
+
+const userRating = computed(() => (movie.value ? Math.floor((movie.value.vote_average / 10) * 100) : undefined))
 </script>
 
 <template>
-  <div class="movie row">
-    <div class="col">
-      <template v-if="movie !== null">
-        <div class="movie__image relative">
-          <Image v-if="movie.backdrop_path" :path="movie.backdrop_path" :height="'600px'" />
-          <div class="movie__overlay absolute">
-            <div class="movie__poster">
+  <div class="movie">
+    <template v-if="movie !== null">
+      <div class="movie__wrapper" :style="`background-image: url(${IMAGE_URL + movie.backdrop_path})`">
+        <div class="movie__overlay">
+          <div class="row">
+            <div class="movie__poster col-12 col-md-4 q-pa-lg">
               <Image
                 v-if="movie.poster_path"
                 :path="movie.poster_path"
                 :imgClass="'poster-image shadow-box shadow-5'"
               />
             </div>
-            <div class="movie__heading q-pa-md">
+            <div class="movie__heading col-12 col-md-8 q-pa-lg">
               <h3 class="movie__title text-h4 text-weight-medium">
                 {{ movie.original_title }}
+                <span class="text-weight-regular text-grey-2">({{ new Date(movie.release_date).getFullYear() }})</span>
               </h3>
               <p v-if="movie.tagline" class="text-caption text-italic q-mb-xs">{{ movie.tagline }}</p>
-              <div class="movie__genre">
+              <div class="movie__genre q-mb-md">
                 <q-chip
                   v-for="genre in movie.genres"
                   :key="genre.id"
@@ -38,22 +43,50 @@ const { movie } = storeToRefs(moviesStore)
                   {{ genre.name }}
                 </q-chip>
               </div>
-              <p class="text-body1 text-weight-regular q-mb-none">
+              <p class="text-body1 text-weight-regular q-mb-md">
                 {{ movie.overview }}
               </p>
+              <div class="movie__rating">
+                <q-circular-progress
+                  show-value
+                  font-size="12px"
+                  :value="userRating"
+                  size="50px"
+                  :thickness="0.22"
+                  color="primary"
+                  track-color="grey-3"
+                >
+                  {{ userRating }}%
+                </q-circular-progress>
+              </div>
+            </div>
+          </div>
+          <div class="movie__casts q-py-lg">
+            <div class="wrapper flex justify-center text-center">
+              <div v-for="cast in movie.credits.cast.slice(0, 6)" :key="cast.id" class="cast">
+                <Image
+                  v-if="cast.profile_path"
+                  :imgClass="'cast-image shadow-box shadow-5 q-mb-sm rounded-borders'"
+                  :path="cast.profile_path"
+                />
+                <h3 class="text-subtitle2">{{ cast.name }}</h3>
+                <h4 class="text-body2">({{ cast.character }})</h4>
+              </div>
             </div>
           </div>
         </div>
-      </template>
-    </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .movie {
-  &__image {
+  &__wrapper {
     overflow: hidden;
     position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
     &::after {
       background: rgb(0, 0, 0);
       background: linear-gradient(270deg, rgba(36, 36, 36, 1) 0%, rgba(36, 36, 36, 0.6) 80%, rgba(0, 0, 0, 0) 100%);
@@ -76,14 +109,8 @@ const { movie } = storeToRefs(moviesStore)
     }
   }
   &__overlay {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: inherit;
     z-index: 1;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 16px;
   }
   &__heading {
     display: flex;
@@ -95,11 +122,22 @@ const { movie } = storeToRefs(moviesStore)
   }
   &__poster {
     display: flex;
-    align-items: center;
     justify-content: center;
     .poster-image {
       max-width: 300px;
       border-radius: 12px;
+    }
+  }
+  &__casts {
+    .wrapper {
+      gap: 16px;
+      .cast {
+        width: 140px;
+      }
+      .cast-image {
+        max-width: 100%;
+        height: auto;
+      }
     }
   }
 }

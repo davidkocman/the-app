@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMoviesStore } from '@/store/movies'
 
 const moviesStore = useMoviesStore()
 const { selected, searchResults, searchFor } = storeToRefs(moviesStore)
 
-const searchTimeout = ref()
 const results = computed(() => {
   return searchResults.value?.results
 })
@@ -19,21 +18,14 @@ watch(selected, (value) => {
 })
 
 const filterFn = (inputValue: string, doneFn: any, abortFn: any) => {
-  clearTimeout(searchTimeout.value)
   searchResults.value = null
   if (inputValue.length < 3) {
     abortFn()
     return
   }
-  searchTimeout.value = setTimeout(() => {
-    doneFn(() => {
-      moviesStore.search(inputValue.toLowerCase())
-    })
-  }, 1000)
-}
-
-const keyUpEvent = (target: HTMLElement) => {
-  target.blur()
+  doneFn(() => {
+    moviesStore.search(inputValue.toLowerCase())
+  })
 }
 </script>
 
@@ -44,17 +36,16 @@ const keyUpEvent = (target: HTMLElement) => {
       standout
       clearable
       hide-dropdown-icon
-      input-debounce="300"
-      :label="searchFor === 'movie' ? 'Search movie' : 'Search TV show'"
+      input-debounce="1000"
       label-color="var(--text-base)"
-      :options="results"
       option-value="value"
-      :option-label="selected?.title ? 'title' : 'name'"
       transition-show="fade"
       transition-hide="fade"
       use-input
+      :label="searchFor === 'movie' ? 'Search movie' : 'Search TV show'"
+      :options="results"
+      :option-label="selected?.title ? 'title' : 'name'"
       @filter="filterFn"
-      @keyup.enter="keyUpEvent($event.target as HTMLElement)"
     >
       <template #no-option>
         <q-item>
