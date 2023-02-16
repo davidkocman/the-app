@@ -1,4 +1,4 @@
-type Selected = {
+type Movie = {
   poster_path: string
   adult: boolean
   overview: string
@@ -17,7 +17,7 @@ type Selected = {
 
 type MoviesSearchResponse = {
   page: number
-  results: Array<Selected>
+  results: Array<Movie>
 }
 
 type Reviews = {
@@ -40,7 +40,7 @@ type Reviews = {
   total_results: number
 }
 
-type MovieData = {
+type MovieDetails = {
   adult: boolean
   backdrop_path: string | null
   belongs_to_collection: null | object
@@ -111,7 +111,7 @@ type MovieData = {
   vote_count: number
 }
 
-type TvShowData = {
+type TvShowDetails = {
   backdrop_path: string | null
   created_by: Array<{
     id: number
@@ -219,4 +219,4 @@ type TvShowData = {
   vote_count: number
 }
 
-export { Selected, MovieData, TvShowData, MoviesSearchResponse }
+export { Movie, MovieDetails, TvShowDetails, MoviesSearchResponse }

@@ -2,6 +2,7 @@
   --text-base: #213547;
   --bg-base: #dfdfdf;
   --bg-muted: #a8a8a8;
+  --bg-transparent: rgba(231, 231, 231, 0.8);
   // Charts
   --title-text: #213547;
   --legend: #213547;
@@ -36,6 +37,7 @@
         --text-base: rgba(255, 255, 255, .87);
         --bg-base: #1f1f1f;
         --bg-muted: #616161;
+        --bg-transparent: rgba(36, 36, 36, 0.8);
         // Charts
         --title-text: rgba(255, 255, 255, .87);
         --legend: rgba(255, 255, 255, .87);
@@ -86,6 +88,7 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
+  color: inherit;
 	font: inherit;
 	vertical-align: baseline;
 }

@@ -1,11 +1,11 @@
 import { useAppStore } from '@/store/app'
 import { Loading, QSpinnerPuff as spinner } from 'quasar'
 
-export default (visible: boolean) => {
+export default (show: boolean) => {
   const appStore = useAppStore()
-  appStore.loading = visible
+  appStore.loading = show
 
-  if (appStore.loading === true) {
+  if (show) {
     Loading.show({
       spinner: spinner,
       spinnerSize: 60

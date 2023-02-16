@@ -29,7 +29,11 @@ export default function useFindMinMaxTemp() {
     )
   })
 
-  /* A computed property that returns the maximum temperature of the day. */
+  /**
+   * This function returns the maximum temperature for a given day
+   * @param {string} dateIsoString - The date for which the maximum temperature is to be returned
+   * @returns {number} - The maximum temperature for the given date
+   */
   const maxTemp = computed(() => {
     const todaySeries: TimeSeries[] = []
     weatherStore.weatherData?.properties.timeseries.forEach((item: TimeSeries) => {

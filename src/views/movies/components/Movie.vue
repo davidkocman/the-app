@@ -10,13 +10,22 @@ const moviesStore = useMoviesStore()
 const { movie } = storeToRefs(moviesStore)
 
 const userRating = computed(() => (movie.value ? Math.floor((movie.value.vote_average / 10) * 100) : undefined))
+const director = computed(() =>
+  movie.value?.credits.crew.filter((member) => member.known_for_department === 'Directing').map((member) => member.name)
+)
+const story = computed(() =>
+  movie.value?.credits.crew.filter((member) => member.known_for_department === 'Writing').map((member) => member.name)
+)
+const sound = computed(() =>
+  movie.value?.credits.crew.filter((member) => member.known_for_department === 'Sound').map((member) => member.name)
+)
 </script>
 
 <template>
   <div class="movie">
     <template v-if="movie !== null">
       <div class="movie__wrapper" :style="`background-image: url(${IMAGE_URL + movie.backdrop_path})`">
-        <div class="movie__overlay">
+        <div class="movie__overlay q-mx-auto">
           <div class="row">
             <div class="movie__poster col-12 col-md-4 q-pa-lg">
               <Image
@@ -26,12 +35,19 @@ const userRating = computed(() => (movie.value ? Math.floor((movie.value.vote_av
               />
             </div>
             <div class="movie__heading col-12 col-md-8 q-pa-lg">
-              <h3 class="movie__title text-h4 text-weight-medium">
-                {{ movie.original_title }}
-                <span class="text-weight-regular text-grey-2">({{ new Date(movie.release_date).getFullYear() }})</span>
+              <h3 class="movie__title text-h4 text-weight-medium q-mb-sm">
+                <template v-if="movie.homepage">
+                  <a :href="movie.homepage" target="_blank" class="movie__homepage">
+                    {{ movie.original_title }}
+                  </a>
+                </template>
+                <template v-else>
+                  {{ movie.original_title }}
+                </template>
+                <span class="text-weight-regular text-grey-2"> ({{ new Date(movie.release_date).getFullYear() }})</span>
               </h3>
-              <p v-if="movie.tagline" class="text-caption text-italic q-mb-xs">{{ movie.tagline }}</p>
-              <div class="movie__genre q-mb-md">
+              <p v-if="movie.tagline" class="text-caption text-italic q-mb-sm">{{ movie.tagline }}</p>
+              <div class="movie__genre q-mb-sm">
                 <q-chip
                   v-for="genre in movie.genres"
                   :key="genre.id"
@@ -43,21 +59,29 @@ const userRating = computed(() => (movie.value ? Math.floor((movie.value.vote_av
                   {{ genre.name }}
                 </q-chip>
               </div>
+              <div class="row movie__rating q-mb-sm">
+                <div class="col">
+                  <h3 class="text-subtitle2 text-weight-regular">
+                    User score: <span class="text-subtitle1 text-weight-bold">{{ userRating }}%</span>
+                  </h3>
+                </div>
+              </div>
               <p class="text-body1 text-weight-regular q-mb-md">
                 {{ movie.overview }}
               </p>
-              <div class="movie__rating">
-                <q-circular-progress
-                  show-value
-                  font-size="12px"
-                  :value="userRating"
-                  size="50px"
-                  :thickness="0.22"
-                  color="primary"
-                  track-color="grey-3"
-                >
-                  {{ userRating }}%
-                </q-circular-progress>
+              <div class="movie__crew row">
+                <div v-if="director" class="col director">
+                  <span class="text-caption">Director</span>
+                  <h3 class="text-subtitle2">{{ director[0] }}</h3>
+                </div>
+                <div v-if="story" class="col story">
+                  <span class="text-caption">Story</span>
+                  <h3 class="text-subtitle2">{{ story[0] }}</h3>
+                </div>
+                <div v-if="sound" class="col sound">
+                  <span class="text-caption">Sound</span>
+                  <h3 class="text-subtitle2">{{ sound[0] }}</h3>
+                </div>
               </div>
             </div>
           </div>
@@ -109,6 +133,7 @@ const userRating = computed(() => (movie.value ? Math.floor((movie.value.vote_av
     }
   }
   &__overlay {
+    max-width: 1200px;
     position: inherit;
     z-index: 1;
   }
@@ -128,6 +153,11 @@ const userRating = computed(() => (movie.value ? Math.floor((movie.value.vote_av
       border-radius: 12px;
     }
   }
+  &__rating {
+    span {
+      color: var(--text-base);
+    }
+  }
   &__casts {
     .wrapper {
       gap: 16px;
@@ -138,6 +168,11 @@ const userRating = computed(() => (movie.value ? Math.floor((movie.value.vote_av
         max-width: 100%;
         height: auto;
       }
+    }
+  }
+  &__crew {
+    span {
+      color: var(--text-base);
     }
   }
 }
