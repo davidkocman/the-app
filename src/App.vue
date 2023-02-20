@@ -40,10 +40,14 @@ useMeta(() => {
 @import '@/assets/scss/app.scss';
 
 body {
-  color: var(--text-base) !important;
   &.body {
     &--light {
-      background-color: #f3f3f3;
+      background-color: var(--bg-base) !important;
+      color: var(--text-base) !important;
+    }
+    &--dark {
+      background-color: var(--bg-base) !important;
+      color: var(--text-base) !important;
     }
   }
 }

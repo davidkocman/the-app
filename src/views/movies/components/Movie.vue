@@ -31,7 +31,8 @@ const sound = computed(() =>
               <Image
                 v-if="movie.poster_path"
                 :path="movie.poster_path"
-                :imgClass="'poster-image shadow-box shadow-5'"
+                :imgClass="'poster-image shadow-box shadow-6'"
+                :ratio="2 / 3"
               />
             </div>
             <div class="movie__heading col-12 col-md-8 q-pa-lg">
@@ -44,7 +45,9 @@ const sound = computed(() =>
                 <template v-else>
                   {{ movie.original_title }}
                 </template>
-                <span class="text-weight-regular text-grey-2"> ({{ new Date(movie.release_date).getFullYear() }})</span>
+                <span class="year text-subtitle1 text-weight-regular">
+                  ({{ new Date(movie.release_date).getFullYear() }})</span
+                >
               </h3>
               <p v-if="movie.tagline" class="text-caption text-italic q-mb-sm">{{ movie.tagline }}</p>
               <div class="movie__genre q-mb-sm">
@@ -52,7 +55,7 @@ const sound = computed(() =>
                   v-for="genre in movie.genres"
                   :key="genre.id"
                   square
-                  color="secondary"
+                  color="primary"
                   text-color="white"
                   class="q-ml-none"
                 >
@@ -63,22 +66,23 @@ const sound = computed(() =>
                 <div class="col">
                   <h3 class="text-subtitle2 text-weight-regular">
                     User score: <span class="text-subtitle1 text-weight-bold">{{ userRating }}%</span>
+                    <span class="text-subtitle1 text-weight-bold"> ({{ movie.vote_count }})</span>
                   </h3>
                 </div>
               </div>
-              <p class="text-body1 text-weight-regular q-mb-md">
+              <p class="text-body1 text-italic text-weight-regular q-mb-md">
                 {{ movie.overview }}
               </p>
               <div class="movie__crew row">
-                <div v-if="director" class="col director">
+                <div v-if="director?.length" class="col director">
                   <span class="text-caption">Director</span>
                   <h3 class="text-subtitle2">{{ director[0] }}</h3>
                 </div>
-                <div v-if="story" class="col story">
+                <div v-if="story?.length" class="col story">
                   <span class="text-caption">Story</span>
                   <h3 class="text-subtitle2">{{ story[0] }}</h3>
                 </div>
-                <div v-if="sound" class="col sound">
+                <div v-if="sound?.length" class="col sound">
                   <span class="text-caption">Sound</span>
                   <h3 class="text-subtitle2">{{ sound[0] }}</h3>
                 </div>
@@ -90,8 +94,9 @@ const sound = computed(() =>
               <div v-for="cast in movie.credits.cast.slice(0, 6)" :key="cast.id" class="cast">
                 <Image
                   v-if="cast.profile_path"
-                  :imgClass="'cast-image shadow-box shadow-5 q-mb-sm rounded-borders'"
+                  :imgClass="'cast-image shadow-box shadow-4 q-mb-sm rounded-borders'"
                   :path="cast.profile_path"
+                  :ratio="2 / 3"
                 />
                 <h3 class="text-subtitle2">{{ cast.name }}</h3>
                 <h4 class="text-body2">({{ cast.character }})</h4>
@@ -145,11 +150,16 @@ const sound = computed(() =>
       max-width: 75%;
     }
   }
+  &__title {
+    .year {
+      color: var(--text-muted);
+    }
+  }
   &__poster {
     display: flex;
     justify-content: center;
     .poster-image {
-      max-width: 300px;
+      width: 300px;
       border-radius: 12px;
     }
   }

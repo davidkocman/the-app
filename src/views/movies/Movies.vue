@@ -29,13 +29,20 @@ const { movie, tvShow, searchFor } = storeToRefs(moviesStore)
     </div>
     <q-separator />
     <Search />
-    <q-tab-panels v-model="searchFor" animated transition-next="fade" transition-prev="fade">
-      <q-tab-panel name="movie" class="q-pa-none">
+    <q-tab-panels v-model="searchFor" keep-alive animated transition-next="fade" transition-prev="fade">
+      <q-tab-panel name="movie" class="movie-tab q-pa-none">
         <Movie v-if="movie" />
       </q-tab-panel>
-      <q-tab-panel name="tv" class="q-pa-none">
+      <q-tab-panel name="tv" class="tv-show-tab q-pa-none">
         <TvShow v-if="tvShow" />
       </q-tab-panel>
     </q-tab-panels>
   </q-page>
 </template>
+
+<style lang="scss" scoped>
+.movie-tab,
+.tv-show-tab {
+  background-color: var(--bg-base);
+}
+</style>

@@ -26,7 +26,8 @@ const story = computed(() =>
                 <Image
                   v-if="tvShow.poster_path"
                   :path="tvShow.poster_path"
-                  :imgClass="'poster-image shadow-box shadow-5'"
+                  :imgClass="'poster-image shadow-box shadow-6'"
+                  :ratio="2 / 3"
                 />
               </div>
               <div class="tv-show__heading col-12 col-md-8 q-pa-lg">
@@ -39,7 +40,7 @@ const story = computed(() =>
                   <template v-else>
                     {{ tvShow.original_name }}
                   </template>
-                  <span class="text-weight-regular text-grey-2">
+                  <span class="year text-subtitle1 text-weight-regular">
                     ({{ new Date(tvShow.first_air_date).getFullYear() }})</span
                   >
                 </h3>
@@ -60,14 +61,15 @@ const story = computed(() =>
                   <div class="col">
                     <h3 class="text-subtitle2 text-weight-regular">
                       User score: <span class="text-subtitle1 text-weight-bold">{{ userRating }}%</span>
+                      <span class="text-subtitle1 text-weight-bold"> ({{ tvShow.vote_count }})</span>
                     </h3>
                   </div>
                 </div>
-                <p class="text-body1 text-weight-regular q-mb-md">
+                <p class="text-body1 text-italic text-weight-regular q-mb-md">
                   {{ tvShow.overview }}
                 </p>
                 <div class="tv-show__crew row">
-                  <div v-if="story" class="col story">
+                  <div v-if="story?.length" class="col story">
                     <span class="text-caption">Story</span>
                     <h3 class="text-subtitle2">{{ story[0] }}</h3>
                   </div>
@@ -79,13 +81,32 @@ const story = computed(() =>
                 <div v-for="cast in tvShow.credits.cast.slice(0, 6)" :key="cast.id" class="cast">
                   <Image
                     v-if="cast.profile_path"
-                    :imgClass="'cast-image shadow-box shadow-5 q-mb-sm rounded-borders'"
+                    :imgClass="'cast-image shadow-box shadow-4 q-mb-sm rounded-borders'"
                     :path="cast.profile_path"
+                    :ratio="2 / 3"
                   />
                   <h3 class="text-subtitle2">{{ cast.name }}</h3>
                   <h4 class="text-body2">({{ cast.character }})</h4>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="tvShow.seasons.length" class="tv-show__seasons q-py-lg q-px-md q-mx-auto">
+          <h2 class="text-h6 text-center">Seasons</h2>
+          <div v-for="season in tvShow.seasons" :key="season.id" class="season q-pa-md shadow-8 rounded-borders">
+            <Image
+              v-if="season.poster_path"
+              :imgClass="'season-poster shadow-box shadow-5 q-mb-sm rounded-borders'"
+              :path="season.poster_path"
+              :ratio="2 / 3"
+            />
+            <div class="season-info">
+              <h3 class="text-subtitle1 text-weight-bolder">{{ season.name }}</h3>
+              <h4 class="text-body2 text-weight-bold">{{ season.air_date }} | {{ season.episode_count }} Episodes</h4>
+              <h4 class="text-body2">
+                {{ season?.overview }}
+              </h4>
             </div>
           </div>
         </div>
@@ -135,11 +156,16 @@ const story = computed(() =>
       max-width: 75%;
     }
   }
+  &__title {
+    .year {
+      color: var(--text-muted);
+    }
+  }
   &__poster {
     display: flex;
     justify-content: center;
     .poster-image {
-      max-width: 300px;
+      width: 300px;
       border-radius: 12px;
     }
   }
@@ -163,6 +189,27 @@ const story = computed(() =>
   &__crew {
     span {
       color: var(--text-base);
+    }
+  }
+  &__seasons {
+    display: grid;
+    gap: 16px;
+    max-width: 1200px;
+    width: 100%;
+    .season {
+      width: 100%;
+      gap: 16px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      .season-poster {
+        width: 100px;
+        max-height: 150px;
+      }
+      .season-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
     }
   }
 }

@@ -27,7 +27,7 @@ export default function useWindSpeedChartData() {
    * @returns Array of strings
    */
   function getCategories() {
-    const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sobota']
+    const weekday = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
     const categories: string[] = []
     timeSeries.value?.forEach((item: TimeSeries) => {
       categories.push(
