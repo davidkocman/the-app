@@ -40,6 +40,16 @@ type Reviews = {
   total_results: number
 }
 
+type Seasons = {
+  air_date: string
+  episode_count: number
+  id: number
+  name: string
+  overview: string
+  poster_path: string
+  season_number: number
+}
+
 type MovieDetails = {
   adult: boolean
   backdrop_path: string | null
@@ -198,15 +208,7 @@ type TvShowDetails = {
     name: string
   }>
   reviews: Reviews
-  seasons: Array<{
-    air_date: string
-    episode_count: number
-    id: number
-    name: string
-    overview: string
-    poster_path: string
-    season_number: number
-  }>
+  seasons: Array<Seasons>
   spoken_languages: Array<{
     english_name: string
     iso_639_1: string
@@ -219,4 +221,4 @@ type TvShowDetails = {
   vote_count: number
 }
 
-export { Movie, MovieDetails, TvShowDetails, MoviesSearchResponse }
+export { Movie, MovieDetails, TvShowDetails, Seasons, Reviews, MoviesSearchResponse }

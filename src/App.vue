@@ -49,6 +49,12 @@ body {
       background-color: var(--bg-base) !important;
       color: var(--text-base) !important;
     }
+    &--light,
+    &--dark {
+      .q-dark {
+        background-color: var(--bg-base) !important;
+      }
+    }
   }
 }
 </style>

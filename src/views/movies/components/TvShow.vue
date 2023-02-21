@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useMoviesStore } from '@/store/movies'
 import { storeToRefs } from 'pinia'
 import Image from '@/components/Image.vue'
+import Seasons from '@/views/movies/components/Seasons.vue'
+import Reviews from '@/views/movies/components/Reviews.vue'
 
 const IMAGE_URL = import.meta.env.VITE_APP_TMDB_POSTER_URL
 
 const moviesStore = useMoviesStore()
 const { tvShow } = storeToRefs(moviesStore)
+
+const tvShowTabs = ref('seasons')
 
 const userRating = computed(() => (tvShow.value ? Math.floor((tvShow.value.vote_average / 10) * 100) : undefined))
 const story = computed(() =>
@@ -43,6 +47,17 @@ const story = computed(() =>
                   <span class="year text-subtitle1 text-weight-regular">
                     ({{ new Date(tvShow.first_air_date).getFullYear() }})</span
                   >
+                  <template v-if="tvShow.networks?.length">
+                    <q-chip
+                      v-for="network in tvShow.networks"
+                      :key="network.id"
+                      color="primary"
+                      text-color="white"
+                      square
+                      class="network"
+                      >{{ network.name }}</q-chip
+                    >
+                  </template>
                 </h3>
                 <p v-if="tvShow.tagline" class="text-caption text-italic q-mb-xs">{{ tvShow.tagline }}</p>
                 <div class="tv-show__genre q-mb-sm">
@@ -92,24 +107,34 @@ const story = computed(() =>
             </div>
           </div>
         </div>
-        <div v-if="tvShow.seasons.length" class="tv-show__seasons q-py-lg q-px-md q-mx-auto">
-          <h2 class="text-h6 text-center">Seasons</h2>
-          <div v-for="season in tvShow.seasons" :key="season.id" class="season q-pa-md shadow-8 rounded-borders">
-            <Image
-              v-if="season.poster_path"
-              :imgClass="'season-poster shadow-box shadow-5 q-mb-sm rounded-borders'"
-              :path="season.poster_path"
-              :ratio="2 / 3"
-            />
-            <div class="season-info">
-              <h3 class="text-subtitle1 text-weight-bolder">{{ season.name }}</h3>
-              <h4 class="text-body2 text-weight-bold">{{ season.air_date }} | {{ season.episode_count }} Episodes</h4>
-              <h4 class="text-body2">
-                {{ season?.overview }}
-              </h4>
-            </div>
-          </div>
-        </div>
+        <q-tabs
+          v-model="tvShowTabs"
+          dense
+          active-color="primary"
+          indicator-color="primary"
+          align="justify"
+          narrow-indicator
+          class="q-mt-md"
+        >
+          <q-tab v-if="tvShow.seasons?.length" name="seasons" label="Seasons" />
+          <q-tab v-if="tvShow.reviews?.results.length" name="reviews" label="Reviews" />
+        </q-tabs>
+        <q-separator />
+        <q-tab-panels
+          v-model="tvShowTabs"
+          keep-alive
+          animated
+          transition-next="fade"
+          transition-prev="fade"
+          class="tv-show__tabs"
+        >
+          <q-tab-panel name="seasons" class="seasons-tab q-pa-none">
+            <Seasons :seasons="tvShow.seasons" />
+          </q-tab-panel>
+          <q-tab-panel name="reviews" class="reviews-show-tab q-pa-none">
+            <Reviews :reviews="tvShow.reviews" />
+          </q-tab-panel>
+        </q-tab-panels>
       </template>
     </div>
   </div>
@@ -191,26 +216,8 @@ const story = computed(() =>
       color: var(--text-base);
     }
   }
-  &__seasons {
-    display: grid;
-    gap: 16px;
-    max-width: 1200px;
-    width: 100%;
-    .season {
-      width: 100%;
-      gap: 16px;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      .season-poster {
-        width: 100px;
-        max-height: 150px;
-      }
-      .season-info {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-    }
+  &__tabs {
+    background-color: transparent;
   }
 }
 </style>
