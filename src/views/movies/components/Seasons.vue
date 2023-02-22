@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { Seasons } from '@/types/movies'
 import Image from '@/components/Image.vue'
+import { useMoviesStore } from '@/store/movies'
+
+const movieStore = useMoviesStore()
 
 defineProps({
-  seasons: Array<Seasons>
+  seasons: Array<Seasons>,
+  id: {
+    type: Number,
+    required: true
+  }
 })
 </script>
 
@@ -22,6 +29,23 @@ defineProps({
         <h4 class="text-body2">
           {{ season?.overview }}
         </h4>
+        <div class="q-pa-md q-gutter-sm">
+          <q-btn
+            v-if="!season.episodes?.length"
+            flat
+            color="primary"
+            label="Episodes"
+            @click="movieStore.loadEpisodes(id, season.season_number)"
+          />
+          <template v-if="season.episodes">
+            <ol>
+              <li v-for="episode in season.episodes" :key="episode.id">
+                {{ episode.name }} * {{ new Date(episode.air_date).toLocaleDateString('sk') }} *
+                {{ episode.runtime }} min.
+              </li>
+            </ol>
+          </template>
+        </div>
       </div>
     </div>
   </div>

@@ -129,7 +129,7 @@ const story = computed(() =>
           class="tv-show__tabs"
         >
           <q-tab-panel name="seasons" class="seasons-tab q-pa-none">
-            <Seasons :seasons="tvShow.seasons" />
+            <Seasons :seasons="tvShow.seasons" :id="tvShow.id" />
           </q-tab-panel>
           <q-tab-panel name="reviews" class="reviews-show-tab q-pa-none">
             <Reviews :reviews="tvShow.reviews" />

@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useMoviesStore } from '@/store/movies'
 import { storeToRefs } from 'pinia'
 import Image from '@/components/Image.vue'
+import Reviews from '@/views/movies/components/Reviews.vue'
 
 const IMAGE_URL = import.meta.env.VITE_APP_TMDB_POSTER_URL
 
 const moviesStore = useMoviesStore()
 const { movie } = storeToRefs(moviesStore)
+
+const movieTabs = ref('reviews')
 
 const userRating = computed(() => (movie.value ? Math.floor((movie.value.vote_average / 10) * 100) : undefined))
 const director = computed(() =>
@@ -105,6 +108,30 @@ const sound = computed(() =>
           </div>
         </div>
       </div>
+      <q-tabs
+        v-model="movieTabs"
+        dense
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+        narrow-indicator
+        class="q-mt-md"
+      >
+        <q-tab v-if="movie.reviews?.results.length" name="reviews" label="Reviews" />
+      </q-tabs>
+      <q-separator />
+      <q-tab-panels
+        v-model="movieTabs"
+        keep-alive
+        animated
+        transition-next="fade"
+        transition-prev="fade"
+        class="movie__tabs"
+      >
+        <q-tab-panel name="reviews" class="reviews-show-tab q-pa-none">
+          <Reviews :reviews="movie.reviews" />
+        </q-tab-panel>
+      </q-tab-panels>
     </template>
   </div>
 </template>
