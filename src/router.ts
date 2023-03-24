@@ -1,5 +1,5 @@
 import { useUserStore } from './store/user'
-import { useAppStore } from './store/app'
+import useAppStore from './store/app/useAppStore'
 import { createRouter, createWebHistory, RouterOptions, RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
 import Default from '@/layouts/Default.vue'
 

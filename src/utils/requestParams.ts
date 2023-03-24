@@ -1,4 +1,4 @@
-const URL = import.meta.env.VITE_APP_TMDB_REQUEST_URL
+const URL: string = import.meta.env.VITE_APP_TMDB_REQUEST_URL
 
 const HEADERS = {
   Authorization: `Bearer ${import.meta.env.VITE_APP_TMDB_READ_ACCESS_TOKEN}`,

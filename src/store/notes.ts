@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { useAppStore } from './app'
 import { addDoc, doc, collection, getDocs, query, where, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { auth, db } from '@/firebaseConfig'
+import useAppStore from './app/useAppStore'
 import getErrorMessage from '@/utils/handleCatchErrors'
-import { NoteResponse, NewNote, Note } from '@/types/notes'
+
+import type { NoteResponse, NewNote, Note } from '@/types/notes'
 
 export const useNotesStore = defineStore('notes', {
   state: () => ({

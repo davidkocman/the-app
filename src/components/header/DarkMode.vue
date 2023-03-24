@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAppStore } from '@/store/app'
+import useAppStore from '@/store/app/useAppStore'
 import { useQuasar } from 'quasar'
 const $q = useQuasar()
 const appStore = useAppStore()

@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import getErrorMessage from '@/utils/handleCatchErrors'
-import { useAppStore } from '@/store/app'
-import { WeatherData, TimeSeries } from '@/types/weather'
+import useAppStore from '@/store/app/useAppStore'
+
+import type { WeatherData, TimeSeries } from '@/types/weather'
 
 export const useWeatherStore = defineStore('weather', {
   state: () => ({

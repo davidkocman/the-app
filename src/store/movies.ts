@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
-import { useAppStore } from '@/store/app'
+import useAppStore from '@/store/app/useAppStore'
 import { URL, HEADERS } from '@/utils/requestParams'
-import { Movie, MovieDetails, TvShowDetails, Seasons, MoviesSearchResponse } from '@/types/movies'
 import getErrorMessage from '@/utils/handleCatchErrors'
+
+import type { Movie, MovieDetails, TvShowDetails, Seasons, MoviesSearchResponse } from '@/types/movies'
 
 export const useMoviesStore = defineStore('movies', {
   state: () => ({
@@ -69,18 +70,19 @@ export const useMoviesStore = defineStore('movies', {
         appStore.loading = false
       }
     },
+    /**
+     * This function loads the episodes for a given season
+     * @param {number} id - The id of the tv show
+     * @param {number} seasonNumber - The season number
+     */
     async loadEpisodes(id: number, seasonNumber: number) {
       const appStore = useAppStore()
       try {
         const response = await fetch(`${URL}/tv/${id}/season/${seasonNumber}`, { headers: HEADERS })
         const data = await response.json()
         const ep = data.episodes
-        console.log(ep)
-
-        if (this.tvShow) {
-          const seasonIndex = this.tvShow.seasons.findIndex((x: Seasons) => x.season_number === seasonNumber)
-          this.tvShow.seasons[seasonIndex].episodes = ep
-        }
+        const seasonIndex = this.tvShow.seasons.findIndex((x: Seasons) => x.season_number === seasonNumber)
+        this.tvShow.seasons[seasonIndex].episodes = ep
       } catch (e) {
         appStore.reportError({ message: getErrorMessage(e) })
       } finally {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAppStore } from '@/store/app'
+import useAppStore from '@/store/app/useAppStore'
 import { useUserStore } from '@/store/user'
 import useGeneralInfo from '@/composables/profile/useGeneralInfo'
 import FileInput from '@/components/FileInput.vue'

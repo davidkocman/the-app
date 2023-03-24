@@ -9,11 +9,12 @@ import {
   updateProfile,
   User
 } from 'firebase/auth'
-import { useAppStore } from './app'
 import { useNotesStore } from './notes'
-import { UserData } from '@/types/user'
-import getErrorMessage from '@/utils/handleCatchErrors'
+import useAppStore from './app/useAppStore'
 import router from '@/router'
+import getErrorMessage from '@/utils/handleCatchErrors'
+
+import type { UserData } from '@/types/user'
 
 export const useUserStore = defineStore('user', {
   state: () => ({

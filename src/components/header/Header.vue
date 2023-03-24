@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAppStore } from '@/store/app'
+import useAppStore from '@/store/app/useAppStore'
 import { useUserStore } from '@/store/user'
 import DarkMode from '@/components/header/DarkMode.vue'
 
