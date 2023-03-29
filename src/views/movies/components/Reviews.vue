@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import type { Reviews } from '@/types/movies'
 import type { PropType } from 'vue'
-import { Reviews } from '@/types/movies'
 
 defineProps({
   reviews: {

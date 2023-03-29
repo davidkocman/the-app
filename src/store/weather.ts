@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import getErrorMessage from '@/utils/handleCatchErrors'
-import useAppStore from '@/store/app/useAppStore'
+import useAppStore from '@/store/app'
 
 import type { WeatherData, TimeSeries } from '@/types/weather'
 

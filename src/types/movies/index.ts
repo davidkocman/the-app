@@ -43,7 +43,12 @@ type Reviews = {
 type Seasons = {
   air_date: string
   episode_count: number
-  episodes?: []
+  episodes?: Array<{
+    id: number
+    name: string
+    air_date: string
+    runtime: string
+  }>
   id: number
   name: string
   overview: string

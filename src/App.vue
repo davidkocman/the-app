@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed, onBeforeMount } from 'vue'
 import { useQuasar, useMeta } from 'quasar'
-import useAppStore from '@/store/app/useAppStore'
+import useAppStore from '@/store/app'
 import spinner from './utils/spinner'
 
 const $q = useQuasar()

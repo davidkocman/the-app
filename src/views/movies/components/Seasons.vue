@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Seasons } from '@/types/movies'
+import type { Seasons } from '@/types/movies'
 import Image from '@/components/Image.vue'
-import { useMoviesStore } from '@/store/movies'
+import useMoviesStore from '@/store/movies'
 
 const movieStore = useMoviesStore()
 

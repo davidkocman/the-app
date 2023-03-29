@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, PropType, toRefs } from 'vue'
 import { useNotesStore } from '@/store/notes'
-import useAppStore from '@/store/app/useAppStore'
-import { NoteResponse, Note } from '@/types/notes'
+import useAppStore from '@/store/app'
 import toMarkDown from '@/utils/toMarkdown'
+
+import type { NoteResponse, Note } from '@/types/notes'
 
 const props = defineProps({
   note: {

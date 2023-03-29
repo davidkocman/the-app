@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useNotesStore } from '@/store/notes'
-import useAppStore from '@/store/app/useAppStore'
+import useAppStore from '@/store/app'
 import toMarkDown from '@/utils/toMarkdown'
-import { Note } from '@/types/notes/index'
+
+import type { Note } from '@/types/notes/index'
 
 const notesStore = useNotesStore()
 const appStore = useAppStore()

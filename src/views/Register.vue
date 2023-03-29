@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '@/store/user'
-import useAppStore from '@/store/app/useAppStore'
+import useAppStore from '@/store/app'
 import { reactive } from 'vue'
 import getErrorMessage from '@/utils/handleCatchErrors'
 

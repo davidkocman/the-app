@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { addDoc, doc, collection, getDocs, query, where, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { auth, db } from '@/firebaseConfig'
-import useAppStore from './app/useAppStore'
+import useAppStore from './app'
 import getErrorMessage from '@/utils/handleCatchErrors'
 
 import type { NoteResponse, NewNote, Note } from '@/types/notes'

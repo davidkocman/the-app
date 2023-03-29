@@ -1,4 +1,4 @@
-import useAppStore from '@/store/app/useAppStore'
+import useAppStore from '@/store/app'
 import { Loading, QSpinnerPuff as spinner } from 'quasar'
 
 export default (show: boolean) => {

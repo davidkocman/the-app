@@ -8,7 +8,7 @@ import {
   getStorage,
   deleteObject
 } from 'firebase/storage'
-import useAppStore from '@/store/app/useAppStore'
+import useAppStore from '@/store/app'
 import getErrorMessage from '@/utils/handleCatchErrors'
 
 export default function useFileUpload() {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useMoviesStore } from '@/store/movies'
 import { storeToRefs } from 'pinia'
+import useMoviesStore from '@/store/movies'
 import Movie from '@/views/movies/components/Movie.vue'
 import TvShow from '@/views/movies/components/TvShow.vue'
 import Search from '@/views/movies/components/Search.vue'

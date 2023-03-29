@@ -10,7 +10,7 @@ import {
   User
 } from 'firebase/auth'
 import { useNotesStore } from './notes'
-import useAppStore from './app/useAppStore'
+import useAppStore from './app'
 import router from '@/router'
 import getErrorMessage from '@/utils/handleCatchErrors'
 

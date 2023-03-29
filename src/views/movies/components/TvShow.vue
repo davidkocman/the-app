@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useMoviesStore } from '@/store/movies'
 import { storeToRefs } from 'pinia'
+import useMoviesStore from '@/store/movies'
 import Image from '@/components/Image.vue'
 import Seasons from '@/views/movies/components/Seasons.vue'
 import Reviews from '@/views/movies/components/Reviews.vue'

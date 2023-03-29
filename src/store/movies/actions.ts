@@ -1,5 +1,5 @@
 import { URL, HEADERS } from '@/utils/requestParams'
-import useAppStore from '@/store/app/useAppStore'
+import useAppStore from '@/store/app'
 import getErrorMessage from '@/utils/handleCatchErrors'
 
 import type { PiniaActionAdaptor } from '@/types/store'
