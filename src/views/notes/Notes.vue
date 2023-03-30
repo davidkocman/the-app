@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, onBeforeMount, ComputedRef } from 'vue'
-import { useNotesStore } from '@/store/notes'
+import { ref, onBeforeMount } from 'vue'
 import { useMeta } from 'quasar'
+import useNotesStore from '@/store/notes'
 import toMarkDown from '@/utils/toMarkdown'
 import NewNote from './components/NewNote.vue'
 import EditNote from './components/EditNote.vue'
-import { NoteResponse } from '@/types/notes/index'
 
 const pageTitle = ref('Notes | The App')
 useMeta(() => {
@@ -23,10 +22,6 @@ const notesStore = useNotesStore()
 onBeforeMount(() => {
   notesStore.getNotes()
 })
-
-const savedNotes: ComputedRef<NoteResponse[] | []> = computed(() => {
-  return notesStore.notes
-})
 </script>
 
 <template>
@@ -36,10 +31,10 @@ const savedNotes: ComputedRef<NoteResponse[] | []> = computed(() => {
       <NewNote />
     </div>
     <div class="row">
-      <template v-if="savedNotes.length !== 0">
+      <template v-if="notesStore.savedNotes.length !== 0">
         <q-list bordered separator class="col col-12">
           <q-expansion-item
-            v-for="(note, index) in savedNotes"
+            v-for="(note, index) in notesStore.savedNotes"
             :key="index"
             :label="note.name"
             header-class="text-weight-medium"
