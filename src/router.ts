@@ -1,5 +1,5 @@
-import { useUserStore } from './store/user'
-import useAppStore from './store/app'
+import useUserStore from '@/store/user'
+import useAppStore from '@/store/app'
 import { createRouter, createWebHistory, RouterOptions, RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
 import Default from '@/layouts/Default.vue'
 
@@ -7,7 +7,7 @@ const requireAuth = async (_to: RouteLocationNormalized, _from: RouteLocationNor
   const userStore = useUserStore()
   const appStore = useAppStore()
   appStore.loading = true
-  const user = await userStore.currentUser()
+  const user = userStore.currentUser()
   if (user) {
     next()
   } else {

@@ -3,7 +3,7 @@ import { Store } from 'pinia'
 import type { NoteResponse, Note } from '@/types/notes'
 
 type State = {
-  notes: [] | Array<NoteResponse>
+  notes: Array<NoteResponse>
 }
 
 type Getters = {

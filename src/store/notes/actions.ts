@@ -90,7 +90,7 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
       querySnapshot.forEach((note) => {
         this.notes.push({
           id: note.id,
-          ...note.data()
+          ...(note.data() as NewNote)
         })
       })
     } catch (e) {

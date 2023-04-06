@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useUserStore } from '@/store/user'
+import useUserStore from '@/store/user'
 import { useMeta } from 'quasar'
 import GeneralInfo from '@/views/profile/components/GeneralInfo.vue'
 

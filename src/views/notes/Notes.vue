@@ -31,7 +31,7 @@ onBeforeMount(() => {
       <NewNote />
     </div>
     <div class="row">
-      <template v-if="notesStore.savedNotes.length !== 0">
+      <template v-if="notesStore.savedNotes.length">
         <q-list bordered separator class="col col-12">
           <q-expansion-item
             v-for="(note, index) in notesStore.savedNotes"

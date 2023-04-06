@@ -1,7 +1,7 @@
 type NewNote = {
   name: string
   content: string
-  user: string | undefined
+  user?: string
 }
 
 type Note = {

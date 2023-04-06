@@ -1,6 +1,6 @@
 import { onBeforeMount, ref, computed, watch } from 'vue'
 import { storage } from '@/firebaseConfig'
-import { useUserStore } from '@/store/user'
+import useUserStore from '@/store/user'
 import useFileUpload from '@/composables/useFileUpload'
 import useFileInput from '@/composables/useFileInput'
 
