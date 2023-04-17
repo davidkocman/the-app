@@ -1,8 +1,8 @@
 import router from '@/router'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-import App from './App.vue'
 import { Quasar, Loading, Notify } from 'quasar'
+import App from './App.vue'
 
 // Import icon libraries
 import '@quasar/extras/roboto-font-latin-ext/roboto-font-latin-ext.css'

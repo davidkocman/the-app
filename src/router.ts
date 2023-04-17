@@ -7,7 +7,7 @@ const requireAuth = async (_to: RouteLocationNormalized, _from: RouteLocationNor
   const userStore = useUserStore()
   const appStore = useAppStore()
   appStore.loading = true
-  const user = userStore.currentUser()
+  const user = await userStore.currentUser()
   if (user) {
     next()
   } else {

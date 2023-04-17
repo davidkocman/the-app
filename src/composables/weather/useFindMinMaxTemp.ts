@@ -1,6 +1,7 @@
 import { computed } from 'vue'
-import { TimeSeries } from '@/types/weather'
-import { useWeatherStore } from '@/store/weather'
+import useWeatherStore from '@/store/weather'
+
+import type { TimeSeries } from '@/types/weather'
 
 /**
  * It takes an array of time series data as an argument and returns the minimum and maximum temperature

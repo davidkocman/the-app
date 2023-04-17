@@ -2,7 +2,7 @@
 import { PropType } from 'vue'
 import { Units } from '@/types/weather'
 import { storeToRefs } from 'pinia'
-import { useWeatherStore } from '@/store/weather'
+import useWeatherStore from '@/store/weather'
 import useFindMinMaxTemp from '@/composables/weather/useFindMinMaxTemp'
 import useSavedLocations from '@/composables/weather/useSavedLocations'
 

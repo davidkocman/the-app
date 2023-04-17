@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { SavedLocation } from '@/types/weather'
-import { useWeatherStore } from '@/store/weather'
 import { storeToRefs } from 'pinia'
+import useWeatherStore from '@/store/weather'
 import useSavedLocations from '@/composables/weather/useSavedLocations'
 
 type positionType = 'top' | 'right' | 'standard' | 'bottom' | 'left' | undefined

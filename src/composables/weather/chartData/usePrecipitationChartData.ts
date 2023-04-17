@@ -1,7 +1,8 @@
-import { TimeSeries } from '@/types/weather'
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useWeatherStore } from '@/store/weather'
+import useWeatherStore from '@/store/weather'
+
+import type { TimeSeries } from '@/types/weather'
 import type { Options as HighchartsOptions } from 'highcharts'
 
 export default function usePrecipitationChartData() {

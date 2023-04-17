@@ -1,7 +1,8 @@
-import { TimeSeries } from '@/types/weather'
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useWeatherStore } from '@/store/weather'
+import useWeatherStore from '@/store/weather'
+
+import type { TimeSeries } from '@/types/weather'
 import type { Options as HighchartsOptions } from 'highcharts'
 
 export default function useTodayWindSpeedChartData() {
@@ -29,7 +30,7 @@ export default function useTodayWindSpeedChartData() {
   function getWindSpeed(): number[] {
     const windSpeed: number[] = []
     todaySeries.value?.forEach((item: TimeSeries) => {
-      windSpeed.push(item.data.instant.details.wind_speed)
+      windSpeed.push(item.data.instant.details.wind_speed * 3.6)
     })
     return windSpeed
   }
@@ -82,7 +83,7 @@ export default function useTodayWindSpeedChartData() {
         gridLineColor: 'var(--y-gridline)',
         gridLineWidth: 0,
         title: {
-          text: '(m/s)',
+          text: '(km/h)',
           style: {
             color: 'var(--y-title)'
           }
@@ -261,7 +262,7 @@ export default function useTodayWindSpeedChartData() {
             enabled: false
           },
           tooltip: {
-            valueSuffix: ' m/s'
+            valueSuffix: ' km/h'
           },
           color: 'var(--wind-speed)'
         }

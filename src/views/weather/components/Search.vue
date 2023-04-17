@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useWeatherStore } from '@/store/weather'
+import useWeatherStore from '@/store/weather/'
 import { Model } from '@/types/weather'
 import cities from '@/assets/cities/sk.json'
 

@@ -4,7 +4,7 @@ import { useMeta } from 'quasar'
 // Composables
 import useSavedLocations from '@/composables/weather/useSavedLocations'
 // Store
-import { useWeatherStore } from '@/store/weather'
+import useWeatherStore from '@/store/weather/'
 // Components
 import Search from '@/views/weather/components/Search.vue'
 import Now from '@/views/weather/components/Now.vue'
