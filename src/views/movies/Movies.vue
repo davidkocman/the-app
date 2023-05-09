@@ -1,42 +1,33 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import useMoviesStore from '@/store/movies'
-import Movie from '@/views/movies/components/Movie.vue'
-import TvShow from '@/views/movies/components/TvShow.vue'
+import SearchResult from '@/views/movies/components/SearchResult.vue'
 import Search from '@/views/movies/components/Search.vue'
 
 const moviesStore = useMoviesStore()
-const { movie, tvShow, searchFor } = storeToRefs(moviesStore)
+const { searchFor, searchResult } = storeToRefs(moviesStore)
 </script>
 
 <template>
   <q-page class="page-movies q-pa-md">
     <div class="row justify-between items-center q-mb-sm">
       <h6 class="text-h6">Motion pictures</h6>
+      <q-btn color="primary" icon="search" round>
+        <q-menu class="q-px-sm">
+          <div class="q-py-md q-gutter-sm">
+            <div class="q-gutter-sm">
+              <q-radio dense v-model="searchFor" val="movie" label="Movie" />
+              <q-radio dense v-model="searchFor" val="tv" label="TV Show" />
+            </div>
+          </div>
+          <Search />
+        </q-menu>
+      </q-btn>
     </div>
-    <div style="max-width: 600px">
-      <q-tabs
-        v-model="searchFor"
-        dense
-        active-color="primary"
-        indicator-color="primary"
-        align="justify"
-        narrow-indicator
-      >
-        <q-tab name="movie" label="Movie" />
-        <q-tab name="tv" label="TV Show" />
-      </q-tabs>
-    </div>
-    <q-separator />
-    <Search />
-    <q-tab-panels v-model="searchFor" keep-alive animated transition-next="fade" transition-prev="fade">
-      <q-tab-panel name="movie" class="movie-tab q-pa-none">
-        <Movie v-if="movie" />
-      </q-tab-panel>
-      <q-tab-panel name="tv" class="tv-show-tab q-pa-none">
-        <TvShow v-if="tvShow" />
-      </q-tab-panel>
-    </q-tab-panels>
+    <SearchResult v-if="searchResult" />
+    <footer class="absolute-bottom q-pa-sm text-center text-caption" style="color: var(--bg-muted)">
+      Data source: themoviedb
+    </footer>
   </q-page>
 </template>
 

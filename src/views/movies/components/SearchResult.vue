@@ -9,47 +9,71 @@ import Reviews from '@/views/movies/components/Reviews.vue'
 const IMAGE_URL = import.meta.env.VITE_APP_TMDB_POSTER_URL
 
 const moviesStore = useMoviesStore()
-const { tvShow } = storeToRefs(moviesStore)
+const { searchResult, searchResultType } = storeToRefs(moviesStore)
 
-const tvShowTabs = ref('seasons')
+const tabs = ref<'seasons' | 'reviews'>('seasons')
 
-const userRating = computed(() => (tvShow.value ? Math.floor((tvShow.value.vote_average / 10) * 100) : undefined))
-const story = computed(() =>
-  tvShow.value?.credits.crew.filter((member) => member.known_for_department === 'Writing').map((member) => member.name)
+const userRating = computed(() =>
+  searchResult.value ? Math.floor((searchResult.value.vote_average / 10) * 100) : undefined
 )
+const director = computed(() =>
+  searchResult.value?.credits.crew
+    .filter((member) => member.known_for_department === 'Directing')
+    .map((member) => member.name)
+)
+const sound = computed(() =>
+  searchResult.value?.credits.crew
+    .filter((member) => member.known_for_department === 'Sound')
+    .map((member) => member.name)
+)
+const story = computed(() =>
+  searchResult.value?.credits.crew
+    .filter((member) => member.known_for_department === 'Writing')
+    .map((member) => member.name)
+)
+const searchResultTitle = computed(() => {
+  if (searchResult.value) {
+    if (searchResultType.value === 'tv') return searchResult.value.original_name
+    return searchResult.value.original_title
+  }
+  return null
+})
 </script>
 
 <template>
-  <div class="tv-show row">
+  <div class="searchResult row">
     <div class="col">
-      <template v-if="tvShow !== null">
-        <div class="tv-show__wrapper" :style="`background-image: url(${IMAGE_URL + tvShow.backdrop_path})`">
-          <div class="tv-show__overlay q-mx-auto">
+      <template v-if="searchResult !== null">
+        <div class="searchResult__wrapper" :style="`background-image: url(${IMAGE_URL + searchResult.backdrop_path})`">
+          <div class="searchResult__overlay q-mx-auto">
             <div class="row">
-              <div class="tv-show__poster col-12 col-md-4 q-pa-lg">
+              <div class="searchResult__poster col-12 col-md-4 q-pa-lg">
                 <Image
-                  v-if="tvShow.poster_path"
-                  :path="tvShow.poster_path"
+                  v-if="searchResult.poster_path"
+                  :path="searchResult.poster_path"
                   :imgClass="'poster-image shadow-box shadow-6'"
                   :ratio="2 / 3"
                 />
               </div>
-              <div class="tv-show__heading col-12 col-md-8 q-pa-lg">
-                <h3 class="tv-show__title text-h4 text-weight-medium q-mb-sm">
-                  <template v-if="!!tvShow.homepage">
-                    <a :href="tvShow.homepage" target="_blank" class="movie__homepage">
-                      {{ tvShow.original_name }}
+              <div class="searchResult__heading col-12 col-md-8 q-pa-lg">
+                <h3 class="searchResult__title text-h4 text-weight-medium q-mb-sm">
+                  <template v-if="!!searchResult.homepage">
+                    <a :href="searchResult.homepage" target="_blank" class="movie__homepage">
+                      {{ searchResultTitle }}
                     </a>
                   </template>
                   <template v-else>
-                    {{ tvShow.original_name }}
+                    {{ searchResultTitle }}
                   </template>
                   <span class="year text-subtitle1 text-weight-regular">
-                    ({{ new Date(tvShow.first_air_date).getFullYear() }})</span
-                  >
-                  <template v-if="tvShow.networks?.length">
+                    <template v-if="searchResultType === 'tv'">
+                      ({{ new Date(searchResult.first_air_date).getFullYear() }})
+                    </template>
+                    <template v-else> ({{ new Date(searchResult.release_date).getFullYear() }}) </template>
+                  </span>
+                  <template v-if="searchResult.networks?.length">
                     <q-chip
-                      v-for="network in tvShow.networks"
+                      v-for="network in searchResult.networks"
                       :key="network.id"
                       color="primary"
                       text-color="white"
@@ -59,10 +83,10 @@ const story = computed(() =>
                     >
                   </template>
                 </h3>
-                <p v-if="tvShow.tagline" class="text-caption text-italic q-mb-xs">{{ tvShow.tagline }}</p>
-                <div class="tv-show__genre q-mb-sm">
+                <p v-if="searchResult.tagline" class="text-caption text-italic q-mb-xs">{{ searchResult.tagline }}</p>
+                <div class="searchResult__genre q-mb-sm">
                   <q-chip
-                    v-for="genre in tvShow.genres"
+                    v-for="genre in searchResult.genres"
                     :key="genre.id"
                     square
                     color="secondary"
@@ -72,28 +96,36 @@ const story = computed(() =>
                     {{ genre.name }}
                   </q-chip>
                 </div>
-                <div class="tv-show__rating row q-mb-sm">
+                <div class="searchResult__rating row q-mb-sm">
                   <div class="col">
                     <h3 class="text-subtitle2 text-weight-regular">
                       User score: <span class="text-subtitle1 text-weight-bold">{{ userRating }}%</span>
-                      <span class="text-subtitle1 text-weight-bold"> ({{ tvShow.vote_count }})</span>
+                      <span class="text-subtitle1 text-weight-bold"> ({{ searchResult.vote_count }})</span>
                     </h3>
                   </div>
                 </div>
                 <p class="text-body1 text-italic text-weight-regular q-mb-md">
-                  {{ tvShow.overview }}
+                  {{ searchResult.overview }}
                 </p>
-                <div class="tv-show__crew row">
+                <div class="searchResult__crew row">
+                  <div v-if="searchResultType === 'movie' && director?.length" class="col director">
+                    <span class="text-caption">Director</span>
+                    <h3 class="text-subtitle2">{{ director[0] }}</h3>
+                  </div>
                   <div v-if="story?.length" class="col story">
                     <span class="text-caption">Story</span>
                     <h3 class="text-subtitle2">{{ story[0] }}</h3>
                   </div>
+                  <div v-if="searchResultType === 'movie' && sound?.length" class="col sound">
+                    <span class="text-caption">Sound</span>
+                    <h3 class="text-subtitle2">{{ sound[0] }}</h3>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="tv-show__casts q-py-lg">
+            <div class="searchResult__casts q-py-lg">
               <div class="wrapper flex justify-center text-center">
-                <div v-for="cast in tvShow.credits.cast.slice(0, 6)" :key="cast.id" class="cast">
+                <div v-for="cast in searchResult.credits.cast.slice(0, 6)" :key="cast.id" class="cast">
                   <Image
                     v-if="cast.profile_path"
                     :imgClass="'cast-image shadow-box shadow-4 q-mb-sm rounded-borders'"
@@ -108,7 +140,7 @@ const story = computed(() =>
           </div>
         </div>
         <q-tabs
-          v-model="tvShowTabs"
+          v-model="tabs"
           dense
           active-color="primary"
           indicator-color="primary"
@@ -116,12 +148,12 @@ const story = computed(() =>
           narrow-indicator
           class="q-mt-md"
         >
-          <q-tab v-if="tvShow.seasons?.length" name="seasons" label="Seasons" />
-          <q-tab v-if="tvShow.reviews?.results.length" name="reviews" label="Reviews" />
+          <q-tab v-if="searchResultType === 'tv' && searchResult.seasons?.length" name="seasons" label="Seasons" />
+          <q-tab v-if="searchResult.reviews?.results.length" name="reviews" label="Reviews" />
         </q-tabs>
         <q-separator />
         <q-tab-panels
-          v-model="tvShowTabs"
+          v-model="tabs"
           keep-alive
           animated
           transition-next="fade"
@@ -129,10 +161,10 @@ const story = computed(() =>
           class="tv-show__tabs"
         >
           <q-tab-panel name="seasons" class="seasons-tab q-pa-none">
-            <Seasons :seasons="tvShow.seasons" :id="tvShow.id" />
+            <Seasons :seasons="searchResult.seasons" :id="searchResult.id" />
           </q-tab-panel>
           <q-tab-panel name="reviews" class="reviews-show-tab q-pa-none">
-            <Reviews :reviews="tvShow.reviews" />
+            <Reviews :reviews="searchResult.reviews" />
           </q-tab-panel>
         </q-tab-panels>
       </template>
@@ -141,7 +173,7 @@ const story = computed(() =>
 </template>
 
 <style lang="scss" scoped>
-.tv-show {
+.searchResult {
   &__wrapper {
     overflow: hidden;
     position: relative;

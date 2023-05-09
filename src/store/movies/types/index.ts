@@ -5,9 +5,9 @@ import type { Movie, MovieDetails, TvShowDetails, MoviesSearchResponse } from '@
 type State = {
   searchResults: MoviesSearchResponse | null
   selected: Movie | null
-  movie: MovieDetails | null
-  tvShow: TvShowDetails | null
   searchFor: 'movie' | 'tv'
+  searchResult: (MovieDetails & TvShowDetails) | null
+  searchResultType: 'movie' | 'tv'
 }
 
 type Getters = {

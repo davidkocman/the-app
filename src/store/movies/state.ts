@@ -4,8 +4,8 @@ export default function (): State {
   return {
     searchResults: null,
     selected: null,
-    movie: null,
-    tvShow: null,
-    searchFor: 'movie'
+    searchFor: 'movie',
+    searchResult: null,
+    searchResultType: 'movie'
   }
 }

@@ -47,7 +47,8 @@ export const actions: PiniaActionAdaptor<Actions, MoviesStore> = {
     try {
       appStore.loading = true
       const response = await fetch(`${URL}/movie/${id}?append_to_response=reviews,credits`, { headers: HEADERS })
-      this.movie = await response.json()
+      this.searchResult = await response.json()
+      this.searchResultType = 'movie'
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {
@@ -59,7 +60,8 @@ export const actions: PiniaActionAdaptor<Actions, MoviesStore> = {
     try {
       appStore.loading = true
       const response = await fetch(`${URL}/tv/${id}?append_to_response=reviews,credits`, { headers: HEADERS })
-      this.tvShow = await response.json()
+      this.searchResult = await response.json()
+      this.searchResultType = 'tv'
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {
@@ -72,9 +74,9 @@ export const actions: PiniaActionAdaptor<Actions, MoviesStore> = {
       const response = await fetch(`${URL}/tv/${id}/season/${seasonNumber}`, { headers: HEADERS })
       const data = await response.json()
       const ep = data.episodes
-      if (this.tvShow) {
-        const seasonIndex = this.tvShow.seasons.findIndex((x: Seasons) => x.season_number === seasonNumber)
-        this.tvShow.seasons[seasonIndex].episodes = ep
+      if (this.searchResult) {
+        const seasonIndex = this.searchResult.seasons.findIndex((x: Seasons) => x.season_number === seasonNumber)
+        this.searchResult.seasons[seasonIndex].episodes = ep
       }
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
