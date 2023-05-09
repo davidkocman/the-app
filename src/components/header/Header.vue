@@ -12,9 +12,9 @@ const userStore = useUserStore()
     <q-toolbar>
       <q-btn flat round dense icon="menu" class="q-mr-sm" @click="appStore.drawer = !appStore.drawer"></q-btn>
       <!-- <q-avatar>
-          <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
-        </q-avatar> -->
-      <q-toolbar-title>The App</q-toolbar-title>
+        <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
+      </q-avatar> -->
+      <q-toolbar-title>the App</q-toolbar-title>
       <DarkMode />
       <q-btn flat round dense icon="logout" @click="userStore.logoutUser">
         <q-tooltip> Logout </q-tooltip>
