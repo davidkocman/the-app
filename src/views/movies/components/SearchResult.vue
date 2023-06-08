@@ -41,7 +41,8 @@ const searchResultTitle = computed(() => {
 </script>
 
 <template>
-  <div class="searchResult row">
+  <div class="searchResult row q-mb-lg">
+    <q-btn color="primary" label="Close" class="close-search-resault absolute" @click="searchResult = null" />
     <div class="col">
       <template v-if="searchResult !== null">
         <div class="searchResult__wrapper" :style="`background-image: url(${IMAGE_URL + searchResult.backdrop_path})`">
@@ -160,10 +161,14 @@ const searchResultTitle = computed(() => {
           transition-prev="fade"
           class="tv-show__tabs"
         >
-          <q-tab-panel name="seasons" class="seasons-tab q-pa-none">
+          <q-tab-panel
+            v-if="searchResultType === 'tv' && searchResult.seasons?.length"
+            name="seasons"
+            class="seasons-tab q-pa-none"
+          >
             <Seasons :seasons="searchResult.seasons" :id="searchResult.id" />
           </q-tab-panel>
-          <q-tab-panel name="reviews" class="reviews-show-tab q-pa-none">
+          <q-tab-panel v-if="searchResult.reviews?.results.length" name="reviews" class="reviews-show-tab q-pa-none">
             <Reviews :reviews="searchResult.reviews" />
           </q-tab-panel>
         </q-tab-panels>
@@ -174,6 +179,11 @@ const searchResultTitle = computed(() => {
 
 <style lang="scss" scoped>
 .searchResult {
+  .close-search-resault {
+    top: 64px;
+    right: 32px;
+    z-index: 2;
+  }
   &__wrapper {
     overflow: hidden;
     position: relative;

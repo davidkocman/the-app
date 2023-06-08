@@ -2,6 +2,7 @@
 import { storeToRefs } from 'pinia'
 import useMoviesStore from '@/store/movies'
 import SearchResult from '@/views/movies/components/SearchResult.vue'
+import BaseContent from '@/views/movies/components/BaseContent.vue'
 import Search from '@/views/movies/components/Search.vue'
 
 const moviesStore = useMoviesStore()
@@ -25,15 +26,17 @@ const { searchFor, searchResult } = storeToRefs(moviesStore)
       </q-btn>
     </div>
     <SearchResult v-if="searchResult" />
+    <BaseContent v-else />
     <footer class="absolute-bottom q-pa-sm text-center text-caption" style="color: var(--bg-muted)">
-      Data source: themoviedb
+      Data source: themoviedb.org
     </footer>
   </q-page>
 </template>
 
 <style lang="scss" scoped>
-.movie-tab,
-.tv-show-tab {
-  background-color: var(--bg-base);
+.page-movies {
+  footer {
+    background-color: var(--bg-base);
+  }
 }
 </style>

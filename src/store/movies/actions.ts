@@ -1,4 +1,4 @@
-import { URL, HEADERS } from '@/utils/requestParams'
+import { URL, HEADERS } from '@/utils/tmdbRequestParams'
 import useAppStore from '@/store/app'
 import getErrorMessage from '@/utils/handleCatchErrors'
 
@@ -80,8 +80,24 @@ export const actions: PiniaActionAdaptor<Actions, MoviesStore> = {
       }
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
-    } finally {
-      appStore.loading = false
+    }
+  },
+  async getNowPlaying() {
+    const appStore = useAppStore()
+    try {
+      const response = await fetch(`${URL}/movie/now_playing`, { headers: HEADERS })
+      this.nowPlaying = await response.json()
+    } catch (e) {
+      appStore.reportError({ message: getErrorMessage(e) })
+    }
+  },
+  async getUpcoming() {
+    const appStore = useAppStore()
+    try {
+      const response = await fetch(`${URL}/movie/upcoming`, { headers: HEADERS })
+      this.upcoming = await response.json()
+    } catch (e) {
+      appStore.reportError({ message: getErrorMessage(e) })
     }
   }
 }

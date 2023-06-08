@@ -227,4 +227,32 @@ type TvShowDetails = {
   vote_count: number
 }
 
-export { Movie, MovieDetails, TvShowDetails, Seasons, Reviews, MoviesSearchResponse }
+type MovieItem = {
+  adult: boolean
+  backdrop_path: string
+  genre_ids: Array<number>
+  id: number
+  original_language: string
+  original_title: string
+  overview: string
+  popularity: number
+  poster_path: string
+  release_date: string
+  title: string
+  video: boolean
+  vote_average: number
+  vote_count: number
+}
+
+type MovieList = {
+  dates: {
+    maximum: string
+    minimum: string
+  }
+  page: number
+  results: Array<MovieItem>
+  total_pages: number
+  total_results: number
+}
+
+export { Movie, MovieDetails, TvShowDetails, Seasons, Reviews, MoviesSearchResponse, MovieList, MovieItem }

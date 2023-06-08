@@ -1,6 +1,6 @@
 import { Store } from 'pinia'
 
-import type { Movie, MovieDetails, TvShowDetails, MoviesSearchResponse } from '@/types/movies'
+import type { Movie, MovieDetails, TvShowDetails, MoviesSearchResponse, MovieList, MovieItem } from '@/types/movies'
 
 type State = {
   searchResults: MoviesSearchResponse | null
@@ -8,10 +8,12 @@ type State = {
   searchFor: 'movie' | 'tv'
   searchResult: (MovieDetails & TvShowDetails) | null
   searchResultType: 'movie' | 'tv'
+  nowPlaying: MovieList | null
+  upcoming: MovieList | null
 }
 
 type Getters = {
-  selectedSearchMode: 'movie' | 'tv'
+  nowPlayingResultsByPopularityDesc: Array<MovieItem> | null
 }
 
 type Actions = {
@@ -21,6 +23,8 @@ type Actions = {
   getMovieData: (id: number) => void
   getTvShowData: (id: number) => void
   loadEpisodes: (id: number, seasonNumber: number) => void
+  getNowPlaying: () => Promise<void>
+  getUpcoming: () => Promise<void>
 }
 
 type MoviesStore = Store<'movies', State, Getters, Actions>
