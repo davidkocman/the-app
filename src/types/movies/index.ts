@@ -245,7 +245,7 @@ type MovieItem = {
 }
 
 type MovieList = {
-  dates: {
+  dates?: {
     maximum: string
     minimum: string
   }

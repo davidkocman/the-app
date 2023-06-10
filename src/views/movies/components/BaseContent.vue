@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, computed } from 'vue'
 import useMoviesStore from '@/store/movies'
 import Image from '@/components/Image.vue'
 
@@ -8,9 +8,13 @@ const IMAGE_URL = import.meta.env.VITE_APP_TMDB_POSTER_URL
 const moviesStore = useMoviesStore()
 const slide = ref(1)
 
+const currentSlide = computed(() => {
+  return moviesStore.trendingResultsByPopularityDesc ? moviesStore.trendingResultsByPopularityDesc[slide.value] : null
+})
+
 onBeforeMount(async () => {
-  if (moviesStore.nowPlaying) return
-  moviesStore.getNowPlaying()
+  if (moviesStore.trending) return
+  moviesStore.getTrending()
   moviesStore.getUpcoming()
 })
 </script>
@@ -19,10 +23,20 @@ onBeforeMount(async () => {
   <div class="baseContent q-mb-lg">
     <section class="section__top row">
       <div class="slider">
-        <template v-if="moviesStore.nowPlayingResultsByPopularityDesc?.length">
-          <q-carousel animated v-model="slide" :autoplay="10000" transition-duration="4000" infinite height="auto">
+        <template v-if="moviesStore.trendingResultsByPopularityDesc?.length">
+          <q-carousel
+            animated
+            v-model="slide"
+            :autoplay="10000"
+            transition-duration="1000"
+            infinite
+            arrows
+            height="auto"
+            class="shadow-10"
+            @update:model-value="currentSlide"
+          >
             <q-carousel-slide
-              v-for="(item, index) in moviesStore.nowPlayingResultsByPopularityDesc"
+              v-for="(item, index) in moviesStore.trendingResultsByPopularityDesc"
               :key="item.id"
               :name="index"
             >
@@ -33,6 +47,12 @@ onBeforeMount(async () => {
               </div>
             </q-carousel-slide>
           </q-carousel>
+          <section class="trendingItemDetails q-pa-md">
+            <div v-if="currentSlide" class="poster">
+              <Image :path="`${IMAGE_URL}${currentSlide.poster_path}`" :ratio="2 / 3" :imgClass="'shadow-10'" />
+            </div>
+            <div class="details"></div>
+          </section>
         </template>
         <template v-else>
           <q-skeleton type="QSlider" height="450px" />
@@ -51,9 +71,21 @@ onBeforeMount(async () => {
       grid-template-columns: 1fr auto;
       .slider {
         max-width: 1000px;
+        position: relative;
         .q-carousel {
           &__slide {
             padding: 0;
+          }
+        }
+        .trendingItemDetails {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          position: absolute;
+          z-index: 1;
+          width: 100%;
+          bottom: 0;
+          .poster {
+            max-width: 150px;
           }
         }
       }

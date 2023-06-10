@@ -8,12 +8,12 @@ type State = {
   searchFor: 'movie' | 'tv'
   searchResult: (MovieDetails & TvShowDetails) | null
   searchResultType: 'movie' | 'tv'
-  nowPlaying: MovieList | null
+  trending: MovieList | null
   upcoming: MovieList | null
 }
 
 type Getters = {
-  nowPlayingResultsByPopularityDesc: Array<MovieItem> | null
+  trendingResultsByPopularityDesc: Array<MovieItem> | null
 }
 
 type Actions = {
@@ -23,7 +23,7 @@ type Actions = {
   getMovieData: (id: number) => void
   getTvShowData: (id: number) => void
   loadEpisodes: (id: number, seasonNumber: number) => void
-  getNowPlaying: () => Promise<void>
+  getTrending: () => Promise<void>
   getUpcoming: () => Promise<void>
 }
 

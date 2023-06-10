@@ -82,11 +82,13 @@ export const actions: PiniaActionAdaptor<Actions, MoviesStore> = {
       appStore.reportError({ message: getErrorMessage(e) })
     }
   },
-  async getNowPlaying() {
+  async getTrending() {
     const appStore = useAppStore()
     try {
-      const response = await fetch(`${URL}/movie/now_playing`, { headers: HEADERS })
-      this.nowPlaying = await response.json()
+      const response = await fetch(`${URL}/trending/movie/week?language=en-US`, {
+        headers: HEADERS
+      })
+      this.trending = await response.json()
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
     }
@@ -94,7 +96,14 @@ export const actions: PiniaActionAdaptor<Actions, MoviesStore> = {
   async getUpcoming() {
     const appStore = useAppStore()
     try {
-      const response = await fetch(`${URL}/movie/upcoming`, { headers: HEADERS })
+      const response = await fetch(
+        `${URL}/discover/movie?include_adult=false&include_video=false&page=1&with_original_language=en&region=SK,CZ,DE&primary_release_date.gte=${new Date()
+          .toISOString()
+          .slice(0, 10)}&sort_by=primary_release_date.asc`,
+        {
+          headers: HEADERS
+        }
+      )
       this.upcoming = await response.json()
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })

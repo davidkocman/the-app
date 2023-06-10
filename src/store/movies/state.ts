@@ -7,7 +7,7 @@ export default function (): State {
     searchFor: 'movie',
     searchResult: null,
     searchResultType: 'movie',
-    nowPlaying: null,
+    trending: null,
     upcoming: null
   }
 }
