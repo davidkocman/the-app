@@ -3,6 +3,8 @@ import type { Seasons } from '@/types/movies'
 import Image from '@/components/Image.vue'
 import useMoviesStore from '@/store/movies'
 
+const IMAGE_URL = import.meta.env.VITE_APP_TMDB_POSTER_URL
+
 const movieStore = useMoviesStore()
 
 defineProps({
@@ -20,7 +22,7 @@ defineProps({
       <Image
         v-if="season.poster_path"
         :imgClass="'season-poster shadow-box shadow-5 q-mb-sm rounded-borders'"
-        :path="season.poster_path"
+        :path="`${IMAGE_URL}${season.poster_path}`"
         :ratio="2 / 3"
       />
       <div class="season-info">

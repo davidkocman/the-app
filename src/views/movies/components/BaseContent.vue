@@ -41,17 +41,22 @@ onBeforeMount(async () => {
               :name="index"
             >
               <Image :path="`${IMAGE_URL}${item.backdrop_path}`" />
-              <div class="absolute-bottom custom-caption">
-                <h6 class="text-h6">{{ item.title }}</h6>
-                <!-- <h6 class="text-subtitle1">{{ item.vote_average }}</h6> -->
-              </div>
             </q-carousel-slide>
           </q-carousel>
-          <section class="trendingItemDetails q-pa-md">
-            <div v-if="currentSlide" class="poster">
+          <section v-if="currentSlide" class="trendingItemDetails">
+            <div class="poster">
               <Image :path="`${IMAGE_URL}${currentSlide.poster_path}`" :ratio="2 / 3" :imgClass="'shadow-10'" />
             </div>
-            <div class="details"></div>
+            <div class="details column justify-center">
+              <h4 class="text-h4 q-mb-sm">{{ currentSlide.title }}</h4>
+              <h5 class="text-subtitle2 text-weight-regular q-mb-sm">
+                User score:
+                <span class="text-subtitle1 text-weight-bold">{{ currentSlide.vote_average }}</span>
+                &nbsp;
+                <span class="text-subtitle1 text-weight-bold">({{ currentSlide.vote_count }})</span>
+              </h5>
+              <h5 class="text-body2">{{ currentSlide.overview }}</h5>
+            </div>
           </section>
         </template>
         <template v-else>
@@ -78,24 +83,48 @@ onBeforeMount(async () => {
           }
         }
         .trendingItemDetails {
-          display: grid;
-          grid-template-columns: 1fr auto;
-          position: absolute;
-          z-index: 1;
-          width: 100%;
-          bottom: 0;
+          display: block;
+          padding: 16px 0;
+          @media (min-width: $breakpoint-md-min) {
+            background: rgb(29, 29, 29);
+            background: linear-gradient(
+              0deg,
+              rgba(0, 0, 0, 1) 0%,
+              rgba(0, 0, 0, 0.75) 65%,
+              rgba(255, 255, 255, 0) 100%
+            );
+            bottom: 0;
+            display: grid;
+            grid-template-columns: 150px auto;
+            padding: 16px;
+            position: absolute;
+            width: 100%;
+            z-index: 1;
+            .body--light & {
+              background: linear-gradient(
+                0deg,
+                rgba(255, 255, 255, 1) 0%,
+                rgba(255, 255, 255, 0.75) 65%,
+                rgba(255, 255, 255, 0) 100%
+              );
+            }
+          }
+          .details {
+            padding: 0;
+            @media (min-width: $breakpoint-md-min) {
+              padding: 0 16px;
+            }
+          }
           .poster {
+            display: none;
             max-width: 150px;
+            @media (min-width: $breakpoint-md-min) {
+              display: block;
+            }
           }
         }
       }
     }
-  }
-  .custom-caption {
-    text-align: center;
-    padding: 12px;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.3);
   }
 }
 </style>

@@ -51,7 +51,7 @@ const searchResultTitle = computed(() => {
               <div class="searchResult__poster col-12 col-md-4 q-pa-lg">
                 <Image
                   v-if="searchResult.poster_path"
-                  :path="searchResult.poster_path"
+                  :path="`${IMAGE_URL}${searchResult.poster_path}`"
                   :imgClass="'poster-image shadow-box shadow-6'"
                   :ratio="2 / 3"
                 />
@@ -130,7 +130,7 @@ const searchResultTitle = computed(() => {
                   <Image
                     v-if="cast.profile_path"
                     :imgClass="'cast-image shadow-box shadow-4 q-mb-sm rounded-borders'"
-                    :path="cast.profile_path"
+                    :path="`${IMAGE_URL}${cast.profile_path}`"
                     :ratio="2 / 3"
                   />
                   <h3 class="text-subtitle2">{{ cast.name }}</h3>
@@ -150,7 +150,7 @@ const searchResultTitle = computed(() => {
           class="q-mt-md"
         >
           <q-tab v-if="searchResultType === 'tv' && searchResult.seasons?.length" name="seasons" label="Seasons" />
-          <q-tab v-if="searchResult.reviews?.results.length" name="reviews" label="Reviews" />
+          <q-tab v-if="searchResult.reviews" name="reviews" label="Reviews" />
         </q-tabs>
         <q-separator />
         <q-tab-panels
@@ -168,7 +168,7 @@ const searchResultTitle = computed(() => {
           >
             <Seasons :seasons="searchResult.seasons" :id="searchResult.id" />
           </q-tab-panel>
-          <q-tab-panel v-if="searchResult.reviews?.results.length" name="reviews" class="reviews-show-tab q-pa-none">
+          <q-tab-panel v-if="searchResult.reviews" name="reviews" class="reviews-show-tab q-pa-none">
             <Reviews :reviews="searchResult.reviews" />
           </q-tab-panel>
         </q-tab-panels>
