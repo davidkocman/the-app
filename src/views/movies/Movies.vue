@@ -11,8 +11,7 @@ const { searchFor, searchResult } = storeToRefs(moviesStore)
 
 <template>
   <q-page class="page-movies q-pa-md">
-    <div class="row justify-between items-center q-mb-sm">
-      <h6 class="text-h6">Motion pictures</h6>
+    <div class="row justify-end items-center q-mb-sm">
       <q-btn color="primary" icon="search" round size="sm">
         <q-menu class="q-px-sm">
           <div class="q-py-md q-gutter-sm">

@@ -14,6 +14,7 @@ type State = {
 
 type Getters = {
   trendingResultsByPopularityDesc: Array<MovieItem> | null
+  upcomingResultsWithPoster: Array<MovieItem> | null
 }
 
 type Actions = {
