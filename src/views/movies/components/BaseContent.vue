@@ -36,7 +36,6 @@ onBeforeMount(async () => {
               arrows
               height="auto"
               class="shadow-10"
-              @update:model-value="currentSlide"
             >
               <q-carousel-slide
                 v-for="(item, index) in moviesStore.trendingResultsByPopularityDesc"
@@ -79,8 +78,11 @@ onBeforeMount(async () => {
   .section {
     &__wrapper {
       display: grid;
-      grid-template-columns: 1fr 300px;
+      grid-template-columns: 1fr;
       gap: 16px;
+      @media (min-width: $breakpoint-md-min) {
+        grid-template-columns: 1fr 1fr;
+      }
     }
     &__main {
       width: 100%;
@@ -99,13 +101,16 @@ onBeforeMount(async () => {
           @media (min-width: $breakpoint-md-min) {
             background: rgb(29, 29, 29);
             background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 0) 100%);
+            backdrop-filter: blur(2px);
             bottom: 0;
             display: grid;
-            grid-template-columns: 150px auto;
+            grid-template-columns: 120px auto;
             padding: 16px;
             position: absolute;
             width: 100%;
             z-index: 1;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
             .body--light & {
               background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
             }
@@ -118,7 +123,7 @@ onBeforeMount(async () => {
           }
           .poster {
             display: none;
-            max-width: 150px;
+            max-width: 120px;
             @media (min-width: $breakpoint-md-min) {
               display: block;
             }
