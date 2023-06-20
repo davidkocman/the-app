@@ -50,14 +50,14 @@ onBeforeMount(async () => {
                 <Image :path="`${IMAGE_URL}${currentSlide.poster_path}`" :ratio="2 / 3" :imgClass="'shadow-10'" />
               </div>
               <div class="details column justify-center">
-                <h4 class="text-h4 q-mb-sm">{{ currentSlide.title }}</h4>
-                <h5 class="text-subtitle2 text-weight-regular q-mb-sm">
+                <h4 class="title text-h4 q-mb-sm">{{ currentSlide.title }}</h4>
+                <h5 class="user-score text-subtitle2 text-weight-regular q-mb-sm">
                   User score:
                   <span class="text-subtitle1 text-weight-bold">{{ currentSlide.vote_average.toFixed(1) }}</span>
                   &nbsp;
                   <span class="text-subtitle1 text-weight-bold">({{ currentSlide.vote_count }})</span>
                 </h5>
-                <h5 class="text-body2">{{ currentSlide.overview }}</h5>
+                <h5 class="text-body2 overview">{{ currentSlide.overview }}</h5>
               </div>
             </div>
           </template>
@@ -96,35 +96,58 @@ onBeforeMount(async () => {
           }
         }
         .trending-item-details {
-          display: block;
-          padding: 16px 0;
-          @media (min-width: $breakpoint-md-min) {
-            background: rgb(29, 29, 29);
-            background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 0) 100%);
-            backdrop-filter: blur(2px);
-            bottom: 0;
-            display: grid;
+          background: rgb(29, 29, 29);
+          background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 0) 100%);
+          backdrop-filter: blur(2px);
+          bottom: 0;
+          display: grid;
+          grid-template-columns: auto;
+          padding: 16px;
+          position: absolute;
+          width: 100%;
+          z-index: 1;
+          border-top-left-radius: 16px;
+          border-top-right-radius: 16px;
+          @media (min-width: $breakpoint-lg-min) {
             grid-template-columns: 120px auto;
-            padding: 16px;
-            position: absolute;
-            width: 100%;
-            z-index: 1;
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
-            .body--light & {
-              background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
-            }
+          }
+          .body--light & {
+            background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
           }
           .details {
             padding: 0;
-            @media (min-width: $breakpoint-md-min) {
+            @media (min-width: $breakpoint-lg-min) {
               padding: 0 16px;
+            }
+            .title {
+              font-size: 16px;
+              line-height: 24px;
+              @media (min-width: $breakpoint-md-min) {
+                font-size: 24px;
+                line-height: 32px;
+              }
+              @media (min-width: $breakpoint-lg-min) {
+                font-size: 34px;
+                line-height: 48px;
+              }
+            }
+            .user-score {
+              display: none;
+              @media (min-width: $breakpoint-sm-min) {
+                display: block;
+              }
+            }
+            .overview {
+              display: none;
+              @media (min-width: $breakpoint-lg-min) {
+                display: block;
+              }
             }
           }
           .poster {
             display: none;
             max-width: 120px;
-            @media (min-width: $breakpoint-md-min) {
+            @media (min-width: $breakpoint-lg-min) {
               display: block;
             }
           }

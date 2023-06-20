@@ -62,7 +62,10 @@ const moviesStore = useMoviesStore()
 .skeleton-items,
 .upcoming-items {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 16px;
+  @media (min-width: $breakpoint-sm-min) {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 </style>
