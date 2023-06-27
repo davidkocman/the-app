@@ -3,9 +3,9 @@ import { Store } from 'pinia'
 import type { Movie, MovieDetails, TvShowDetails, MoviesSearchResponse, MovieList, MovieItem } from '@/types/movies'
 
 type State = {
-  searchResults: MoviesSearchResponse | null
   selected: Movie | null
   searchFor: 'movie' | 'tv'
+  searchResults: MoviesSearchResponse | null
   searchResult: (MovieDetails & TvShowDetails) | null
   searchResultType: 'movie' | 'tv'
   trending: MovieList | null

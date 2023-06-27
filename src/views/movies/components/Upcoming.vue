@@ -24,6 +24,7 @@ const moviesStore = useMoviesStore()
         :key="index"
         class="upcoming-item shadow-6"
         :style="`background-image: url(${IMAGE_URL}${item.backdrop_path})`"
+        @click.prevent="moviesStore.getMovieData(item.id)"
       >
         <div class="upcoming-item__info q-pa-md">
           <h3 class="text-subtitle2 q-mb-xs">
@@ -42,8 +43,8 @@ const moviesStore = useMoviesStore()
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50% 50%;
+  cursor: pointer;
   height: 240px;
-  border-radius: 10px;
   padding: 16px;
   position: relative;
   overflow: hidden;

@@ -41,6 +41,7 @@ onBeforeMount(async () => {
                 v-for="(item, index) in moviesStore.trendingResultsByPopularityDesc"
                 :key="item.id"
                 :name="index"
+                @click="moviesStore.getMovieData(item.id)"
               >
                 <Image :path="`${IMAGE_URL}${item.backdrop_path}`" />
               </q-carousel-slide>
@@ -92,6 +93,7 @@ onBeforeMount(async () => {
         position: relative;
         .q-carousel {
           &__slide {
+            cursor: pointer;
             padding: 0;
           }
         }
@@ -108,6 +110,7 @@ onBeforeMount(async () => {
           z-index: 1;
           border-top-left-radius: 16px;
           border-top-right-radius: 16px;
+          pointer-events: none;
           @media (min-width: $breakpoint-lg-min) {
             grid-template-columns: 120px auto;
           }
