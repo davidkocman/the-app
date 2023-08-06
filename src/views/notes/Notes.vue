@@ -38,6 +38,7 @@ onBeforeMount(() => {
             :key="index"
             :label="note.name"
             header-class="text-weight-medium"
+            data-cy="note-item"
           >
             <q-card>
               <q-card-section class="q-px-lg">

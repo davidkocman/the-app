@@ -14,35 +14,35 @@ const appStore = useAppStore()
   >
     <q-scroll-area class="fit">
       <q-list padding>
-        <q-item clickable v-ripple to="/">
+        <q-item clickable v-ripple to="/" data-cy="toDashboard">
           <q-item-section avatar>
             <q-icon name="dashboard" />
           </q-item-section>
 
           <q-item-section> Dashboard </q-item-section>
         </q-item>
-        <q-item clickable v-ripple to="/news">
+        <q-item clickable v-ripple to="/news" data-cy="toNews">
           <q-item-section avatar>
             <q-icon name="newspaper" />
           </q-item-section>
 
           <q-item-section> News </q-item-section>
         </q-item>
-        <q-item clickable v-ripple to="/movies">
+        <q-item clickable v-ripple to="/movies" data-cy="toMovies">
           <q-item-section avatar>
             <q-icon name="movie" />
           </q-item-section>
 
           <q-item-section> Movies </q-item-section>
         </q-item>
-        <q-item clickable v-ripple to="/notes">
+        <q-item clickable v-ripple to="/notes" data-cy="toNotes">
           <q-item-section avatar>
             <q-icon name="notes" />
           </q-item-section>
 
           <q-item-section> Notes </q-item-section>
         </q-item>
-        <q-item clickable v-ripple to="/weather">
+        <q-item clickable v-ripple to="/weather" data-cy="toWeather">
           <q-item-section avatar>
             <q-icon name="thermostat" />
           </q-item-section>
@@ -52,7 +52,7 @@ const appStore = useAppStore()
 
         <q-separator />
 
-        <q-item clickable v-ripple to="/profile">
+        <q-item clickable v-ripple to="/profile" data-cy="toProfile">
           <q-item-section avatar>
             <q-icon name="person" />
           </q-item-section>
@@ -62,7 +62,15 @@ const appStore = useAppStore()
       </q-list>
     </q-scroll-area>
     <div class="absolute desktop-only" style="top: 20px; right: -12px">
-      <q-btn dense round unelevated color="primary" size="sm" @click="appStore.miniState = !appStore.miniState">
+      <q-btn
+        dense
+        round
+        unelevated
+        color="primary"
+        size="sm"
+        @click="appStore.miniState = !appStore.miniState"
+        data-cy="drawerMiniStateToggle"
+      >
         <q-icon :name="appStore.miniState ? 'chevron_right' : 'chevron_left'" />
       </q-btn>
     </div>

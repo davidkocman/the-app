@@ -22,7 +22,7 @@ const moviesStore = useMoviesStore()
       <div
         v-for="(item, index) in moviesStore.upcomingResultsWithPoster.slice(0, 6)"
         :key="index"
-        class="upcoming-item shadow-6"
+        class="upcoming-item shadow-6 q-pa-md"
         :style="`background-image: url(${IMAGE_URL}${item.backdrop_path})`"
         @click.prevent="moviesStore.getMovieData(item.id)"
       >
@@ -45,7 +45,6 @@ const moviesStore = useMoviesStore()
   background-position: 50% 50%;
   cursor: pointer;
   height: 240px;
-  padding: 16px;
   position: relative;
   overflow: hidden;
   &__info {

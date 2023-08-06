@@ -35,10 +35,10 @@ const { nameModel, saveName, removeAvatar, userAvatar } = useGeneralInfo()
           </q-avatar>
         </div>
         <div class="right">
-          <h2 class="text-h6 q-my-xs">
+          <h2 class="text-h6 q-my-xs" data-cy="nameEdit">
             {{ nameModel }}
             <q-popup-edit v-model="nameModel" auto-save v-slot="scope" :disable="appStore.loading" @save="saveName">
-              <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
+              <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" data-cy="nameInput" />
             </q-popup-edit>
           </h2>
           <h3 class="text-body2">Email: {{ userStore.userData?.email }}</h3>

@@ -39,11 +39,27 @@ const resetNote = () => {
 
 <template>
   <div>
-    <q-btn color="primary" icon="add" size="16px" class="q-pa-none" flat dense @click="dialog = true">
+    <q-btn
+      color="primary"
+      icon="add"
+      size="16px"
+      class="q-pa-none"
+      flat
+      dense
+      @click="dialog = true"
+      data-cy="new-note-add-button"
+    >
       <q-tooltip>New</q-tooltip>
     </q-btn>
 
-    <q-dialog v-model="dialog" persistent maximized transition-show="slide-up" transition-hide="slide-down">
+    <q-dialog
+      v-model="dialog"
+      persistent
+      maximized
+      transition-show="slide-up"
+      transition-hide="slide-down"
+      data-cy="new-note-dialog"
+    >
       <q-card class="bg-dark-page">
         <q-bar>
           <q-space />
@@ -64,6 +80,7 @@ const resetNote = () => {
               dense
               :disable="!hasValues || appStore.loading"
               @click="save"
+              data-cy="new-note-save-button"
             >
               <q-tooltip>Save note</q-tooltip>
             </q-btn>
@@ -73,13 +90,14 @@ const resetNote = () => {
         <q-card-section class="q-pt-none">
           <div class="row">
             <div class="col q-pr-sm q-pb-sm">
-              <q-input dense v-model="name" label="Note name" type="text" />
+              <q-input dense v-model="name" label="Note name" type="text" data-cy="new-note-title" />
               <q-input
                 type="textarea"
                 dense
                 v-model="content"
                 :input-style="{ minHeight: '600px' }"
                 placeholder="Note content"
+                data-cy="new-note-body"
               />
             </div>
             <div class="col q-pa-sm">
