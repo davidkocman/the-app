@@ -4,9 +4,12 @@ export default function (): State {
   return {
     activeLocation: '',
     activeRegion: '',
-    coordinates: [],
-    weatherData: null,
-    timeSeries: null,
-    todaySeries: null
+    coordinates: {
+      lat: null,
+      lon: null
+    },
+    currentWeatherData: null,
+    forecastData: null,
+    searchResults: []
   }
 }

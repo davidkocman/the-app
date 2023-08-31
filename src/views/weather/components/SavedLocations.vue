@@ -23,9 +23,9 @@ const open = (pos: positionType) => {
 // A function that is called when a saved location is clicked. It sets the active location, active
 // region, and coordinates to the location that was clicked. It then closes the dialog.
 const updateRegion = (location: SavedLocation): void => {
-  activeLocation.value = location.title
+  activeLocation.value = location.name
   activeRegion.value = location.region
-  coordinates.value = [location.lat, location.lng]
+  coordinates.value = { lat: location.lat, lon: location.lon }
   dialog.value = false
 }
 </script>
@@ -41,12 +41,10 @@ const updateRegion = (location: SavedLocation): void => {
         :key="index"
         class="locations row items-center justify-between no-wrap"
       >
-        <span
-          class="text-subtitle2"
-          @click=";[weatherStore.getWeatherData(location.lat, location.lng), updateRegion(location)]"
-          >{{ location.title }}</span
-        >
-        <q-btn icon="close" color="negative" flat @click="removeSavedLocation(location.title)"></q-btn>
+        <span class="text-subtitle2" @click=";[weatherStore.getWeatherData(), updateRegion(location)]">{{
+          location.name
+        }}</span>
+        <q-btn icon="close" color="negative" flat @click="removeSavedLocation(location.name)"></q-btn>
       </q-card-section>
     </q-card>
   </q-dialog>

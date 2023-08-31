@@ -49,7 +49,7 @@ const groupByKey = <T extends Record<string, any>, K extends keyof T>(arr: T[], 
 const sortByKey = <T extends Record<string, any>, K extends keyof T>(arr: T[], k: K): T[] =>
   arr.concat().sort((a, b) => (a[k] > b[k] ? 1 : a[k] < b[k] ? -1 : 0))
 
-//Calculate the number of difference days between two dates
+// Calculate the number of difference days between two dates
 // ----------------------------------
 const daysDiff = (date: Date, otherDate: Date): number =>
   Math.ceil(Math.abs(date.valueOf() - otherDate.valueOf()) / (1000 * 60 * 60 * 24))
@@ -58,6 +58,22 @@ const daysDiff = (date: Date, otherDate: Date): number =>
 // ----------------------------------
 const monthDiff = (startDate: Date, endDate: Date): number =>
   Math.max(0, (endDate.getFullYear() - startDate.getFullYear()) * 12 - startDate.getMonth() + endDate.getMonth())
+
+// Get local time string from unix timestamp
+// ----------------------------------
+const timeFromUnix = (timestamp: number): string => new Date(timestamp * 1000).toLocaleTimeString('sk')
+
+const sunProgress = (sunrise: number, sunset: number, timezone: number): number | null => {
+  const time = new Date().getHours() * 60 + new Date().getMinutes() + timezone / 60
+  const rise = new Date((sunrise + timezone) * 1e3).getHours() * 60 + new Date((sunrise + timezone) * 1e3).getMinutes()
+  const set = new Date((sunset + timezone) * 1e3).getHours() * 60 + new Date((sunset + timezone) * 1e3).getMinutes()
+  const currentTime = time >= 1440 ? time - 1440 : time
+  if (currentTime >= rise && currentTime <= set) {
+    const sunTimeDuration = set - rise
+    return calculatePercentage(currentTime - rise, sunTimeDuration)
+  }
+  return null
+}
 
 export {
   capitalize,
@@ -72,5 +88,7 @@ export {
   groupByKey,
   sortByKey,
   daysDiff,
-  monthDiff
+  monthDiff,
+  timeFromUnix,
+  sunProgress
 }

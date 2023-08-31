@@ -1,98 +1,133 @@
-type Model = {
-  admin_name: string
-  capital: string
+type SearchResult = {
   country: string
-  iso2: string
-  label: string
-  lat: string
-  lng: string
-  population: string
-  population_proper: string
+  lat: number
+  local_names: object
+  lon: number
+  name: string
+  state?: string
+}
+
+type Coordinates = {
+  lat: number | null
+  lon: number | null
 }
 
 type SavedLocation = {
-  lat: string
-  lng: string
-  title: string
+  lat: number
+  lon: number
+  name: string
   region: string
 }
 
-type Units = {
-  air_pressure_at_sea_level: string
-  air_temperature: string
-  air_temperature_max: string
-  air_temperature_min: string
-  cloud_area_fraction: string
-  cloud_area_fraction_high: string
-  cloud_area_fraction_low: string
-  cloud_area_fraction_medium: string
-  dew_point_temperature: string
-  fog_area_fraction: string
-  precipitation_amount: string
-  relative_humidity: string
-  ultraviolet_index_clear_sky: string
-  wind_from_direction: string
-  wind_speed: string
+type Weather = {
+  id: number
+  main: string
+  description: string
+  icon: string
 }
 
-type TimeSeries = {
-  time: string
-  data: {
-    instant: {
-      details: {
-        air_pressure_at_sea_level: number
-        air_temperature: number
-        cloud_area_fraction: number
-        cloud_area_fraction_high: number
-        cloud_area_fraction_low: number
-        cloud_area_fraction_medium: number
-        dew_point_temperature: number
-        fog_area_fraction: number
-        relative_humidity: number
-        ultraviolet_index_clear_sky: number
-        wind_from_direction: number
-        wind_speed: number
-      }
+type CurrentWeatherData = {
+  coord: {
+    lon: number
+    lat: number
+  }
+  weather: Array<Weather>
+  base: string
+  main: {
+    temp: number
+    feels_like: number
+    temp_min: number
+    temp_max: number
+    pressure: number
+    humidity: number
+    sea_level: number
+    grnd_level: number
+  }
+  visibility: number
+  wind: {
+    speed: number
+    deg: number
+    gust: number
+  }
+  rain?: {
+    '1h'?: number
+    '3h'?: number
+  }
+  snow?: {
+    '1h'?: number
+    '3h'?: number
+  }
+  clouds: {
+    all: number
+  }
+  dt: number
+  sys: {
+    type: number
+    id: number
+    country: string
+    sunrise: number
+    sunset: number
+  }
+  timezone: number
+  id: number
+  name: string
+  cod: number
+}
+
+type Forecast = {
+  dt: number
+  main: {
+    temp: number
+    feels_like: number
+    temp_min: number
+    temp_max: number
+    pressure: number
+    sea_level: number
+    grnd_level: number
+    humidity: number
+    temp_kf: number
+  }
+  weather: Array<Weather>
+  clouds: {
+    all: number
+  }
+  wind: {
+    speed: number
+    deg: number
+    gust: number
+  }
+  visibility: number
+  pop: number
+  rain?: {
+    '3h'?: number
+  }
+  snow?: {
+    '3h'?: number
+  }
+  sys: {
+    pod: string
+  }
+  dt_txt: string
+}
+
+type ForecastData = {
+  cod: string
+  message: number
+  cnt: number
+  list: Array<Forecast>
+  city: {
+    id: number
+    name: string
+    coord: {
+      lat: number
+      lon: number
     }
-    next_12_hours: {
-      summary: {
-        symbol_code: string
-      }
-    }
-    next_1_hours: {
-      summary: {
-        symbol_code: string
-      }
-      details: {
-        precipitation_amount: number
-      }
-    }
-    next_6_hours: {
-      summary: {
-        symbol_code: string
-      }
-      details: {
-        air_temperature_max: number
-        air_temperature_min: number
-        precipitation_amount: number
-      }
-    }
+    country: string
+    population: number
+    timezone: number
+    sunrise: number
+    sunset: number
   }
 }
 
-type WeatherData = {
-  type: string
-  geometry: {
-    type: string
-    coordinates: number[]
-  }
-  properties: {
-    meta: {
-      updated_at: string
-      units: Units
-    }
-    timeseries: TimeSeries[]
-  }
-}
-
-export { Model, SavedLocation, TimeSeries, Units, WeatherData }
+export { SearchResult, SavedLocation, Coordinates, CurrentWeatherData, ForecastData }
