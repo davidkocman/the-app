@@ -4,33 +4,8 @@
   --bg-base: #dfdfdf;
   --bg-muted: #a8a8a8;
   --bg-transparent: rgba(231, 231, 231, 0.8);
-  // Charts
-  --title-text: #213547;
-  --legend: #213547;
-  --x-hours-gridline: #5f5f5f78;
-  --x-hours-labels: #213547;
-  --x-categories-gridline: #5f5f5f78;
-  --x-categories-labels: #213547;
-  --y-gridline: #5f5f5f78;
-  --y-plotlines: #0b7fab;
-  --y-plotlines-label: #213547;
-  --y-plotbands-label: #213547;
-  --y-plotbands-odd: rgba(0, 0, 0, 0);
-  --y-plotbands-even: rgba(68, 170, 213, 0.1);
-  --y-title: #213547;
-  --y-labels: #213547;
-  --temp-series-max-temp: #ec644b;
-  --temp-series-max-feel-temp: #ec644b;
-  --temp-series-min-temp: #1e8bc3;
-  --temp-series-min-feel-temp: #1e8bc3;
-  --precipitation: #006992;
-  --clouds: #7a8c98;
-  --fog: #bcc5cb;
-  --wind-speed: #006992;
-  --humidity: #03a678;
-  --air-pressure-high: #f2784b;
-  --air-pressure-low: #006992;
-  --air-pressure-break: #1e8bc3;
+  // Weather
+  --sun: #ec6e4c;
 
   body {
     &.body {
@@ -40,33 +15,8 @@
         --bg-base: #262626;
         --bg-muted: #616161;
         --bg-transparent: rgba(36, 36, 36, 0.8);
-        // Charts
-        --title-text: rgba(255, 255, 255, .87);
-        --legend: rgba(255, 255, 255, .87);
-        --x-hours-gridline: #85858578;
-        --x-hours-labels: rgba(255, 255, 255, .87);
-        --x-categories-gridline: #85858578;
-        --x-categories-labels: rgba(255, 255, 255, .87);
-        --y-gridline: #858585;
-        --y-plotlines: #0b7fab;
-        --y-plotlines-label: rgba(255, 255, 255, .87);
-        --y-plotbands-label: rgba(255, 255, 255, .87);
-        --y-plotbands: #c0c0c0;
-        --y-plotbands-odd: rgba(0, 0, 0, 0);
-        --y-plotbands-even: rgba(68, 170, 213, 0.1);
-        --y-title: rgba(255, 255, 255, .87);
-        --y-labels: rgba(255, 255, 255, .87);
-        --temp-series-max-temp: #ec644b;
-        --temp-series-max-feel-temp: #ec644b;
-        --temp-series-min-temp: #1e8bc3;
-        --temp-series-min-feel-temp: #1e8bc3;
-        --precipitation: #006992;
-        --clouds: #7a8c98;
-        --fog: #bcc5cb;
-        --wind-speed: #006992;
-        --humidity: #03a678;
-        --air-pressure-high: #f2784b;
-        --air-pressure-low: #006992;
+        // weather
+        --sun: #ffd600;
       }
     }
   }

@@ -75,7 +75,6 @@ const sunProgress = (sunrise: number, sunset: number, timezone: number) => {
   const rise = new Date((sunrise + timezone) * 1e3).getHours() * 60 + new Date((sunrise + timezone) * 1e3).getMinutes()
   const set = new Date((sunset + timezone) * 1e3).getHours() * 60 + new Date((sunset + timezone) * 1e3).getMinutes()
   const currentTime = time >= 1440 ? time - 1440 : time
-  debugger
   if (currentTime >= rise && currentTime <= set) {
     const sunTimeDuration = set - rise
     return calculatePercentage(currentTime - rise, sunTimeDuration)
