@@ -11,6 +11,9 @@ import useWeatherStore from '@/store/weather/'
 import SunriseSunsetGauge from './SunriseSunsetGauge.vue'
 import HumidityGauge from './HumidityGauge.vue'
 import WindGauge from './WindGauge.vue'
+import FeelsLikeCard from './FeelsLikeCard.vue'
+import PressureCard from './PressureCard.vue'
+import VisibilityCard from './VisibilityCard.vue'
 
 const weatherStore = useWeatherStore()
 const { activeLocation, currentWeatherData } = storeToRefs(weatherStore)
@@ -18,7 +21,7 @@ const { activeLocation, currentWeatherData } = storeToRefs(weatherStore)
 
 <template>
   <div v-if="currentWeatherData" class="current-weather">
-    <div class="row q-mb-md">
+    <div class="row q-mb-xl">
       <div class="col">
         <div class="location text-center">
           <h4 class="text-h4">
@@ -27,7 +30,7 @@ const { activeLocation, currentWeatherData } = storeToRefs(weatherStore)
         </div>
       </div>
     </div>
-    <div class="row q-mb-lg">
+    <div class="row q-mb-xl">
       <div class="col">
         <div class="top-wrapper q-mx-auto">
           <div class="weather-condition flex justify-center q-mx-auto">
@@ -60,32 +63,10 @@ const { activeLocation, currentWeatherData } = storeToRefs(weatherStore)
               </div>
             </h2>
           </div>
-          <ul class="aditional-data">
-            <li>
-              <h6 class="text-overline">
-                feels like
-                <span class="text-subtitle1 text-primary"
-                  >{{ parseFloat(currentWeatherData.main.feels_like.toFixed(0)) }}°</span
-                >
-              </h6>
-            </li>
-            <li>
-              <h6 class="text-overline">
-                humidity
-                <span class="text-subtitle1 text-primary">{{ currentWeatherData.main.humidity }}%</span>
-              </h6>
-            </li>
-            <li>
-              <h6 class="text-overline">
-                pressure
-                <span class="text-subtitle1 text-primary">{{ currentWeatherData.main.pressure }} hPa</span>
-              </h6>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row q-mb-xl">
       <div class="col">
         <SunriseSunsetGauge />
       </div>
@@ -94,6 +75,17 @@ const { activeLocation, currentWeatherData } = storeToRefs(weatherStore)
       </div>
       <div class="col">
         <WindGauge />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <FeelsLikeCard />
+      </div>
+      <div class="col">
+        <PressureCard />
+      </div>
+      <div class="col">
+        <VisibilityCard />
       </div>
     </div>
   </div>
@@ -106,9 +98,6 @@ const { activeLocation, currentWeatherData } = storeToRefs(weatherStore)
   }
   .top-wrapper {
     max-width: 460px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 40px;
     .weather-condition {
       .condition {
         position: relative;
@@ -139,12 +128,6 @@ const { activeLocation, currentWeatherData } = storeToRefs(weatherStore)
             line-height: 22px;
           }
         }
-      }
-    }
-    .aditional-data {
-      list-style: none;
-      h6 {
-        color: var(--text-muted);
       }
     }
   }

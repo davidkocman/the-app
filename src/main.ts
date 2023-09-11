@@ -7,6 +7,7 @@ import App from './App.vue'
 // Import icon libraries
 import '@quasar/extras/roboto-font-latin-ext/roboto-font-latin-ext.css'
 import '@quasar/extras/material-icons/material-icons.css'
+import '@quasar/extras/material-symbols-sharp/material-symbols-sharp.css'
 
 // Import Quasar css
 import 'quasar/src/css/index.sass'
@@ -31,7 +32,8 @@ myApp.use(Quasar, {
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font-latin-ext', // optional, you are not bound to it
-      'material-icons' // optional, you are not bound to it
+      'material-icons', // optional, you are not bound to it
+      'material-symbols-sharp'
     ],
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {

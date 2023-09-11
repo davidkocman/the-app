@@ -13,7 +13,7 @@ const { currentWeatherData } = storeToRefs(weatherStore)
 
 <template>
   <div v-if="currentWeatherData" class="humidity">
-    <div class="title text-overline text-center">Humidity</div>
+    <div class="title text-overline text-center text-weight-bolder text-primary">Humidity</div>
     <div class="gauge">
       <div class="gauge__body">
         <div

@@ -13,7 +13,7 @@ const { currentWeatherData } = storeToRefs(weatherStore)
 
 <template>
   <div v-if="currentWeatherData" class="sunrise-sunset">
-    <div class="title text-overline text-center">Sunrise & sunset</div>
+    <div class="title text-overline text-center text-weight-bolder text-primary">Sunrise & sunset</div>
     <div class="sun-position">
       <div class="gauge-a"></div>
       <div class="gauge-b">
