@@ -10,6 +10,7 @@ import useWeatherStore from '@/store/weather/'
 // Components
 import SunriseSunsetGauge from './SunriseSunsetGauge.vue'
 import HumidityGauge from './HumidityGauge.vue'
+import WindGauge from './WindGauge.vue'
 
 const weatherStore = useWeatherStore()
 const { activeLocation, currentWeatherData } = storeToRefs(weatherStore)
@@ -91,7 +92,9 @@ const { activeLocation, currentWeatherData } = storeToRefs(weatherStore)
       <div class="col">
         <HumidityGauge />
       </div>
-      <div class="col"></div>
+      <div class="col">
+        <WindGauge />
+      </div>
     </div>
   </div>
 </template>

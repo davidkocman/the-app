@@ -12,29 +12,50 @@ const { currentWeatherData } = storeToRefs(weatherStore)
 </script>
 
 <template>
-  <div v-if="currentWeatherData" class="humidity">
-    <div class="title text-overline text-center">Humidity</div>
+  <div v-if="currentWeatherData" class="wind">
+    <div class="title text-overline text-center">Wind</div>
     <div class="gauge">
       <div class="gauge__body">
         <div
-          class="gauge__fill"
-          :style="{ transform: `rotate(${calculateValueFromPercentage(currentWeatherData.main.humidity, 180)}deg)` }"
+          v-if="currentWeatherData.wind.speed"
+          class="gauge__fill-a"
+          :style="{
+            transform: `rotate(${calculateValueFromPercentage(
+              parseInt((currentWeatherData.wind.speed * 3.6).toFixed(0), 10),
+              200
+            )}deg)`
+          }"
+        ></div>
+        <div
+          v-if="currentWeatherData.wind.gust"
+          class="gauge__fill-b"
+          :style="{
+            transform: `rotate(${calculateValueFromPercentage(
+              parseInt((currentWeatherData.wind.gust * 3.6).toFixed(0), 10),
+              200
+            )}deg)`
+          }"
         ></div>
         <div class="gauge__meter"></div>
         <div class="gauge__cover">
-          <h3 class="text-h3">{{ currentWeatherData.main.humidity }}%</h3>
+          <h6 v-if="currentWeatherData.wind.speed" class="text-overline">
+            speed: {{ (currentWeatherData.wind.speed * 3.6).toFixed(0) }} km/h
+          </h6>
+          <h6 v-if="currentWeatherData.wind.gust" class="text-overline">
+            gusts: {{ (currentWeatherData.wind.gust * 3.6).toFixed(0) }} km/h
+          </h6>
         </div>
       </div>
       <div class="min-max">
-        <span class="none q-pt-xs">0%</span>
-        <span class="full q-pt-xs">100%</span>
+        <span class="none q-pt-xs">0 km/h</span>
+        <span class="full q-pt-xs">200 km/h</span>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.humidity {
+.wind {
   min-height: 210px;
   position: relative;
   .gauge {
@@ -72,14 +93,26 @@ const { currentWeatherData } = storeToRefs(weatherStore)
       overflow: hidden;
       border-bottom: 1px solid var(--text-base);
     }
-    &__fill {
+    &__fill-a {
       position: absolute;
       top: 100%;
       left: 0;
       width: inherit;
       height: 100%;
-      background: rgb(0, 114, 187);
-      background: linear-gradient(90deg, rgba(0, 114, 187, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+      background: rgb(0, 201, 50);
+      background: linear-gradient(180deg, rgba(0, 201, 50, 0.7) 0%, rgba(255, 255, 255, 0) 100%);
+      transform-origin: center top;
+      transition: transform 1.3s ease-out;
+      z-index: 1;
+    }
+    &__fill-b {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: inherit;
+      height: 100%;
+      background: rgb(136, 0, 255);
+      background: linear-gradient(180deg, rgba(136, 0, 255, 0.7) 0%, rgba(255, 255, 255, 0) 100%);
       transform-origin: center top;
       transition: transform 1.3s ease-out;
     }
@@ -102,14 +135,18 @@ const { currentWeatherData } = storeToRefs(weatherStore)
       top: 25%;
       left: 50%;
       transform: translateX(-50%);
-      color: rgb(0, 114, 187);
+      z-index: 1;
 
       /* Text */
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding-bottom: 25%;
       box-sizing: border-box;
+      h6 {
+        line-height: 20px;
+      }
     }
   }
 }
