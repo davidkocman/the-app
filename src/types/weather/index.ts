@@ -130,4 +130,4 @@ type ForecastData = {
   }
 }
 
-export { SearchResult, SavedLocation, Coordinates, CurrentWeatherData, ForecastData }
+export { SearchResult, SavedLocation, Coordinates, CurrentWeatherData, ForecastData, Forecast }

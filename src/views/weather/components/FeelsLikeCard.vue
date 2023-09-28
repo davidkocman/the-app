@@ -15,7 +15,7 @@ const { currentWeatherData } = storeToRefs(weatherStore)
     </q-card-section>
     <q-card-section class="q-pt-none">
       <h3 class="text-h3 text-weight-bold flex items-end">
-        <q-icon name="sym_s_thermometer" color="primary" />{{ currentWeatherData.main.feels_like.toFixed(1)
+        <q-icon name="sym_s_thermometer" color="primary" />{{ currentWeatherData.main.feels_like.toFixed(0)
         }}<span class="text-h6 text-weight-regular">°C</span>
       </h3>
     </q-card-section>

@@ -9,6 +9,7 @@ import useSavedLocations from '@/composables/weather/useSavedLocations'
 import SearchLocation from '@/views/weather/components/SearchLocation.vue'
 import SavedLocations from '@/views/weather/components/SavedLocations.vue'
 import CurrentWeather from './components/CurrentWeather.vue'
+import TemperatureChart from './components/charts/TemperatureChart.vue'
 
 const pageTitle = ref('Weather | The App')
 
@@ -36,6 +37,7 @@ resolveSavedLocations()
     </div>
     <SearchLocation />
     <CurrentWeather />
+    <TemperatureChart />
   </q-page>
 </template>
 

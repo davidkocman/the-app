@@ -1,5 +1,5 @@
 import { Store } from 'pinia'
-import type { Coordinates, SearchResult, CurrentWeatherData, ForecastData } from '@/types/weather'
+import type { Coordinates, SearchResult, CurrentWeatherData, ForecastData, Forecast } from '@/types/weather'
 
 type State = {
   activeLocation: string
@@ -10,7 +10,9 @@ type State = {
   searchResults: SearchResult[] | []
 }
 
-type Getters = unknown
+type Getters = {
+  forecastDataList: Array<Forecast> | null
+}
 
 type Actions = {
   getWeatherData: () => void

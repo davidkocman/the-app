@@ -1,3 +1,15 @@
+// utils
+import dayjs from 'dayjs'
+
+// types
+import type { Forecast } from '@/types/weather'
+type Group = {
+  title: string
+  cols: number
+}
+
+// --------------------------------------------------------------------
+
 // Capitalize Text
 // ----------------------------------
 const capitalize = (str: string) => `${str.charAt(0).toUpperCase()}${str.slice(1)}`
@@ -82,6 +94,38 @@ const sunProgress = (sunrise: number, sunset: number, timezone: number) => {
   return null
 }
 
+const xAxisGroups = (list: Forecast[]) => {
+  const arrOfDates: string[] = []
+  let countsArray: number[] = []
+  const groups: Group[] = []
+
+  list.forEach((item: Forecast) => {
+    arrOfDates.push(dayjs(item.dt * 1000).format('D.M.'))
+  })
+  // get unique days
+  const uniqueValues = new Set(arrOfDates)
+  const uniqueDays = [...uniqueValues]
+
+  // get occurrences
+  const valueCounts = new Map<string, number>()
+  arrOfDates.forEach((value) => {
+    if (valueCounts.has(value)) {
+      valueCounts.set(value, valueCounts.get(value)! + 1)
+    } else {
+      valueCounts.set(value, 1)
+    }
+  })
+  countsArray = Array.from(valueCounts.values())
+
+  // get groups
+  uniqueDays.forEach((item, index) => {
+    groups.push({ title: item, cols: countsArray[index] })
+  })
+  console.log(groups)
+
+  return groups
+}
+
 export {
   capitalize,
   calculatePercentage,
@@ -98,5 +142,6 @@ export {
   daysDiff,
   monthDiff,
   timeFromUnix,
-  sunProgress
+  sunProgress,
+  xAxisGroups
 }
