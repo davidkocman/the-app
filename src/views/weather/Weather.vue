@@ -10,6 +10,9 @@ import SearchLocation from '@/views/weather/components/SearchLocation.vue'
 import SavedLocations from '@/views/weather/components/SavedLocations.vue'
 import CurrentWeather from './components/CurrentWeather.vue'
 import TemperatureChart from './components/charts/TemperatureChart.vue'
+import WindChart from './components/charts/WindChart.vue'
+import Clouds from './components/charts/Clouds.vue'
+import Rain from './components/charts/Rain.vue'
 
 const pageTitle = ref('Weather | The App')
 
@@ -37,7 +40,14 @@ resolveSavedLocations()
     </div>
     <SearchLocation />
     <CurrentWeather />
-    <TemperatureChart />
+    <div class="row q-my-lg">
+      <div class="col">
+        <TemperatureChart />
+        <Rain />
+        <WindChart />
+        <Clouds />
+      </div>
+    </div>
   </q-page>
 </template>
 

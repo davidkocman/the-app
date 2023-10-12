@@ -22,10 +22,25 @@ const getSeriesData = (list: Forecast[]) => {
   type Serie = {
     x: string
     y: number
+    goals: Array<{
+      name: string
+      value: number
+      strokeColor: string
+    }>
   }
   const series: Serie[] = []
   list.forEach((item: Forecast) => {
-    series.push({ x: dayjs(item.dt * 1000).format('H:mm'), y: Math.round(item.main.temp) })
+    series.push({
+      x: dayjs(item.dt * 1000).format('H:mm'),
+      y: Math.round(item.wind.speed * 3.6),
+      goals: [
+        {
+          name: 'Wind gusts:',
+          value: Math.round(item.wind.gust * 3.6),
+          strokeColor: appStore.isDarkMode ? '#e74c3c' : '#e74c3c'
+        }
+      ]
+    })
   })
   return series
 }
@@ -34,7 +49,7 @@ const series = computed(() => {
   if (forecastDataList.value) {
     return [
       {
-        name: 'Temperature',
+        name: 'Wind speed',
         data: getSeriesData(forecastDataList.value)
       }
     ]
@@ -52,7 +67,7 @@ const options = computed(() => {
         ]
       },
       title: {
-        text: 'Temperature forecast',
+        text: 'Wind speed forecast',
         align: 'center',
         style: {
           fontSize: '14px',
@@ -63,7 +78,7 @@ const options = computed(() => {
       chart: {
         type: 'bar',
         height: 400,
-        id: 'temperature-chart',
+        id: 'wind-chart',
         toolbar: {
           show: false
         }
@@ -112,7 +127,7 @@ const options = computed(() => {
       },
       yaxis: {
         title: {
-          text: '°C',
+          text: 'km/h',
           style: {
             color: appStore.isDarkMode ? 'rgba(255, 255, 255, .85)' : '#213547'
           }
@@ -148,12 +163,12 @@ const options = computed(() => {
       },
       dataLabels: {
         style: {
-          colors: ['#e67e22']
+          colors: ['#27ae60']
         }
       },
       fill: {
         type: 'gradient',
-        colors: ['#e67e22'],
+        colors: ['#27ae60'],
         gradient: {
           shadeIntensity: 0,
           opacityFrom: 0.2,
@@ -166,7 +181,8 @@ const options = computed(() => {
         theme: appStore.isDarkMode ? 'dark' : 'light',
         custom: ({ series, seriesIndex, dataPointIndex, w }) => {
           return `<div class="q-pa-sm">
-            <h4 class="text-caption">Temperature: <span class="text-weight-bold">${series[seriesIndex][dataPointIndex]}</span>°C</h4>
+            <h4 class="text-caption">Gusts: <span class="text-weight-bold">${w.config.series[0].data[dataPointIndex].goals[0].value}</span> km/h</h4>
+            <h4 class="text-caption">Speed: <span class="text-weight-bold">${series[seriesIndex][dataPointIndex]}</span> km/h</h4>
             </div>`
         }
       }

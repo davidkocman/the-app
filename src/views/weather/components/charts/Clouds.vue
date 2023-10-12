@@ -25,7 +25,7 @@ const getSeriesData = (list: Forecast[]) => {
   }
   const series: Serie[] = []
   list.forEach((item: Forecast) => {
-    series.push({ x: dayjs(item.dt * 1000).format('H:mm'), y: Math.round(item.main.temp) })
+    series.push({ x: dayjs(item.dt * 1000).format('H:mm'), y: Math.round(item.clouds.all) })
   })
   return series
 }
@@ -52,7 +52,7 @@ const options = computed(() => {
         ]
       },
       title: {
-        text: 'Temperature forecast',
+        text: 'Clouds forecast',
         align: 'center',
         style: {
           fontSize: '14px',
@@ -63,7 +63,7 @@ const options = computed(() => {
       chart: {
         type: 'bar',
         height: 400,
-        id: 'temperature-chart',
+        id: 'clouds-chart',
         toolbar: {
           show: false
         }
@@ -111,6 +111,7 @@ const options = computed(() => {
         }
       },
       yaxis: {
+        max: 100,
         title: {
           text: '°C',
           style: {
@@ -148,12 +149,12 @@ const options = computed(() => {
       },
       dataLabels: {
         style: {
-          colors: ['#e67e22']
+          colors: ['#16a085']
         }
       },
       fill: {
         type: 'gradient',
-        colors: ['#e67e22'],
+        colors: ['#16a085'],
         gradient: {
           shadeIntensity: 0,
           opacityFrom: 0.2,
@@ -166,7 +167,7 @@ const options = computed(() => {
         theme: appStore.isDarkMode ? 'dark' : 'light',
         custom: ({ series, seriesIndex, dataPointIndex, w }) => {
           return `<div class="q-pa-sm">
-            <h4 class="text-caption">Temperature: <span class="text-weight-bold">${series[seriesIndex][dataPointIndex]}</span>°C</h4>
+            <h4 class="text-caption">Clouds: <span class="text-weight-bold">${series[seriesIndex][dataPointIndex]}</span>%</h4>
             </div>`
         }
       }

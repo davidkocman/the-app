@@ -18,14 +18,32 @@ const weatherStore = useWeatherStore()
 const appStore = useAppStore()
 const { forecastDataList } = storeToRefs(weatherStore)
 
-const getSeriesData = (list: Forecast[]) => {
+const getVolumeData = (list: Forecast[]) => {
   type Serie = {
     x: string
     y: number
   }
   const series: Serie[] = []
   list.forEach((item: Forecast) => {
-    series.push({ x: dayjs(item.dt * 1000).format('H:mm'), y: Math.round(item.main.temp) })
+    series.push({
+      x: dayjs(item.dt * 1000).format('H:mm'),
+      y: item.rain && item.rain['3h'] ? Math.round(item.rain['3h']) : 0
+    })
+  })
+  return series
+}
+
+const getChanceData = (list: Forecast[]) => {
+  type Serie = {
+    x: string
+    y: number
+  }
+  const series: Serie[] = []
+  list.forEach((item: Forecast) => {
+    series.push({
+      x: dayjs(item.dt * 1000).format('H:mm'),
+      y: Math.round(item.pop * 100)
+    })
   })
   return series
 }
@@ -34,8 +52,14 @@ const series = computed(() => {
   if (forecastDataList.value) {
     return [
       {
-        name: 'Temperature',
-        data: getSeriesData(forecastDataList.value)
+        name: 'Chance of rain',
+        type: 'area',
+        data: getChanceData(forecastDataList.value)
+      },
+      {
+        name: 'Rain volume',
+        type: 'bar',
+        data: getVolumeData(forecastDataList.value)
       }
     ]
   }
@@ -52,7 +76,7 @@ const options = computed(() => {
         ]
       },
       title: {
-        text: 'Temperature forecast',
+        text: 'Rainfall forecast',
         align: 'center',
         style: {
           fontSize: '14px',
@@ -63,11 +87,12 @@ const options = computed(() => {
       chart: {
         type: 'bar',
         height: 400,
-        id: 'temperature-chart',
+        id: 'wind-chart',
         toolbar: {
           show: false
         }
       },
+      colors: ['rgba(0,0,0,0.15)', '#2980b9'],
       plotOptions: {
         bar: {
           horizontal: false,
@@ -110,27 +135,57 @@ const options = computed(() => {
           }
         }
       },
-      yaxis: {
-        title: {
-          text: '°C',
-          style: {
-            color: appStore.isDarkMode ? 'rgba(255, 255, 255, .85)' : '#213547'
+      yaxis: [
+        {
+          max: 100,
+          seriesName: 'Chance of rain',
+          title: {
+            text: '%',
+            style: {
+              color: appStore.isDarkMode ? 'rgba(255, 255, 255, .85)' : '#213547'
+            }
+          },
+          labels: {
+            style: {
+              fontSize: '12px',
+              colors: appStore.isDarkMode ? 'rgba(255, 255, 255, .85)' : '#213547'
+            }
+          },
+          axisTicks: {
+            show: true
+          },
+          axisBorder: {
+            show: true,
+            color: appStore.isDarkMode ? '#a8a8a8' : '#616161',
+            height: 1,
+            offsetX: -1,
+            offsetY: 0
           }
         },
-        labels: {
-          style: {
-            fontSize: '12px',
-            colors: appStore.isDarkMode ? 'rgba(255, 255, 255, .85)' : '#213547'
+        {
+          opposite: true,
+          seriesName: 'Rain volume',
+          title: {
+            text: 'mm',
+            style: {
+              color: appStore.isDarkMode ? 'rgba(255, 255, 255, .85)' : '#213547'
+            }
+          },
+          labels: {
+            style: {
+              fontSize: '12px',
+              colors: appStore.isDarkMode ? 'rgba(255, 255, 255, .85)' : '#213547'
+            }
+          },
+          axisBorder: {
+            show: true,
+            color: appStore.isDarkMode ? '#a8a8a8' : '#616161',
+            height: 1,
+            offsetX: -1,
+            offsetY: 0
           }
-        },
-        axisBorder: {
-          show: true,
-          color: appStore.isDarkMode ? '#a8a8a8' : '#616161',
-          height: 1,
-          offsetX: -1,
-          offsetY: 0
         }
-      },
+      ],
       grid: {
         show: false,
         borderColor: '#90A4AE',
@@ -148,25 +203,15 @@ const options = computed(() => {
       },
       dataLabels: {
         style: {
-          colors: ['#e67e22']
-        }
-      },
-      fill: {
-        type: 'gradient',
-        colors: ['#e67e22'],
-        gradient: {
-          shadeIntensity: 0,
-          opacityFrom: 0.2,
-          type: 'vertical',
-          opacityTo: 0.8,
-          stops: [0, 50, 100]
+          colors: ['#95a5a6', '#82ccdd']
         }
       },
       tooltip: {
         theme: appStore.isDarkMode ? 'dark' : 'light',
         custom: ({ series, seriesIndex, dataPointIndex, w }) => {
           return `<div class="q-pa-sm">
-            <h4 class="text-caption">Temperature: <span class="text-weight-bold">${series[seriesIndex][dataPointIndex]}</span>°C</h4>
+            <h4 class="text-caption">Chance: <span class="text-weight-bold">${series[0][dataPointIndex]}</span>%</h4>
+            <h4 class="text-caption">Volume: <span class="text-weight-bold">${series[1][dataPointIndex]}</span> mm</h4>
             </div>`
         }
       }

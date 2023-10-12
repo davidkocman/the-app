@@ -96,12 +96,11 @@ const sunProgress = (sunrise: number, sunset: number, timezone: number) => {
 
 const xAxisGroups = (list: Forecast[]) => {
   const arrOfDates: string[] = []
-  let countsArray: number[] = []
-  const groups: Group[] = []
 
   list.forEach((item: Forecast) => {
-    arrOfDates.push(dayjs(item.dt * 1000).format('D.M.'))
+    arrOfDates.push(dayjs(item.dt * 1000).format('dddd'))
   })
+
   // get unique days
   const uniqueValues = new Set(arrOfDates)
   const uniqueDays = [...uniqueValues]
@@ -115,13 +114,14 @@ const xAxisGroups = (list: Forecast[]) => {
       valueCounts.set(value, 1)
     }
   })
+  let countsArray: number[] = []
   countsArray = Array.from(valueCounts.values())
 
   // get groups
+  const groups: Group[] = []
   uniqueDays.forEach((item, index) => {
     groups.push({ title: item, cols: countsArray[index] })
   })
-  console.log(groups)
 
   return groups
 }
