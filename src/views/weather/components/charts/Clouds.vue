@@ -113,7 +113,7 @@ const options = computed(() => {
       yaxis: {
         max: 100,
         title: {
-          text: '°C',
+          text: '%',
           style: {
             color: appStore.isDarkMode ? 'rgba(255, 255, 255, .85)' : '#213547'
           }
@@ -165,7 +165,7 @@ const options = computed(() => {
       },
       tooltip: {
         theme: appStore.isDarkMode ? 'dark' : 'light',
-        custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+        custom: ({ series, seriesIndex, dataPointIndex }) => {
           return `<div class="q-pa-sm">
             <h4 class="text-caption">Clouds: <span class="text-weight-bold">${series[seriesIndex][dataPointIndex]}</span>%</h4>
             </div>`

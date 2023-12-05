@@ -14,41 +14,21 @@ const { currentWeatherData } = storeToRefs(weatherStore)
 <template>
   <div v-if="currentWeatherData" class="wind">
     <div class="title text-overline text-center text-weight-bolder text-primary">Wind</div>
-    <div class="gauge">
-      <div class="gauge__body">
-        <div
-          v-if="currentWeatherData.wind.speed"
-          class="gauge__fill-a"
-          :style="{
-            transform: `rotate(${calculateValueFromPercentage(
-              parseInt((currentWeatherData.wind.speed * 3.6).toFixed(0), 10),
-              200
-            )}deg)`
-          }"
-        ></div>
-        <div
-          v-if="currentWeatherData.wind.gust"
-          class="gauge__fill-b"
-          :style="{
-            transform: `rotate(${calculateValueFromPercentage(
-              parseInt((currentWeatherData.wind.gust * 3.6).toFixed(0), 10),
-              200
-            )}deg)`
-          }"
-        ></div>
-        <div class="gauge__meter"></div>
-        <div class="gauge__cover">
-          <h6 v-if="currentWeatherData.wind.speed" class="text-overline">
-            speed: {{ (currentWeatherData.wind.speed * 3.6).toFixed(0) }} km/h
-          </h6>
-          <h6 v-if="currentWeatherData.wind.gust" class="text-overline">
-            gusts: {{ (currentWeatherData.wind.gust * 3.6).toFixed(0) }} km/h
+    <div class="wrapper">
+      <div class="wind__direction q-mt-md q-mx-auto row flex-center">
+        <div class="data text-center">
+          <h5 v-if="currentWeatherData.wind.speed" class="text-h4 text-weight-medium">
+            {{ (currentWeatherData.wind.speed * 3.6).toFixed(0) }}
+            <span class="text-caption text-weight-light">km/h</span>
+          </h5>
+          <h6 v-if="currentWeatherData.wind.gust" class="text-h6">
+            <span class="text-caption">gust:</span> {{ (currentWeatherData.wind.gust * 3.6).toFixed(0) }}
+            <span class="text-caption text-weight-light">km/h</span>
           </h6>
         </div>
-      </div>
-      <div class="min-max">
-        <span class="none q-pt-xs">0 km/h</span>
-        <span class="full q-pt-xs">200 km/h</span>
+        <div class="needle-holder" :style="{ transform: `rotate(${360 - currentWeatherData.wind.deg}deg)` }">
+          <div class="arrow"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -57,95 +37,44 @@ const { currentWeatherData } = storeToRefs(weatherStore)
 <style lang="scss" scoped>
 .wind {
   min-height: 210px;
-  position: relative;
-  .gauge {
-    left: 50%;
-    transform: translateX(-50%);
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
-    max-width: 240px;
-    .min-max {
+  &__direction {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 2px solid var(--wind-direction);
+    position: relative;
+    &::after {
+      content: 'N';
       position: absolute;
-      width: 100%;
-      bottom: 0;
-      .none,
-      .full {
-        position: absolute;
-      }
-      .none {
-        left: 18px;
-        transform: translateX(-50%);
-      }
-      .full {
-        right: 12px;
-        transform: translateX(50%);
-      }
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
     }
-    &__body {
+    .needle-holder {
+      position: absolute;
       width: 100%;
       height: 0;
-      padding-bottom: 50%;
-      background: var(--bg-base);
-      position: relative;
-      border-top-left-radius: 100% 200%;
-      border-top-right-radius: 100% 200%;
-      overflow: hidden;
-      border-bottom: 1px solid var(--text-base);
-    }
-    &__fill-a {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: inherit;
-      height: 100%;
-      background: rgb(0, 201, 50);
-      background: linear-gradient(180deg, rgba(0, 201, 50, 0.7) 0%, rgba(255, 255, 255, 0) 100%);
-      transform-origin: center top;
-      transition: transform 1.3s ease-out;
-      z-index: 1;
-    }
-    &__fill-b {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: inherit;
-      height: 100%;
-      background: rgb(136, 0, 255);
-      background: linear-gradient(180deg, rgba(136, 0, 255, 0.7) 0%, rgba(255, 255, 255, 0) 100%);
-      transform-origin: center top;
-      transition: transform 1.3s ease-out;
-    }
-    &__meter {
-      width: 88%;
-      height: 175%;
-      border-radius: 50%;
-      position: absolute;
-      top: 12%;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 1px dashed var(--text-base);
-    }
-    &__cover {
-      width: 75%;
-      height: 150%;
-      background: var(--bg-base);
-      border-radius: 50%;
-      position: absolute;
-      top: 25%;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1;
-
-      /* Text */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding-bottom: 25%;
-      box-sizing: border-box;
-      h6 {
-        line-height: 20px;
+      transition: all 1.3s ease-in-out;
+      .arrow {
+        position: absolute;
+        left: -14px;
+        width: 10px;
+        height: 10px;
+        display: block;
+        border-top: 2px solid var(--wind-direction-needle);
+        border-right: 2px solid var(--wind-direction-needle);
+        transform: rotate(45deg);
+        &::after {
+          content: '';
+          position: absolute;
+          display: block;
+          right: -3px;
+          top: 3px;
+          width: 14px;
+          height: 2px;
+          background-color: var(--wind-direction-needle);
+          transform: rotate(135deg);
+        }
       }
     }
   }

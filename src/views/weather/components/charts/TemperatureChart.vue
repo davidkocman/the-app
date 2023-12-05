@@ -164,7 +164,7 @@ const options = computed(() => {
       },
       tooltip: {
         theme: appStore.isDarkMode ? 'dark' : 'light',
-        custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+        custom: ({ series, seriesIndex, dataPointIndex }) => {
           return `<div class="q-pa-sm">
             <h4 class="text-caption">Temperature: <span class="text-weight-bold">${series[seriesIndex][dataPointIndex]}</span>°C</h4>
             </div>`
