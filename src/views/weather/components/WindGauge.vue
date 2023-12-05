@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 
-// utils
-import { calculateValueFromPercentage } from '@/utils/helpers'
-
 // Store
 import useWeatherStore from '@/store/weather/'
 
