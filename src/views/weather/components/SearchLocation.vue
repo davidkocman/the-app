@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import useWeatherStore from '@/store/weather/'
-import { Model } from '@/types/weather'
-import cities from '@/assets/cities/sk.json'
+
+import type { SearchResult } from '@/types/weather'
 
 const weatherStore = useWeatherStore()
-const options = ref(cities)
-const model = ref<Model>()
+
+const model = ref<SearchResult | null>(null)
+const options = computed(() => weatherStore.searchResults)
 
 const filterFn = (inputValue: string, doneFn: any, abortFn: any): void => {
   if (inputValue.length < 1) {
@@ -16,9 +17,9 @@ const filterFn = (inputValue: string, doneFn: any, abortFn: any): void => {
   setTimeout(() => {
     doneFn(() => {
       const needle = inputValue.toLowerCase()
-      options.value = cities.filter((v) => v.label.toLowerCase().indexOf(needle) > -1)
+      weatherStore.getLocation(needle)
     })
-  }, 300)
+  }, 1000)
 }
 
 const keyUpEvent = (target: HTMLElement) => {
@@ -27,17 +28,18 @@ const keyUpEvent = (target: HTMLElement) => {
 
 watch(model, (value) => {
   if (value) {
-    weatherStore.activeLocation = value.label
-    weatherStore.activeRegion = value.admin_name
-    weatherStore.coordinates = [value.lat, value.lng]
-    weatherStore.getWeatherData(value.lat, value.lng)
+    weatherStore.activeLocation = value.name
+    weatherStore.activeRegion = value.state
+    weatherStore.coordinates.lat = value.lat
+    weatherStore.coordinates.lon = value.lon
+    weatherStore.getWeatherData()
   }
 })
 </script>
 
 <template>
-  <div class="relative-position q-mx-auto q-px-md search-location">
-    <div>
+  <div class="row q-mx-auto q-mb-lg q-px-md search-location">
+    <div class="col">
       <q-select
         v-model="model"
         standout
@@ -47,7 +49,7 @@ watch(model, (value) => {
         label="Search"
         label-color="var(--text-base)"
         :options="options"
-        option-value="value"
+        :option-label="(item: SearchResult | null) => (item === null ? '' : `${item.name} - (${item.state})`)"
         transition-show="fade"
         transition-hide="fade"
         use-input
@@ -70,8 +72,7 @@ watch(model, (value) => {
 <style lang="scss" scoped>
 .search-location {
   border-radius: 8px;
-  top: 16px;
-  max-width: 80%;
+  max-width: 420px;
   color: var(--text-base);
 }
 </style>

@@ -38,11 +38,11 @@ export default function useSavedLocations() {
    * @param {string} activeRegion - string - The region that the user is currently viewing.
    * @returns void.
    */
-  function saveLocation(coordinates: string[], activeLocation: string, activeRegion: string): void {
+  function saveLocation(coordinates: number[], activeLocation: string, activeRegion: string): void {
     const newLocation = ref<SavedLocation>({
       lat: coordinates[0],
-      lng: coordinates[1],
-      title: activeLocation,
+      lon: coordinates[1],
+      name: activeLocation,
       region: activeRegion
     })
     let storageValue = []
@@ -52,7 +52,7 @@ export default function useSavedLocations() {
       storageValue = JSON.parse(localStorage.getItem('the_app-weather-locations') as string)
 
       /* Checking if the location is already saved. */
-      if (storageValue.some((e: SavedLocation) => e.title === newLocation.value.title)) {
+      if (storageValue.some((e: SavedLocation) => e.name === newLocation.value.name)) {
         return
       }
 
@@ -88,7 +88,7 @@ export default function useSavedLocations() {
   const removeSavedLocation = (title: string) => {
     let storageValue = JSON.parse(localStorage.getItem('the_app-weather-locations') as string)
     const newFavourites = storageValue.filter((location: SavedLocation) => {
-      return location.title !== title
+      return location.name !== title
     })
     storageValue = newFavourites
     if (storageValue.length === 0) {
