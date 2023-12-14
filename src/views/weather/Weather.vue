@@ -33,7 +33,7 @@ resolveSavedLocations()
 </script>
 
 <template>
-  <q-page class="page-weather q-pa-md">
+  <q-page class="page-weather q-py-md q-px-lg">
     <div class="row q-mb-md justify-between items-center">
       <h1 class="text-h6">Weather</h1>
       <SavedLocations v-if="hasSavedLocations" />

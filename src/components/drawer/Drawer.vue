@@ -42,6 +42,13 @@ const appStore = useAppStore()
 
           <q-item-section> Notes </q-item-section>
         </q-item>
+        <q-item clickable v-ripple to="/invoices" data-cy="toInvoices">
+          <q-item-section avatar>
+            <q-icon name="description" />
+          </q-item-section>
+
+          <q-item-section> Invoices </q-item-section>
+        </q-item>
         <q-item clickable v-ripple to="/weather" data-cy="toWeather">
           <q-item-section avatar>
             <q-icon name="thermostat" />

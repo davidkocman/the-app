@@ -10,7 +10,7 @@ const { searchFor, searchResult } = storeToRefs(moviesStore)
 </script>
 
 <template>
-  <q-page class="page-movies q-pa-md">
+  <q-page class="page-movies q-py-md q-px-lg">
     <div class="row justify-end items-center q-mb-sm">
       <q-btn color="primary" icon="search" round size="sm">
         <q-menu class="q-px-sm">

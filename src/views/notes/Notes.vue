@@ -25,7 +25,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <q-page class="page-notes q-pa-md">
+  <q-page class="page-notes q-py-md q-px-lg">
     <div class="row justify-between items-center q-mb-sm">
       <h6 class="text-h6">Notes</h6>
       <NewNote />
