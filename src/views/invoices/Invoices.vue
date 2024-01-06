@@ -6,6 +6,7 @@ import useInvoicesStore from '@/store/invoices'
 const invoicesStore = useInvoicesStore()
 
 import NewConsumer from './components/NewConsumer.vue'
+import NewInvoice from './components/NewInvoice.vue'
 
 const pageTitle = ref('Invoices | The App')
 useMeta(() => {
@@ -29,6 +30,11 @@ onMounted(async () => {
     <div class="row justify-between items-center q-mb-sm">
       <h6 class="text-h6">Invoices</h6>
       <NewConsumer />
+    </div>
+    <div class="row">
+      <div class="col">
+        <NewInvoice />
+      </div>
     </div>
   </q-page>
 </template>

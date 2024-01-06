@@ -13,4 +13,13 @@ interface SavedConsumer extends Consumer {
   id: string
 }
 
-export { Consumer, SavedConsumer }
+type InvoiceItem = {
+  name: string
+  quantity: number | null
+  unit: string | null
+  price: number
+  vatRate: number
+  vatPrice: number
+}
+
+export { Consumer, SavedConsumer, InvoiceItem }
