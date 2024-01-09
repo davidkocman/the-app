@@ -7,9 +7,6 @@ import useInvoicesStore from '@/store/invoices'
 // types
 import type { SavedConsumer, InvoiceItem } from '@/types/invoices'
 
-// helpers
-import { calculateValueFromPercentage } from '@/utils/helpers'
-
 const invoiceStore = useInvoicesStore()
 const { consumers } = storeToRefs(invoiceStore)
 
@@ -87,16 +84,13 @@ const calculateVatPrice = () => {
   if (Number(tableRows.value[index.value].quantity)) {
     tableRows.value[index.value].vatPrice =
       (Number(tableRows.value[index.value].price) +
-        calculateValueFromPercentage(
-          tableRows.value[index.value].vatRate,
-          Number(tableRows.value[index.value].price)
-        )) *
+        (tableRows.value[index.value].vatRate * Number(tableRows.value[index.value].price)) / 100) *
       Number(tableRows.value[index.value].quantity)
     return
   }
   tableRows.value[index.value].vatPrice =
     Number(tableRows.value[index.value].price) +
-    calculateValueFromPercentage(tableRows.value[index.value].vatRate, Number(tableRows.value[index.value].price))
+    (tableRows.value[index.value].vatRate * Number(tableRows.value[index.value].price)) / 100
 }
 </script>
 
@@ -271,7 +265,7 @@ const calculateVatPrice = () => {
               </q-popup-edit>
             </q-td>
             <q-td key="vatPrice" :props="props">
-              {{ props.row.vatPrice }}
+              {{ props.row.vatPrice.toFixed(2) }}
             </q-td>
           </q-tr>
         </template>
