@@ -12,12 +12,13 @@ const { consumers } = storeToRefs(invoiceStore)
 
 const TODAY = new Date()
 const YEAR = TODAY.getFullYear().toString().substring(2)
-const MONTH = TODAY.getMonth() + 1
+const MONTH = TODAY.getMonth() < 10 ? `0${TODAY.getMonth() + 1}` : TODAY.getMonth() + 1
 const DAY = TODAY.getDate()
 
 const selectedConsumer = ref<SavedConsumer | null>(null)
 const selectedSupplier = ref<SavedConsumer | null>(null)
 const variableSymbol = ref(`${YEAR}${MONTH}01`)
+const vatRate = ref(20)
 
 const issueDate = ref(`${YEAR}/${MONTH}/${DAY}`)
 const dueDate = ref(`${YEAR}/${MONTH}/${DAY}`)
@@ -43,6 +44,16 @@ const dueDateFormValue = computed(() => {
       ).toLocaleDateString('sk')
     : ''
 })
+const basePrice = computed(() => {
+  const prices: number[] = []
+  tableRows.value.forEach((item) => {
+    prices.push(item.price * (item.quantity !== null ? item.quantity : 1))
+  })
+  return Number(prices.reduce((partialSum, a) => partialSum + a, 0)).toFixed(2)
+})
+const vat = computed(() => {
+  return ((Number(basePrice.value) * tableRows.value[0].vatRate) / 100).toFixed(2)
+})
 
 const tableHeaders = ref([
   {
@@ -61,11 +72,11 @@ const tableHeaders = ref([
 ])
 const tableRows = ref<InvoiceItem[]>([
   {
-    name: 'test',
-    quantity: null,
-    unit: null,
+    name: '- Click to edit -',
+    quantity: 1,
+    unit: '',
     price: 0,
-    vatRate: 20,
+    vatRate: vatRate.value,
     vatPrice: 0
   }
 ])
@@ -79,7 +90,16 @@ watch(
     deep: true
   }
 )
-
+const addInvoiceItem = () => {
+  tableRows.value.push({
+    name: '- Click to edit -',
+    quantity: 1,
+    unit: '',
+    price: 0,
+    vatRate: vatRate.value,
+    vatPrice: 0
+  })
+}
 const calculateVatPrice = () => {
   if (Number(tableRows.value[index.value].quantity)) {
     tableRows.value[index.value].vatPrice =
@@ -220,7 +240,7 @@ const calculateVatPrice = () => {
               </q-popup-edit>
             </q-td>
             <q-td key="quantity" :props="props">
-              {{ props.row.quantity }}
+              {{ props.row.quantity > 1 ? props.row.quantity : '' }}
               <q-popup-edit v-model="props.row.quantity" title="Zadajte množstvo" buttons v-slot="scope">
                 <q-input
                   type="number"
@@ -239,8 +259,8 @@ const calculateVatPrice = () => {
               </q-popup-edit>
             </q-td>
             <q-td key="price" :props="props">
-              {{ props.row.price }}
-              <q-popup-edit v-model="props.row.price" title="Zadajte cenu" buttons persistent v-slot="scope">
+              {{ Number(props.row.price).toFixed(2) }}
+              <q-popup-edit v-model="props.row.price" title="Zadajte cenu" buttons v-slot="scope">
                 <q-input
                   type="number"
                   v-model="scope.value"
@@ -252,11 +272,11 @@ const calculateVatPrice = () => {
               </q-popup-edit>
             </q-td>
             <q-td key="vatRate" :props="props">
-              {{ props.row.vatRate }}
-              <q-popup-edit v-model="props.row.vatRate" title="DPH%" buttons persistent v-slot="scope">
+              {{ vatRate }}
+              <q-popup-edit v-model="vatRate" title="DPH%" buttons v-slot="scope">
                 <q-input
                   type="number"
-                  v-model="scope.value"
+                  v-model="vatRate"
                   dense
                   autofocus
                   @keyup.enter="scope.set"
@@ -270,12 +290,33 @@ const calculateVatPrice = () => {
           </q-tr>
         </template>
       </q-table>
+      <q-btn label="Add item" color="primary" class="q-my-sm" @click="addInvoiceItem" />
     </q-card-section>
   </q-card>
 
   <q-card flat bordered class="invioce-summary">
     <q-card-section>
-      <div class="text-h6">Our Changing Planet</div>
+      <div class="row">
+        <div class="col-8"></div>
+        <div class="col-4">
+          <q-separator class="q-my-sm" />
+          <div class="row">
+            <div class="col-8">Základ DPH</div>
+            <div class="col-4 text-right">{{ basePrice }} EUR</div>
+          </div>
+          <div class="row">
+            <div class="col-8">DPH</div>
+            <div class="col-4 text-right">{{ vat }} EUR</div>
+          </div>
+          <q-separator class="q-my-sm" />
+          <div class="row">
+            <div class="col-8 text-weight-bold">Celkom</div>
+            <div class="col-4 text-right text-weight-bold">
+              {{ (parseFloat(basePrice) + parseFloat(vat)).toFixed(2) }} EUR
+            </div>
+          </div>
+        </div>
+      </div>
     </q-card-section>
   </q-card>
 </template>
