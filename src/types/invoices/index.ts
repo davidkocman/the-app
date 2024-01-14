@@ -1,4 +1,4 @@
-interface Consumer {
+interface Company {
   name: string
   street: string
   zip: string
@@ -9,17 +9,17 @@ interface Consumer {
   vatId?: string
 }
 
-interface SavedConsumer extends Consumer {
+interface SavedCompany extends Company {
   id: string
 }
 
 type InvoiceItem = {
   name: string
-  quantity: number | null
-  unit: string | null
+  quantity: number
+  unit: string
   price: number
   vatRate: number
   vatPrice: number
 }
 
-export { Consumer, SavedConsumer, InvoiceItem }
+export { Company, SavedCompany, InvoiceItem }

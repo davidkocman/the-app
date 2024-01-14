@@ -5,7 +5,7 @@ import useInvoicesStore from '@/store/invoices'
 
 const invoicesStore = useInvoicesStore()
 
-import NewConsumer from './components/NewConsumer.vue'
+import NewCompany from './components/NewCompany.vue'
 import NewInvoice from './components/NewInvoice.vue'
 
 const pageTitle = ref('Invoices | The App')
@@ -29,7 +29,7 @@ onMounted(async () => {
   <q-page class="page-invoices q-py-md q-px-lg">
     <div class="row justify-between items-center q-mb-sm">
       <h6 class="text-h6">Invoices</h6>
-      <NewConsumer />
+      <NewCompany />
     </div>
     <div class="row">
       <div class="col">

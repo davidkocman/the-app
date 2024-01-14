@@ -1,14 +1,14 @@
 import { Store } from 'pinia'
-import type { Consumer, SavedConsumer } from '@/types/invoices'
+import type { Company, SavedCompany } from '@/types/invoices'
 
 type State = {
-  consumers: Array<SavedConsumer>
+  consumers: Array<SavedCompany>
 }
 
 type Getters = {}
 
 type Actions = {
-  addConsumer: (payload: Consumer) => Promise<void>
+  addConsumer: (payload: Company) => Promise<void>
   getConsumers: () => Promise<void>
 }
 

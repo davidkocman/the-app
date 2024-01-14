@@ -5,7 +5,7 @@ import getErrorMessage from '@/utils/handleCatchErrors'
 
 import type { PiniaActionAdaptor } from '@/types/store'
 import type { Actions, InvoicesStore } from './types'
-import { Consumer, SavedConsumer } from '@/types/invoices'
+import { Company, SavedCompany } from '@/types/invoices'
 
 export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
   async addConsumer(payload) {
@@ -26,11 +26,11 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
     appStore.loading = true
     try {
       const querySnapshot = await getDocs(collection(db, 'consumers'))
-      const docs: SavedConsumer[] = []
+      const docs: SavedCompany[] = []
       querySnapshot.forEach((doc) => {
         docs.push({
           id: doc.id,
-          ...(doc.data() as Consumer)
+          ...(doc.data() as Company)
         })
       })
       this.consumers = docs

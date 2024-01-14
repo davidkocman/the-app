@@ -5,18 +5,18 @@ import { storeToRefs } from 'pinia'
 import useInvoicesStore from '@/store/invoices'
 
 // types
-import type { SavedConsumer, InvoiceItem } from '@/types/invoices'
+import type { SavedCompany, InvoiceItem } from '@/types/invoices'
 
 const invoiceStore = useInvoicesStore()
 const { consumers } = storeToRefs(invoiceStore)
 
 const TODAY = new Date()
 const YEAR = TODAY.getFullYear().toString().substring(2)
-const MONTH = TODAY.getMonth() < 10 ? `0${TODAY.getMonth() + 1}` : TODAY.getMonth() + 1
+const MONTH = TODAY.getMonth() + 1
 const DAY = TODAY.getDate()
 
-const selectedConsumer = ref<SavedConsumer | null>(null)
-const selectedSupplier = ref<SavedConsumer | null>(null)
+const selectedConsumer = ref<SavedCompany | null>(null)
+const selectedSupplier = ref<SavedCompany | null>(null)
 const variableSymbol = ref(`${YEAR}${MONTH}01`)
 const vatRate = ref(20)
 

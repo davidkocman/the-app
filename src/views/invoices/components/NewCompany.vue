@@ -3,14 +3,14 @@ import { ref } from 'vue'
 import useInvoicesStore from '@/store/invoices'
 
 // types
-import type { Consumer } from '@/types/invoices'
+import type { Company } from '@/types/invoices'
 
 const { addConsumer } = useInvoicesStore()
 
 const fixed = ref(false)
 const options = ref(['Slovakia', 'Czechia'])
 
-const newConsumer = ref<Consumer>({
+const newConsumer = ref<Company>({
   name: '',
   street: '',
   zip: '',
@@ -38,12 +38,12 @@ const clearForm = () => {
 
 <template>
   <div class="q-pa-md q-gutter-sm">
-    <q-btn label="New Consumer" color="primary" @click="fixed = true" />
+    <q-btn label="Add company" color="primary" @click="fixed = true" />
 
     <q-dialog v-model="fixed" persistent>
       <q-card style="min-width: 320px; width: 80vw">
         <q-card-section>
-          <div class="text-h6">New Consumer</div>
+          <div class="text-h6">Add company</div>
         </q-card-section>
 
         <q-separator />
