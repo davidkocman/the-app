@@ -21,7 +21,7 @@ useMeta(() => {
 })
 
 onMounted(async () => {
-  await invoicesStore.getConsumers()
+  await invoicesStore.getCompanies()
 })
 </script>
 

@@ -7,6 +7,8 @@ interface Company {
   companyId: string
   taxId: string
   vatId?: string
+  iban: string
+  swift: string
 }
 
 interface SavedCompany extends Company {

@@ -8,7 +8,7 @@ import useInvoicesStore from '@/store/invoices'
 import type { SavedCompany, InvoiceItem } from '@/types/invoices'
 
 const invoiceStore = useInvoicesStore()
-const { consumers } = storeToRefs(invoiceStore)
+const { companies } = storeToRefs(invoiceStore)
 
 const TODAY = new Date()
 const YEAR = TODAY.getFullYear().toString().substring(2)
@@ -122,7 +122,7 @@ const calculateVatPrice = () => {
           <q-select
             outlined
             v-model="selectedConsumer"
-            :options="consumers"
+            :options="companies"
             option-label="name"
             option-value="id"
             label="Odberateľ"
@@ -132,7 +132,7 @@ const calculateVatPrice = () => {
           <q-select
             outlined
             v-model="selectedSupplier"
-            :options="consumers"
+            :options="companies"
             option-label="name"
             option-value="id"
             label="Dodávateľ"
