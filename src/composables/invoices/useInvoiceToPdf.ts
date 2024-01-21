@@ -4,18 +4,24 @@ import { getInvoiceInputs } from '@/utils/getInvoiceInputs'
 import { generate } from '@pdfme/generator'
 
 // types
-import type { InvoiceItem } from '@/types/invoices'
+import type { InvoiceItem, Company } from '@/types/invoices'
 
 export default function useInvoiceToPdf(
   variableSymbol: Ref<string>,
   tableRows: Ref<InvoiceItem[]>,
   totalVatPrice: Ref<string>,
-  iban: Ref<string>,
-  swift: Ref<string>
+  supplier: Ref<Company>,
+  consumer: Ref<Company>
 ) {
   const generateInvoice = () => {
     const template = getInvoiceTemplate(tableRows.value)
-    const inputs = getInvoiceInputs(variableSymbol.value, tableRows.value, totalVatPrice.value, iban.value, swift.value)
+    const inputs = getInvoiceInputs(
+      variableSymbol.value,
+      tableRows.value,
+      totalVatPrice.value,
+      supplier.value,
+      consumer.value
+    )
     generate({ template, inputs }).then((pdf) => {
       // Browser
       const blob = new Blob([pdf.buffer], { type: 'application/pdf' })

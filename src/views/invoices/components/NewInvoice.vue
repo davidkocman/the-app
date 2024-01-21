@@ -337,14 +337,14 @@ const removeRow = (index: number) => {
     </q-card-section>
   </q-card>
 
-  <q-card v-if="selectedSupplier && deliveryDate" flat bordered class="invioce-download">
+  <q-card v-if="selectedSupplier && selectedConsumer && deliveryDate" flat bordered class="invioce-download">
     <q-card-section>
       <InvoiceToPdf
         :variableSymbol="variableSymbol"
         :tableRows="tableRows"
         :totalVatPrice="(parseFloat(basePrice) + parseFloat(vat)).toFixed(2)"
-        :iban="selectedSupplier.iban"
-        :swift="selectedSupplier.swift"
+        :supplier="selectedSupplier"
+        :consumer="selectedConsumer"
       />
     </q-card-section>
   </q-card>

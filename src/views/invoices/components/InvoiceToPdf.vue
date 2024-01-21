@@ -3,7 +3,7 @@ import { PropType, toRefs } from 'vue'
 import useInvoiceToPdf from '@/composables/invoices/useInvoiceToPdf'
 
 // types
-import type { InvoiceItem } from '@/types/invoices'
+import type { InvoiceItem, Company } from '@/types/invoices'
 
 const props = defineProps({
   variableSymbol: {
@@ -18,22 +18,22 @@ const props = defineProps({
     required: true,
     type: String
   },
-  iban: {
+  supplier: {
     required: true,
-    type: String
+    type: Object as PropType<Company>
   },
-  swift: {
+  consumer: {
     required: true,
-    type: String
+    type: Object as PropType<Company>
   }
 })
 
-const { tableRows, totalVatPrice, iban, swift, variableSymbol } = toRefs(props)
+const { variableSymbol, tableRows, totalVatPrice, supplier, consumer } = toRefs(props)
 
-const { generateInvoice } = useInvoiceToPdf(variableSymbol, tableRows, totalVatPrice, iban, swift)
+const { generateInvoice } = useInvoiceToPdf(variableSymbol, tableRows, totalVatPrice, supplier, consumer)
 </script>
 
 <template>
-  <q-btn label="Download invoice" @click="generateInvoice"></q-btn>
+  <q-btn label="Stiahnut Faktúru" icon="download" @click="generateInvoice"></q-btn>
 </template>
 @/composables/invoices/useInvoiceToPdf

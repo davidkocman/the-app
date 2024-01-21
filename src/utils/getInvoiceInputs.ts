@@ -1,29 +1,29 @@
 // types
-import type { InvoiceItem } from '@/types/invoices'
+import type { InvoiceItem, Company } from '@/types/invoices'
 
 const getInvoiceInputs = (
   variableSymbol: string,
   invoiceItems: InvoiceItem[],
   totalVatPrice: string,
-  iban: string,
-  swift: string
+  supplier: Company,
+  consumer: Company
 ) => {
   const inputs = [
     {
       invoiceTitle: `FAKTÚRA ${variableSymbol}`,
       consumerTitle: 'DODÁVATEĽ',
-      consumerName: 'GI-NA, s.r.o.',
-      consumerAddress: 'Svätoondrejská 6, 945 01 Komárno, Slovensko',
-      consumerId: 'IČO: 47858486',
-      consumerTax: 'DIČ: 2024122958',
-      consumerVat: 'IČ DPH: SK2024122958',
+      consumerName: supplier.name,
+      consumerAddress: `${supplier.street}, ${supplier.zip} ${supplier.city}, ${supplier.country}`,
+      consumerId: `IČO: ${supplier.companyId}`,
+      consumerTax: `DIČ: ${supplier.taxId}`,
+      consumerVat: `IČ DPH: ${supplier.vatId}`,
       consumerContact: 'KONTAKTNÉ ÚDAJE',
       supplierTitle: 'ODBERATEĽ',
-      supplierName: 'GreenWay Infrastructure s.r.o.',
-      supplierAddress: 'Einsteinova 24, 851 01 Bratislava, Slovensko',
-      supplierId: 'IČO: 47858486',
-      supplierTax: 'DIČ: 2024122958',
-      supplierVat: 'IČ DPH: SK2024122958',
+      supplierName: consumer.name,
+      supplierAddress: `${consumer.street}, ${consumer.zip} ${consumer.city}, ${consumer.country}`,
+      supplierId: `IČO: ${consumer.companyId}`,
+      supplierTax: `DIČ: ${consumer.taxId}`,
+      supplierVat: `IČ DPH: ${consumer.vatId}`,
       separator1: ' ',
       issueDateTitle: 'Dátum vystavenia:',
       issueDateValue: '02.01.2024',
@@ -34,11 +34,11 @@ const getInvoiceInputs = (
       paymentMethod: 'Spôsob úhrady: Bankový prevod',
       sum: `Suma: ${totalVatPrice} EUR`,
       variableSymbol: `Variabilný symbol: ${variableSymbol}`,
-      iban: `IBAN: ${iban
+      iban: `IBAN: ${supplier.iban
         .replace(/[^\dA-Z]/g, '')
         .replace(/(.{4})/g, '$1 ')
         .trim()}`,
-      swift: `SWIFT: ${swift}`,
+      swift: `SWIFT: ${supplier.swift}`,
       itemNoTitle: 'Č.',
       itemNameTitle: 'NÁZOV',
       quantityTitle: 'MNOŽSTVO',
