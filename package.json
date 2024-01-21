@@ -13,6 +13,9 @@
     "lint:fix": "yarn lint:script ; yarn lint:style ; yarn lint:markup --no-error-on-unmatched-pattern --fix"
   },
   "dependencies": {
+    "@pdfme/common": "^3.2.1",
+    "@pdfme/generator": "^3.2.1",
+    "@pdfme/schemas": "^3.2.1",
     "@quasar/extras": "^1.12.4",
     "@types/marked": "^4.0.7",
     "apexcharts": "^3.42.0",

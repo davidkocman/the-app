@@ -4,6 +4,9 @@ import { storeToRefs } from 'pinia'
 
 import useInvoicesStore from '@/store/invoices'
 
+// components
+import InvoiceToPdf from '@/views/invoices/components/InvoiceToPdf.vue'
+
 // types
 import type { SavedCompany, InvoiceItem } from '@/types/invoices'
 
@@ -17,9 +20,8 @@ const DAY = TODAY.getDate()
 
 const selectedConsumer = ref<SavedCompany | null>(null)
 const selectedSupplier = ref<SavedCompany | null>(null)
-const variableSymbol = ref(`${YEAR}${MONTH}01`)
+const variableSymbol = ref(`${YEAR}${MONTH < 10 ? '0' + MONTH : MONTH}01`)
 const vatRate = ref(20)
-
 const issueDate = ref(`${YEAR}/${MONTH}/${DAY}`)
 const dueDate = ref(`${YEAR}/${MONTH}/${DAY}`)
 const deliveryDate = ref('')
@@ -68,11 +70,12 @@ const tableHeaders = ref([
   { name: 'unit', align: 'center', label: 'MJ', field: 'unit' },
   { name: 'price', align: 'center', label: 'Cena bez DPH', field: 'price' },
   { name: 'vatRate', align: 'center', label: 'DPH%', field: 'vatRate' },
-  { name: 'vatPrice', align: 'center', label: 'Spolu s DPH', field: 'vatPrice' }
+  { name: 'vatPrice', align: 'center', label: 'Spolu s DPH', field: 'vatPrice' },
+  { name: 'actions', label: '', field: 'actions' }
 ])
 const tableRows = ref<InvoiceItem[]>([
   {
-    name: '- Click to edit -',
+    name: '- Názov položky -',
     quantity: 1,
     unit: '',
     price: 0,
@@ -92,7 +95,7 @@ watch(
 )
 const addInvoiceItem = () => {
   tableRows.value.push({
-    name: '- Click to edit -',
+    name: '- Názov položky -',
     quantity: 1,
     unit: '',
     price: 0,
@@ -111,6 +114,10 @@ const calculateVatPrice = () => {
   tableRows.value[index.value].vatPrice =
     Number(tableRows.value[index.value].price) +
     (tableRows.value[index.value].vatRate * Number(tableRows.value[index.value].price)) / 100
+}
+
+const removeRow = (index: number) => {
+  tableRows.value.splice(index, 1)
 }
 </script>
 
@@ -287,14 +294,24 @@ const calculateVatPrice = () => {
             <q-td key="vatPrice" :props="props">
               {{ props.row.vatPrice.toFixed(2) }}
             </q-td>
+            <q-td v-if="tableRows.length > 1" :props="props" key="actions">
+              <q-btn color="danger" icon="delete" no-caps flat dense @click="removeRow(tableRows.indexOf(props.row))" />
+            </q-td>
           </q-tr>
         </template>
       </q-table>
-      <q-btn label="Add item" color="primary" class="q-my-sm" @click="addInvoiceItem" />
+      <q-btn
+        label="Pridať položku"
+        icon="add"
+        color="primary"
+        class="q-my-sm"
+        @click="addInvoiceItem"
+        :disable="tableRows.length === 5"
+      />
     </q-card-section>
   </q-card>
 
-  <q-card flat bordered class="invioce-summary">
+  <q-card flat bordered class="invioce-summary q-mb-md">
     <q-card-section>
       <div class="row">
         <div class="col-8"></div>
@@ -317,6 +334,18 @@ const calculateVatPrice = () => {
           </div>
         </div>
       </div>
+    </q-card-section>
+  </q-card>
+
+  <q-card v-if="selectedSupplier && deliveryDate" flat bordered class="invioce-download">
+    <q-card-section>
+      <InvoiceToPdf
+        :variableSymbol="variableSymbol"
+        :tableRows="tableRows"
+        :totalVatPrice="(parseFloat(basePrice) + parseFloat(vat)).toFixed(2)"
+        :iban="selectedSupplier.iban"
+        :swift="selectedSupplier.swift"
+      />
     </q-card-section>
   </q-card>
 </template>
