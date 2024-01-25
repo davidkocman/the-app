@@ -69,7 +69,7 @@ const tableHeaders = ref([
   { name: 'quantity', align: 'center', label: 'Množstvo', field: 'quantity' },
   { name: 'unit', align: 'center', label: 'MJ', field: 'unit' },
   { name: 'price', align: 'center', label: 'Cena bez DPH', field: 'price' },
-  { name: 'vatRate', align: 'center', label: 'DPH%', field: 'vatRate' },
+  { name: 'vatRate', align: 'center', label: 'DPH %', field: 'vatRate' },
   { name: 'vatPrice', align: 'center', label: 'Spolu s DPH', field: 'vatPrice' },
   { name: 'actions', label: '', field: 'actions' }
 ])
@@ -345,6 +345,8 @@ const removeRow = (index: number) => {
         :totalVatPrice="(parseFloat(basePrice) + parseFloat(vat)).toFixed(2)"
         :supplier="selectedSupplier"
         :consumer="selectedConsumer"
+        :basePrice="basePrice"
+        :vat="vat"
       />
     </q-card-section>
   </q-card>

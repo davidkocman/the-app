@@ -25,15 +25,30 @@ const props = defineProps({
   consumer: {
     required: true,
     type: Object as PropType<Company>
+  },
+  basePrice: {
+    required: true,
+    type: String
+  },
+  vat: {
+    required: true,
+    type: String
   }
 })
 
-const { variableSymbol, tableRows, totalVatPrice, supplier, consumer } = toRefs(props)
+const { variableSymbol, tableRows, totalVatPrice, supplier, consumer, basePrice, vat } = toRefs(props)
 
-const { generateInvoice } = useInvoiceToPdf(variableSymbol, tableRows, totalVatPrice, supplier, consumer)
+const { generateInvoice } = useInvoiceToPdf(
+  variableSymbol,
+  tableRows,
+  totalVatPrice,
+  supplier,
+  consumer,
+  basePrice,
+  vat
+)
 </script>
 
 <template>
   <q-btn label="Stiahnut Faktúru" icon="download" @click="generateInvoice"></q-btn>
 </template>
-@/composables/invoices/useInvoiceToPdf

@@ -6,7 +6,9 @@ const getInvoiceInputs = (
   invoiceItems: InvoiceItem[],
   totalVatPrice: string,
   supplier: Company,
-  consumer: Company
+  consumer: Company,
+  basePrice: string,
+  vat: string
 ) => {
   const inputs = [
     {
@@ -45,36 +47,43 @@ const getInvoiceInputs = (
       priceTitle: 'CENA BEZ DPH',
       vatRateTitle: 'DPH %',
       vatPriceTitle: 'SPOLU S DPH',
-      tableHeadLine: ' '
+      tableHeadLine: ' ',
+      tableHeadLineEnd: ' ',
+      basePriceTitle: 'ZÁKLAD',
+      basePrice: `${basePrice} EUR`,
+      vatTitle: 'DPH',
+      vat: `${vat} EUR`,
+      totalToPayTitle: 'Celkom k úhrade',
+      totalToPay: `${totalVatPrice} EUR`
     }
   ]
 
-  const getItemNumber = (inputs) => {
-    invoiceItems.forEach((item, index) => {
+  const getItemNumber = (inputs: { [key: string]: string }[]) => {
+    invoiceItems.forEach((_item, index) => {
       inputs[0][`itemNo${index + 1}`] = (index + 1).toString() + '.'
     })
   }
-  const getItemName = (inputs) => {
+  const getItemName = (inputs: { [key: string]: string }[]) => {
     invoiceItems.forEach((item, index) => {
       inputs[0][`item${index + 1}Name`] = item.name
     })
   }
-  const getItemQuantity = (inputs) => {
+  const getItemQuantity = (inputs: { [key: string]: string }[]) => {
     invoiceItems.forEach((item, index) => {
       inputs[0][`item${index + 1}Quantity`] = item.quantity.toString()
     })
   }
-  const getItemPrice = (inputs) => {
+  const getItemPrice = (inputs: { [key: string]: string }[]) => {
     invoiceItems.forEach((item, index) => {
       inputs[0][`item${index + 1}Price`] = Number(item.price).toFixed(2).toString()
     })
   }
-  const getItemVatRate = (inputs) => {
+  const getItemVatRate = (inputs: { [key: string]: string }[]) => {
     invoiceItems.forEach((item, index) => {
-      inputs[0][`item${index + 1}VatRate`] = Number(item.vatRate).toFixed(2).toString()
+      inputs[0][`item${index + 1}VatRate`] = Number(item.vatRate).toString()
     })
   }
-  const getItemVatPrice = (inputs) => {
+  const getItemVatPrice = (inputs: { [key: string]: string }[]) => {
     invoiceItems.forEach((item, index) => {
       inputs[0][`item${index + 1}VatPrice`] = Number(item.vatPrice).toFixed(2).toString()
     })

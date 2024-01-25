@@ -555,7 +555,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
             y: 115
           },
           width: 20,
-          height: 0.5,
+          height: 5,
           rotate: 0,
           alignment: 'left',
           verticalAlignment: 'top',
@@ -573,7 +573,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
             y: 115
           },
           width: 25,
-          height: 0.5,
+          height: 5,
           rotate: 0,
           alignment: 'left',
           verticalAlignment: 'top',
@@ -617,7 +617,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           y: y + index * 5
         },
         width: 5,
-        height: 0.5,
+        height: 5,
         rotate: 0,
         alignment: 'left',
         verticalAlignment: 'top',
@@ -641,7 +641,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           y: y + index * 5
         },
         width: 65,
-        height: 0.5,
+        height: 5,
         rotate: 0,
         alignment: 'left',
         verticalAlignment: 'top',
@@ -665,7 +665,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           y: y + index * 5
         },
         width: 20,
-        height: 0.5,
+        height: 5,
         rotate: 0,
         alignment: 'left',
         verticalAlignment: 'top',
@@ -689,7 +689,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           y: y + index * 5
         },
         width: 30,
-        height: 0.5,
+        height: 5,
         rotate: 0,
         alignment: 'left',
         verticalAlignment: 'top',
@@ -705,7 +705,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
 
   const getItemVatRate = () => {
     const y = 122
-    invoiceItems.forEach((item, index) => {
+    invoiceItems.forEach((_item, index) => {
       template.schemas[0][`item${index + 1}VatRate`] = {
         type: 'text',
         position: {
@@ -713,7 +713,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           y: y + index * 5
         },
         width: 20,
-        height: 0.5,
+        height: 5,
         rotate: 0,
         alignment: 'left',
         verticalAlignment: 'top',
@@ -737,7 +737,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           y: y + index * 5
         },
         width: 25,
-        height: 0.5,
+        height: 5,
         rotate: 0,
         alignment: 'left',
         verticalAlignment: 'top',
@@ -751,12 +751,169 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
     })
   }
 
+  const tableHeadLineEnd = () => {
+    template.schemas[0]['tableHeadLineEnd'] = {
+      type: 'text',
+      position: {
+        x: 10,
+        y: 123 + invoiceItems.length * 5
+      },
+      width: 190,
+      height: 0.5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 0,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#ffffff',
+      backgroundColor: '#000000',
+      opacity: 1,
+      fontName: 'Roboto'
+    }
+  }
+
+  const basePriceTitlePosition = () => {
+    template.schemas[0]['basePriceTitle'] = {
+      type: 'text',
+      position: {
+        x: 110,
+        y: 130 + invoiceItems.length * 5
+      },
+      width: 40,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 1,
+      fontName: 'Roboto'
+    }
+  }
+
+  const basePricePosition = () => {
+    template.schemas[0]['basePrice'] = {
+      type: 'text',
+      position: {
+        x: 170,
+        y: 130 + invoiceItems.length * 5
+      },
+      width: 40,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 1,
+      fontName: 'Roboto'
+    }
+  }
+
+  const vatTitlePosition = () => {
+    template.schemas[0]['vatTitle'] = {
+      type: 'text',
+      position: {
+        x: 110,
+        y: 135 + invoiceItems.length * 5
+      },
+      width: 190,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 1,
+      fontName: 'Roboto'
+    }
+  }
+
+  const vatPosition = () => {
+    template.schemas[0]['vat'] = {
+      type: 'text',
+      position: {
+        x: 170,
+        y: 135 + invoiceItems.length * 5
+      },
+      width: 40,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 1,
+      fontName: 'Roboto'
+    }
+  }
+
+  const totalToPayTitlePosition = () => {
+    template.schemas[0]['totalToPayTitle'] = {
+      type: 'text',
+      position: {
+        x: 110,
+        y: 140 + invoiceItems.length * 5
+      },
+      width: 60,
+      height: 6,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 12,
+      lineHeight: 1.3,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '#e1e1e1',
+      opacity: 1,
+      fontName: 'Roboto'
+    }
+  }
+
+  const totalToPayPosition = () => {
+    template.schemas[0]['totalToPay'] = {
+      type: 'text',
+      position: {
+        x: 170,
+        y: 140 + invoiceItems.length * 5
+      },
+      width: 30,
+      height: 6,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 12,
+      lineHeight: 1.3,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '#e1e1e1',
+      opacity: 1,
+      fontName: 'Roboto'
+    }
+  }
+
   getItemNumbers()
   getItemNames()
   getItemQuantity()
   getItemPrice()
   getItemVatRate()
   getItemVatPrice()
+  tableHeadLineEnd()
+  basePriceTitlePosition()
+  basePricePosition()
+  vatTitlePosition()
+  vatPosition()
+  totalToPayTitlePosition()
+  totalToPayPosition()
 
   return template
 }
