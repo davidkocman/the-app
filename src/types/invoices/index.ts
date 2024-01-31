@@ -9,6 +9,8 @@ interface Company {
   vatId?: string
   iban: string
   swift: string
+  registration: string
+  businessReg: string
 }
 
 interface SavedCompany extends Company {

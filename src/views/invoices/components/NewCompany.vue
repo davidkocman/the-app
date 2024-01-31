@@ -20,7 +20,9 @@ const newCompany = ref<Company>({
   taxId: '',
   vatId: '',
   iban: '',
-  swift: ''
+  swift: '',
+  registration: '',
+  businessReg: ''
 })
 const isVatPayer = ref(false)
 
@@ -35,19 +37,21 @@ const clearForm = () => {
     taxId: '',
     vatId: '',
     iban: '',
-    swift: ''
+    swift: '',
+    registration: '',
+    businessReg: ''
   }
 }
 </script>
 
 <template>
-  <div class="q-pa-md q-gutter-sm">
-    <q-btn label="Add company" color="primary" icon="apartment" @click="fixed = true" />
+  <div>
+    <q-btn label="New company" color="primary" icon="apartment" @click="fixed = true" />
 
     <q-dialog v-model="fixed" persistent>
       <q-card style="min-width: 320px; width: 80vw">
         <q-card-section>
-          <div class="text-h6">Add company</div>
+          <div class="text-h6">New company</div>
         </q-card-section>
 
         <q-separator />
@@ -112,6 +116,19 @@ const clearForm = () => {
           <div class="row">
             <div class="col">
               <q-input outlined dense v-model="newCompany.swift" label="SWIFT" />
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-card-section class="scroll q-gutter-md">
+          <div class="row">
+            <div class="col">
+              <q-input outlined dense v-model="newCompany.registration" label="Registration" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <q-input outlined dense v-model="newCompany.businessReg" label="Business register" />
             </div>
           </div>
         </q-card-section>

@@ -11,7 +11,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
         invoiceTitle: {
           type: 'text',
           position: {
-            x: 161.05,
+            x: 165,
             y: 10.11
           },
           width: 40,
@@ -491,7 +491,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           lineHeight: 1,
           characterSpacing: 0,
           fontColor: '#000000',
-          opacity: 1,
+          opacity: 0.5,
           fontName: 'Roboto'
         },
         itemNameTitle: {
@@ -509,7 +509,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           lineHeight: 1,
           characterSpacing: 0,
           fontColor: '#000000',
-          opacity: 1,
+          opacity: 0.5,
           fontName: 'Roboto'
         },
         quantityTitle: {
@@ -527,7 +527,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           lineHeight: 1,
           characterSpacing: 0,
           fontColor: '#000000',
-          opacity: 1,
+          opacity: 0.5,
           fontName: 'Roboto'
         },
         priceTitle: {
@@ -545,7 +545,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           lineHeight: 1,
           characterSpacing: 0,
           fontColor: '#000000',
-          opacity: 1,
+          opacity: 0.5,
           fontName: 'Roboto'
         },
         vatRateTitle: {
@@ -563,7 +563,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           lineHeight: 1,
           characterSpacing: 0,
           fontColor: '#000000',
-          opacity: 1,
+          opacity: 0.5,
           fontName: 'Roboto'
         },
         vatPriceTitle: {
@@ -581,7 +581,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           lineHeight: 1,
           characterSpacing: 0,
           fontColor: '#000000',
-          opacity: 1,
+          opacity: 0.5,
           fontName: 'Roboto'
         },
         tableHeadLine: {
@@ -600,6 +600,42 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
           characterSpacing: 0,
           fontColor: '#ffffff',
           backgroundColor: '#000000',
+          opacity: 1,
+          fontName: 'Roboto'
+        },
+        registration: {
+          type: 'text',
+          position: {
+            x: 85,
+            y: 285
+          },
+          width: 60,
+          height: 0.5,
+          rotate: 0,
+          alignment: 'left',
+          verticalAlignment: 'top',
+          fontSize: 8,
+          lineHeight: 1,
+          characterSpacing: 0,
+          fontColor: '#838383',
+          opacity: 1,
+          fontName: 'Roboto'
+        },
+        businessReg: {
+          type: 'text',
+          position: {
+            x: 85,
+            y: 290
+          },
+          width: 60,
+          height: 0.5,
+          rotate: 0,
+          alignment: 'left',
+          verticalAlignment: 'top',
+          fontSize: 8,
+          lineHeight: 1,
+          characterSpacing: 0,
+          fontColor: '#838383',
           opacity: 1,
           fontName: 'Roboto'
         }

@@ -54,7 +54,9 @@ const getInvoiceInputs = (
       vatTitle: 'DPH',
       vat: `${vat} EUR`,
       totalToPayTitle: 'Celkom k úhrade',
-      totalToPay: `${totalVatPrice} EUR`
+      totalToPay: `${totalVatPrice} EUR`,
+      registration: `Registrácia: ${supplier.registration}`,
+      businessReg: `Obch. register vl. č.: ${supplier.businessReg}`
     }
   ]
 

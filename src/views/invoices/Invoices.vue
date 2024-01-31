@@ -3,12 +3,16 @@ import { ref, onMounted } from 'vue'
 import { useMeta } from 'quasar'
 import useInvoicesStore from '@/store/invoices'
 
-const invoicesStore = useInvoicesStore()
-
+// components
 import NewCompany from './components/NewCompany.vue'
 import NewInvoice from './components/NewInvoice.vue'
+import ListOfCompanies from './components/ListOfCompanies.vue'
+
+const invoicesStore = useInvoicesStore()
 
 const pageTitle = ref('Invoices | The App')
+const tab = ref('listOfInvoices')
+
 useMeta(() => {
   return {
     title: pageTitle.value,
@@ -27,13 +31,41 @@ onMounted(async () => {
 
 <template>
   <q-page class="page-invoices q-py-md q-px-lg">
-    <div class="row justify-between items-center q-mb-sm">
+    <div class="row justify-between items-center q-mb-lg">
       <h6 class="text-h6">Invoices</h6>
-      <NewCompany />
+      <div class="row align-center justify-center q-gutter-sm">
+        <NewInvoice />
+        <NewCompany />
+      </div>
     </div>
     <div class="row">
       <div class="col">
-        <NewInvoice />
+        <q-card>
+          <q-tabs
+            v-model="tab"
+            dense
+            class="text-grey"
+            align="left"
+            active-color="primary"
+            indicator-color="primary"
+            narrow-indicator
+          >
+            <q-tab name="listOfInvoices" label="Invoices" />
+            <q-tab name="listOfCompanies" label="Companies" />
+          </q-tabs>
+
+          <q-separator />
+
+          <q-tab-panels v-model="tab">
+            <q-tab-panel name="listOfInvoices">
+              <div class="text-h6">Invoices</div>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </q-tab-panel>
+            <q-tab-panel name="listOfCompanies">
+              <ListOfCompanies />
+            </q-tab-panel>
+          </q-tab-panels>
+        </q-card>
       </div>
     </div>
   </q-page>
