@@ -4,12 +4,12 @@ import useNotesStore from '@/store/notes'
 import useAppStore from '@/store/app'
 import toMarkDown from '@/utils/toMarkdown'
 
-import type { NoteResponse, Note } from '@/types/notes'
+import type { SavedNote, Note } from '@/types/notes'
 
 const props = defineProps({
   note: {
     required: true,
-    type: Object as PropType<NoteResponse>
+    type: Object as PropType<SavedNote>
   }
 })
 

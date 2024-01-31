@@ -9,8 +9,8 @@ type Note = {
   content: string
 }
 
-type NoteResponse = NewNote & {
+type SavedNote = NewNote & {
   id: string
 }
 
-export { NoteResponse, Note, NewNote }
+export { SavedNote, Note, NewNote }

@@ -1,13 +1,13 @@
 import { Store } from 'pinia'
 
-import type { NoteResponse, Note } from '@/types/notes'
+import type { SavedNote, Note } from '@/types/notes'
 
 type State = {
-  notes: Array<NoteResponse>
+  notes: Array<SavedNote>
 }
 
 type Getters = {
-  savedNotes: [] | Array<NoteResponse>
+  savedNotes: [] | Array<SavedNote>
 }
 
 type Actions = {

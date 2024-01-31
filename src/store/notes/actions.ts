@@ -5,7 +5,7 @@ import getErrorMessage from '@/utils/handleCatchErrors'
 
 import type { PiniaActionAdaptor } from '@/types/store'
 import type { Actions, NotesStore } from './types'
-import type { NoteResponse, NewNote } from '@/types/notes'
+import type { SavedNote, NewNote } from '@/types/notes'
 
 export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
   async saveNewNote(payload) {
@@ -43,8 +43,8 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
           content: note.content
         })
 
-        this.notes = this.notes.map((item: NoteResponse) => {
-          return item.id === id ? { ...item, content: note.content, name: note.name } : item
+        this.notes = this.notes.map((item: SavedNote) => {
+          return item.id === id ? { ...item, ...note } : item
         })
       } else {
         throw new Error('You are not a creator of this note!')
@@ -67,7 +67,7 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
       }
       if (docSnap.data().user === auth.currentUser?.uid) {
         await deleteDoc(docRef)
-        this.notes = this.notes.filter((item: NoteResponse) => item.id !== id)
+        this.notes = this.notes.filter((item: SavedNote) => item.id !== id)
       } else {
         throw new Error('You are not a creator of this note!')
       }

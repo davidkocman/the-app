@@ -1,5 +1,5 @@
 import { addDoc, doc, collection, getDocs, query, where, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
-import { db } from '@/firebaseConfig'
+import { auth, db } from '@/firebaseConfig'
 import useAppStore from '@/store/app'
 import getErrorMessage from '@/utils/handleCatchErrors'
 
@@ -15,6 +15,47 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
       const q = collection(db, 'companies')
       const docRef = await addDoc(q, payload)
       this.companies.push({ id: docRef.id, ...payload })
+    } catch (e) {
+      appStore.reportError({ message: getErrorMessage(e) })
+    } finally {
+      appStore.loading = false
+    }
+  },
+  async editCompany(id, company) {
+    const appStore = useAppStore()
+    appStore.loading = true
+    try {
+      const docRef = doc(db, 'companies', id)
+      const docSnap = await getDoc(docRef)
+
+      if (!docSnap.exists()) {
+        throw new Error('There is no such company in DB!')
+      }
+
+      const payload: Company = {
+        name: company.name,
+        street: company.street,
+        zip: company.zip,
+        city: company.city,
+        country: company.country,
+        companyId: company.companyId,
+        taxId: company.taxId,
+        iban: company.iban,
+        swift: company.swift,
+        registration: company.registration,
+        businessReg: company.businessReg
+      }
+      if (company.vatId) payload.vatId = company.vatId
+
+      if (docSnap.data().user === auth.currentUser?.uid) {
+        await updateDoc(docRef, { ...payload })
+
+        this.companies = this.companies.map((item: SavedCompany) => {
+          return item.id === id ? { ...item, ...company } : item
+        })
+      } else {
+        throw new Error('You are not a creator of this item!')
+      }
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {
