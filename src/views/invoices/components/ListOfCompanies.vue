@@ -23,12 +23,18 @@ const { companies } = storeToRefs(invoicesStore)
       <div class="text-body2">{{ item.zip }}, {{ item.city }}</div>
       <div class="text-body2">{{ item.country }}</div>
     </q-card-section>
+    <q-card-section v-if="item.iban || item.swift">
+      <div v-if="item.iban" class="text-body2">
+        <span class="text-subtitle2">IBAN:</span> {{ item.iban.match(/.{1,4}/g)?.join(' ') }}
+      </div>
+      <div v-if="item.swift" class="text-body2"><span class="text-subtitle2">SWIFT:</span> {{ item.swift }}</div>
+    </q-card-section>
     <q-card-section>
       <div v-if="item.registration" class="text-caption">Registrácia: {{ item.registration }}</div>
       <div v-if="item.businessReg" class="text-caption">Obch. register vl. č.:{{ item.businessReg }}</div>
     </q-card-section>
     <q-card-actions align="right">
-      <RemoveComapny :id="item.id" />
+      <RemoveComapny :company="item" />
       <EditCompany :company="item" />
     </q-card-actions>
   </q-card>

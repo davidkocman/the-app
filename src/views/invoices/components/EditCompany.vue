@@ -2,6 +2,7 @@
 import { ref, toRef, PropType } from 'vue'
 import useInvoicesStore from '@/store/invoices'
 
+// types
 import type { SavedCompany } from '@/types/invoices'
 
 const props = defineProps({
@@ -20,7 +21,7 @@ const dialog = ref(false)
 </script>
 
 <template>
-  <q-btn label="Edit" color="primary" icon="apartment" @click="dialog = true" />
+  <q-btn label="Edit" color="primary" @click="dialog = true" />
   <q-dialog v-model="dialog" persistent>
     <q-card style="min-width: 320px; width: 80vw">
       <q-card-section>
