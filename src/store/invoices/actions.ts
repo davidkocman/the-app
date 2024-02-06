@@ -12,6 +12,7 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
     const appStore = useAppStore()
     appStore.loading = true
     try {
+      payload.user = auth.currentUser?.uid
       const q = collection(db, 'companies')
       const docRef = await addDoc(q, payload)
       this.companies.push({ id: docRef.id, ...payload })
@@ -21,18 +22,19 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
       appStore.loading = false
     }
   },
-  async editCompany(id, company) {
+  async editCompany(company) {
     const appStore = useAppStore()
     appStore.loading = true
     try {
-      const docRef = doc(db, 'companies', id)
+      const docRef = doc(db, 'companies', company.id)
       const docSnap = await getDoc(docRef)
 
       if (!docSnap.exists()) {
         throw new Error('There is no such company in DB!')
       }
 
-      const payload: Company = {
+      const payload: SavedCompany = {
+        id: company.id,
         name: company.name,
         street: company.street,
         zip: company.zip,
@@ -51,10 +53,32 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
         await updateDoc(docRef, { ...payload })
 
         this.companies = this.companies.map((item: SavedCompany) => {
-          return item.id === id ? { ...item, ...company } : item
+          return item.id === company.id ? { ...item, ...company } : item
         })
       } else {
         throw new Error('You are not a creator of this item!')
+      }
+    } catch (e) {
+      appStore.reportError({ message: getErrorMessage(e) })
+    } finally {
+      appStore.loading = false
+    }
+  },
+  async removeCompany(id) {
+    const appStore = useAppStore()
+    appStore.loading = true
+    try {
+      const docRef = doc(db, 'companies', id)
+      const docSnap = await getDoc(docRef)
+
+      if (!docSnap.exists()) {
+        throw new Error('There is no such note in DB!')
+      }
+      if (docSnap.data().user === auth.currentUser?.uid) {
+        await deleteDoc(docRef)
+        this.companies = this.companies.filter((item: SavedCompany) => item.id !== id)
+      } else {
+        throw new Error('You are not a creator of this note!')
       }
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
@@ -66,7 +90,8 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
     const appStore = useAppStore()
     appStore.loading = true
     try {
-      const querySnapshot = await getDocs(collection(db, 'companies'))
+      const q = query(collection(db, 'companies'), where('user', '==', auth.currentUser?.uid))
+      const querySnapshot = await getDocs(q)
       const docs: SavedCompany[] = []
       querySnapshot.forEach((doc) => {
         docs.push({

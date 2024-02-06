@@ -7,8 +7,8 @@ import type { Company } from '@/types/invoices'
 
 const { addCompany } = useInvoicesStore()
 
-const fixed = ref(false)
-const options = ref(['Slovakia', 'Czechia'])
+const dialog = ref(false)
+const options = ref(['Slovenská republika', 'Česká republika'])
 
 const newCompany = ref<Company>({
   name: '',
@@ -46,9 +46,9 @@ const clearForm = () => {
 
 <template>
   <div>
-    <q-btn label="New company" color="primary" icon="apartment" @click="fixed = true" />
+    <q-btn label="New company" color="primary" icon="apartment" @click="dialog = true" />
 
-    <q-dialog v-model="fixed" persistent>
+    <q-dialog v-model="dialog" persistent>
       <q-card style="min-width: 320px; width: 80vw">
         <q-card-section>
           <div class="text-h6">New company</div>

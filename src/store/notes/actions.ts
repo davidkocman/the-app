@@ -5,21 +5,17 @@ import getErrorMessage from '@/utils/handleCatchErrors'
 
 import type { PiniaActionAdaptor } from '@/types/store'
 import type { Actions, NotesStore } from './types'
-import type { SavedNote, NewNote } from '@/types/notes'
+import type { SavedNote, Note } from '@/types/notes'
 
 export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
   async saveNewNote(payload) {
     const appStore = useAppStore()
     appStore.loading = true
     try {
-      const newNote: NewNote = {
-        name: payload.name,
-        content: payload.content,
-        user: auth.currentUser?.uid
-      }
+      payload.user = auth.currentUser?.uid
       const q = collection(db, 'notes')
-      const docRef = await addDoc(q, newNote)
-      this.notes.push({ id: docRef.id, ...newNote })
+      const docRef = await addDoc(q, payload)
+      this.notes.push({ id: docRef.id, ...payload })
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {
@@ -90,7 +86,7 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
       querySnapshot.forEach((note) => {
         this.notes.push({
           id: note.id,
-          ...(note.data() as NewNote)
+          ...(note.data() as Note)
         })
       })
     } catch (e) {

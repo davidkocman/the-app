@@ -9,7 +9,8 @@ type Getters = {}
 
 type Actions = {
   addCompany: (payload: Company) => Promise<void>
-  editCompany: (id: string, company: Company) => Promise<void>
+  editCompany: (company: SavedCompany) => Promise<void>
+  removeCompany: (id: string) => Promise<void>
   getCompanies: () => Promise<void>
 }
 

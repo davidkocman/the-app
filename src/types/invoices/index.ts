@@ -11,6 +11,7 @@ interface Company {
   swift: string
   registration: string
   businessReg: string
+  user?: string
 }
 
 interface SavedCompany extends Company {

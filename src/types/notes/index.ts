@@ -1,16 +1,11 @@
-type NewNote = {
+type Note = {
   name: string
   content: string
   user?: string
 }
 
-type Note = {
-  name: string
-  content: string
-}
-
-type SavedNote = NewNote & {
+interface SavedNote extends Note {
   id: string
 }
 
-export { SavedNote, Note, NewNote }
+export { SavedNote, Note }
