@@ -42,6 +42,7 @@ const { companies } = storeToRefs(invoicesStore)
 
 <style lang="scss" scoped>
 .companies-list {
+  background-color: var(--bg-base);
   .text-subtitle2 {
     color: var(--text-muted);
   }

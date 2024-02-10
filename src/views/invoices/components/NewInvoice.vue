@@ -57,6 +57,17 @@ const basePrice = computed(() => {
 const vat = computed(() => {
   return ((Number(basePrice.value) * tableRows.value[0].vatRate) / 100).toFixed(2)
 })
+const invoice = computed(() => {
+  return {
+    consumerId: selectedConsumer.value?.id || null,
+    supplierId: selectedSupplier.value?.id || null,
+    variableSymbol: variableSymbol.value,
+    issueDate: issueDate.value,
+    dueDate: dueDate.value,
+    deliveryDate: deliveryDate.value,
+    invoiceItems: tableRows.value
+  }
+})
 
 const tableHeaders = ref([
   {
@@ -105,21 +116,27 @@ const addInvoiceItem = () => {
   })
 }
 const calculateVatPrice = () => {
+  tableRows.value[index.value].price = Number(tableRows.value[index.value].price)
   if (Number(tableRows.value[index.value].quantity)) {
     tableRows.value[index.value].vatPrice =
-      (Number(tableRows.value[index.value].price) +
-        (tableRows.value[index.value].vatRate * Number(tableRows.value[index.value].price)) / 100) *
-      Number(tableRows.value[index.value].quantity)
+      tableRows.value[index.value].price +
+      ((tableRows.value[index.value].vatRate * tableRows.value[index.value].price) / 100) *
+        Number(tableRows.value[index.value].quantity)
     return
   }
   tableRows.value[index.value].vatPrice =
-    Number(tableRows.value[index.value].price) +
-    (tableRows.value[index.value].vatRate * Number(tableRows.value[index.value].price)) / 100
+    tableRows.value[index.value].price +
+    (tableRows.value[index.value].vatRate * tableRows.value[index.value].price) / 100
 }
 
 const removeRow = (i: number) => {
   index.value = 0
   tableRows.value.splice(i, 1)
+}
+
+const saveInvoice = () => {
+  invoiceStore.saveInvoice(invoice.value)
+  dialog.value = false
 }
 </script>
 
@@ -143,7 +160,7 @@ const removeRow = (i: number) => {
           </q-btn>
         </q-bar>
         <q-card-section>
-          <div class="section-wrapper shadow-2 q-pa-sm rounded-borders" style="background-color: var(--bg-base)">
+          <div class="section-wrapper shadow-2 q-pa-sm rounded-borders">
             <div class="row q-mb-sm q-gutter-md">
               <div class="col">
                 <q-select
@@ -213,10 +230,8 @@ const removeRow = (i: number) => {
           </div>
         </q-card-section>
 
-        <q-separator inset />
-
         <q-card-section>
-          <div class="section-wrapper shadow-2 q-pa-sm rounded-borders" style="background-color: var(--bg-base)">
+          <div class="section-wrapper shadow-2 q-pa-sm rounded-borders">
             <div class="row q-gutter-md">
               <div class="col">
                 <div class="row q-gutter-md q-mb-md">
@@ -278,7 +293,7 @@ const removeRow = (i: number) => {
         </q-card-section>
 
         <q-card-section>
-          <div class="section-wrapper shadow-2 q-pa-sm rounded-borders" style="background-color: var(--bg-base)">
+          <div class="section-wrapper shadow-2 q-pa-sm rounded-borders">
             <q-table flat :rows="tableRows" :columns="tableHeaders" row-key="name" binary-state-sort>
               <template v-slot:body="props">
                 <q-tr :props="props">
@@ -383,139 +398,19 @@ const removeRow = (i: number) => {
           </div>
         </q-card-section>
         <q-card-section v-if="selectedSupplier && selectedConsumer && deliveryDate">
-          <InvoiceToPdf
-            :variableSymbol="variableSymbol"
-            :tableRows="tableRows"
-            :totalVatPrice="(parseFloat(basePrice) + parseFloat(vat)).toFixed(2)"
-            :supplier="selectedSupplier"
-            :consumer="selectedConsumer"
-            :basePrice="basePrice"
-            :vat="vat"
-          />
-        </q-card-section>
-      </q-card>
-
-      <q-card flat bordered class="invoice-items q-mb-md">
-        <!-- <q-card-section>
-          <q-table flat bordered :rows="tableRows" :columns="tableHeaders" row-key="name" binary-state-sort>
-            <template v-slot:body="props">
-              <q-tr :props="props">
-                <q-td key="name" :props="props">
-                  {{ props.row.name }}
-                  <q-popup-edit v-model="props.row.name" title="Zadajte nazov položky" buttons v-slot="scope">
-                    <q-input type="text" v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
-                  </q-popup-edit>
-                </q-td>
-                <q-td key="quantity" :props="props">
-                  {{ props.row.quantity > 1 ? props.row.quantity : '' }}
-                  <q-popup-edit v-model="props.row.quantity" title="Zadajte množstvo" buttons v-slot="scope">
-                    <q-input
-                      type="number"
-                      v-model="scope.value"
-                      dense
-                      autofocus
-                      @keyup.enter="scope.set"
-                      @update:model-value="index = props.rowIndex"
-                    />
-                  </q-popup-edit>
-                </q-td>
-                <q-td key="unit" :props="props">
-                  <div class="text-pre-wrap">{{ props.row.unit }}</div>
-                  <q-popup-edit v-model="props.row.unit" title="Zadajte jednotku" buttons v-slot="scope">
-                    <q-input type="text" v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
-                  </q-popup-edit>
-                </q-td>
-                <q-td key="price" :props="props">
-                  {{ Number(props.row.price).toFixed(2) }}
-                  <q-popup-edit v-model="props.row.price" title="Zadajte cenu" buttons v-slot="scope">
-                    <q-input
-                      type="number"
-                      v-model="scope.value"
-                      dense
-                      autofocus
-                      @keyup.enter="scope.set"
-                      @update:model-value="index = props.rowIndex"
-                    />
-                  </q-popup-edit>
-                </q-td>
-                <q-td key="vatRate" :props="props">
-                  {{ vatRate }}
-                  <q-popup-edit v-model="vatRate" title="DPH%" buttons v-slot="scope">
-                    <q-input
-                      type="number"
-                      v-model="vatRate"
-                      dense
-                      autofocus
-                      @keyup.enter="scope.set"
-                      @update:model-value="index = props.rowIndex"
-                    />
-                  </q-popup-edit>
-                </q-td>
-                <q-td key="vatPrice" :props="props">
-                  {{ props.row.vatPrice.toFixed(2) }}
-                </q-td>
-                <q-td v-if="tableRows.length > 1" :props="props" key="actions">
-                  <q-btn
-                    color="danger"
-                    icon="delete"
-                    no-caps
-                    flat
-                    dense
-                    @click="removeRow(tableRows.indexOf(props.row))"
-                  />
-                </q-td>
-              </q-tr>
-            </template>
-          </q-table>
-          <q-btn
-            label="Pridať položku"
-            icon="add"
-            color="primary"
-            class="q-my-sm"
-            @click="addInvoiceItem"
-            :disable="tableRows.length === 5"
-          />
-        </q-card-section> -->
-      </q-card>
-
-      <q-card flat bordered class="invioce-summary q-mb-md">
-        <!-- <q-card-section>
-          <div class="row">
-            <div class="col-8"></div>
-            <div class="col-4">
-              <q-separator class="q-my-sm" />
-              <div class="row">
-                <div class="col-8">Základ DPH</div>
-                <div class="col-4 text-right">{{ basePrice }} EUR</div>
-              </div>
-              <div class="row">
-                <div class="col-8">DPH</div>
-                <div class="col-4 text-right">{{ vat }} EUR</div>
-              </div>
-              <q-separator class="q-my-sm" />
-              <div class="row">
-                <div class="col-8 text-weight-bold">Celkom</div>
-                <div class="col-4 text-right text-weight-bold">
-                  {{ (parseFloat(basePrice) + parseFloat(vat)).toFixed(2) }} EUR
-                </div>
-              </div>
-            </div>
+          <div class="row q-gutter-sm">
+            <InvoiceToPdf
+              :variableSymbol="variableSymbol"
+              :tableRows="tableRows"
+              :totalVatPrice="(parseFloat(basePrice) + parseFloat(vat)).toFixed(2)"
+              :supplier="selectedSupplier"
+              :consumer="selectedConsumer"
+              :basePrice="basePrice"
+              :vat="vat"
+            />
+            <q-btn label="Save" icon="save" @click="saveInvoice" />
           </div>
-        </q-card-section> -->
-      </q-card>
-
-      <q-card v-if="selectedSupplier && selectedConsumer && deliveryDate" flat bordered class="invioce-download">
-        <!-- <q-card-section>
-          <InvoiceToPdf
-            :variableSymbol="variableSymbol"
-            :tableRows="tableRows"
-            :totalVatPrice="(parseFloat(basePrice) + parseFloat(vat)).toFixed(2)"
-            :supplier="selectedSupplier"
-            :consumer="selectedConsumer"
-            :basePrice="basePrice"
-            :vat="vat"
-          />
-        </q-card-section> -->
+        </q-card-section>
       </q-card>
     </q-dialog>
   </div>

@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { useMeta } from 'quasar'
+
 import useInvoicesStore from '@/store/invoices'
 
 // components
 import NewCompany from './components/NewCompany.vue'
 import NewInvoice from './components/NewInvoice.vue'
 import ListOfCompanies from './components/ListOfCompanies.vue'
+import ListOfInvoices from './components/ListOfInvoices.vue'
 
 const invoicesStore = useInvoicesStore()
 
@@ -24,8 +26,9 @@ useMeta(() => {
   }
 })
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await invoicesStore.getCompanies()
+  await invoicesStore.getInvoices()
 })
 </script>
 
@@ -58,8 +61,7 @@ onMounted(async () => {
 
           <q-tab-panels v-model="tab">
             <q-tab-panel name="listOfInvoices">
-              <div class="text-h6">Invoices</div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              <ListOfInvoices />
             </q-tab-panel>
             <q-tab-panel name="listOfCompanies">
               <ListOfCompanies />

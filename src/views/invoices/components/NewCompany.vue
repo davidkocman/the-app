@@ -5,7 +5,7 @@ import useInvoicesStore from '@/store/invoices'
 // types
 import type { Company } from '@/types/invoices'
 
-const { addCompany } = useInvoicesStore()
+const { saveCompany } = useInvoicesStore()
 
 const dialog = ref(false)
 const options = ref(['Slovenská republika', 'Česká republika'])
@@ -137,7 +137,7 @@ const clearForm = () => {
 
         <q-card-actions align="right">
           <q-btn flat label="Cancel" color="primary" v-close-popup @click="clearForm" />
-          <q-btn label="Save" color="primary" v-close-popup @click="addCompany(newCompany)" />
+          <q-btn label="Save" color="primary" v-close-popup @click="saveCompany(newCompany)" />
         </q-card-actions>
       </q-card>
     </q-dialog>

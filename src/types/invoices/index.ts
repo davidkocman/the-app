@@ -27,4 +27,19 @@ type InvoiceItem = {
   vatPrice: number
 }
 
-export { Company, SavedCompany, InvoiceItem }
+type Invoice = {
+  consumerId: string | null
+  supplierId: string | null
+  variableSymbol: string
+  issueDate: string
+  dueDate: string
+  deliveryDate: string
+  invoiceItems: InvoiceItem[]
+  user?: string
+}
+
+interface SavedInvoice extends Invoice {
+  id: string
+}
+
+export { Company, Invoice, InvoiceItem, SavedCompany, SavedInvoice }

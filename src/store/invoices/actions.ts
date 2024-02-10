@@ -5,10 +5,10 @@ import getErrorMessage from '@/utils/handleCatchErrors'
 
 import type { PiniaActionAdaptor } from '@/types/store'
 import type { Actions, InvoicesStore } from './types'
-import { Company, SavedCompany } from '@/types/invoices'
+import { Company, Invoice, SavedCompany, SavedInvoice } from '@/types/invoices'
 
 export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
-  async addCompany(payload) {
+  async saveCompany(payload) {
     const appStore = useAppStore()
     appStore.loading = true
     try {
@@ -16,6 +16,20 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
       const q = collection(db, 'companies')
       const docRef = await addDoc(q, payload)
       this.companies.push({ id: docRef.id, ...payload })
+    } catch (e) {
+      appStore.reportError({ message: getErrorMessage(e) })
+    } finally {
+      appStore.loading = false
+    }
+  },
+  async saveInvoice(payload) {
+    const appStore = useAppStore()
+    appStore.loading = true
+    try {
+      payload.user = auth.currentUser?.uid
+      const q = collection(db, 'invoices')
+      const docRef = await addDoc(q, payload)
+      this.invoices.push({ id: docRef.id, ...payload })
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {
@@ -100,6 +114,26 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
         })
       })
       this.companies = docs
+    } catch (e) {
+      appStore.reportError({ message: getErrorMessage(e) })
+    } finally {
+      appStore.loading = false
+    }
+  },
+  async getInvoices() {
+    const appStore = useAppStore()
+    appStore.loading = true
+    try {
+      const q = query(collection(db, 'invoices'), where('user', '==', auth.currentUser?.uid))
+      const querySnapshot = await getDocs(q)
+      const docs: SavedInvoice[] = []
+      querySnapshot.forEach((doc) => {
+        docs.push({
+          id: doc.id,
+          ...(doc.data() as Invoice)
+        })
+      })
+      this.invoices = docs
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {
