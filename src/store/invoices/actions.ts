@@ -100,6 +100,28 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
       appStore.loading = false
     }
   },
+  async removeInvoice(id) {
+    const appStore = useAppStore()
+    appStore.loading = true
+    try {
+      const docRef = doc(db, 'invoices', id)
+      const docSnap = await getDoc(docRef)
+
+      if (!docSnap.exists()) {
+        throw new Error('There is no such note in DB!')
+      }
+      if (docSnap.data().user === auth.currentUser?.uid) {
+        await deleteDoc(docRef)
+        this.invoices = this.invoices.filter((item: SavedInvoice) => item.id !== id)
+      } else {
+        throw new Error('You are not a creator of this note!')
+      }
+    } catch (e) {
+      appStore.reportError({ message: getErrorMessage(e) })
+    } finally {
+      appStore.loading = false
+    }
+  },
   async getCompanies() {
     if (this.companies.length !== 0) {
       return
