@@ -59,8 +59,8 @@ const vat = computed(() => {
 })
 const invoice = computed(() => {
   return {
-    consumerId: selectedConsumer.value?.id || null,
-    supplierId: selectedSupplier.value?.id || null,
+    consumer: selectedConsumer.value,
+    supplier: selectedSupplier.value,
     variableSymbol: variableSymbol.value,
     issueDate: issueDate.value,
     dueDate: dueDate.value,
@@ -365,7 +365,7 @@ const saveInvoice = () => {
               </template>
             </q-table>
             <q-btn
-              label="Pridať položku"
+              label="New invoice item"
               icon="add"
               color="primary"
               class="q-my-sm"

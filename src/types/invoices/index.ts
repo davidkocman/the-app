@@ -14,10 +14,6 @@ interface Company {
   user?: string
 }
 
-interface SavedCompany extends Company {
-  id: string
-}
-
 type InvoiceItem = {
   name: string
   quantity: number
@@ -28,14 +24,18 @@ type InvoiceItem = {
 }
 
 type Invoice = {
-  consumerId: string | null
-  supplierId: string | null
+  consumer: SavedCompany
+  supplier: SavedCompany
   variableSymbol: string
   issueDate: string
   dueDate: string
   deliveryDate: string
   invoiceItems: InvoiceItem[]
   user?: string
+}
+
+interface SavedCompany extends Company {
+  id: string
 }
 
 interface SavedInvoice extends Invoice {

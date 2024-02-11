@@ -74,10 +74,10 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
     }
   },
   async getNotes() {
-    const appStore = useAppStore()
     if (this.notes.length !== 0) {
       return
     }
+    const appStore = useAppStore()
     appStore.loading = true
     this.notes = []
     const q = query(collection(db, 'notes'), where('user', '==', auth.currentUser?.uid))

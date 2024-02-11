@@ -101,6 +101,9 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
     }
   },
   async getCompanies() {
+    if (this.companies.length !== 0) {
+      return
+    }
     const appStore = useAppStore()
     appStore.loading = true
     try {
@@ -121,6 +124,9 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
     }
   },
   async getInvoices() {
+    if (this.invoices.length !== 0) {
+      return
+    }
     const appStore = useAppStore()
     appStore.loading = true
     try {

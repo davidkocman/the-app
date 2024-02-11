@@ -26,9 +26,9 @@ useMeta(() => {
   }
 })
 
-onBeforeMount(async () => {
-  await invoicesStore.getCompanies()
-  await invoicesStore.getInvoices()
+onBeforeMount(() => {
+  invoicesStore.getCompanies()
+  invoicesStore.getInvoices()
 })
 </script>
 
