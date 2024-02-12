@@ -95,7 +95,7 @@ const clearForm = () => {
           </div>
           <div class="row">
             <div class="col">
-              <q-checkbox v-model="isVatPayer" label="Has VAT ID?" />
+              <q-checkbox v-model="isVatPayer" label="Is VAT payer?" />
             </div>
           </div>
           <div v-if="isVatPayer" class="row">
