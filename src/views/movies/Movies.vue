@@ -1,9 +1,23 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useMeta } from 'quasar'
 import useMoviesStore from '@/store/movies'
 import SearchResult from '@/views/movies/components/SearchResult.vue'
 import BaseContent from '@/views/movies/components/BaseContent.vue'
 import Search from '@/views/movies/components/Search.vue'
+
+const pageTitle = ref('Movies | The App')
+useMeta(() => {
+  return {
+    title: pageTitle.value,
+    meta: {
+      description: { name: 'description', content: 'Notes' },
+      keywords: { name: 'keywords', content: 'notes, note, markdown, .md' },
+      equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' }
+    }
+  }
+})
 
 const moviesStore = useMoviesStore()
 const { searchFor, searchResult } = storeToRefs(moviesStore)

@@ -50,5 +50,5 @@ const { generateInvoice } = useInvoiceToPdf(
 </script>
 
 <template>
-  <q-btn color="primary" icon="download" @click="generateInvoice"></q-btn>
+  <q-btn color="primary" icon="download" flat @click="generateInvoice"></q-btn>
 </template>

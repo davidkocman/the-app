@@ -6,6 +6,7 @@ import useInvoicesStore from '@/store/invoices'
 // components
 import InvoiceToPdf from './InvoiceToPdf.vue'
 import RemoveInvoice from './RemoveInvoice.vue'
+import InvoiceIsPayed from './InvoiceIsPayed.vue'
 
 // types
 import type { SavedInvoice, InvoiceItem, Invoice } from '@/types/invoices'
@@ -57,16 +58,14 @@ type TableRows = {
 }
 
 const tableRows = computed(() => {
-  const rows: TableRows[] | [] = []
-  const entry = {
-    variableSymbol: '',
-    consumer: '',
-    totalPrice: '',
-    invoiceItems: []
-  }
+  const rows: TableRows[] = []
   invoices.value.forEach((item: Invoice) => {
-    entry.variableSymbol = item.variableSymbol
-    entry.consumer = item.consumer.name
+    const entry: TableRows & { invoiceItems: InvoiceItem[] } = {
+      variableSymbol: item.variableSymbol,
+      consumer: item.consumer.name,
+      totalPrice: '',
+      invoiceItems: []
+    }
     let sum = 0
     item.invoiceItems.forEach((itm: InvoiceItem) => {
       sum = sum + itm.vatPrice
@@ -75,7 +74,7 @@ const tableRows = computed(() => {
     entry.totalPrice = sum.toFixed(2) + ' EUR'
     rows.push(entry)
   })
-  return rows || []
+  return rows
 })
 </script>
 
@@ -86,8 +85,8 @@ const tableRows = computed(() => {
         <q-table flat :rows="tableRows" :columns="tableHeaders" row-key="name" binary-state-sort>
           <template v-slot:body-cell-actions="props">
             <q-td :props="props" key="actions">
-              <div class="actions q-gutter-sm">
-                <RemoveInvoice :invoice="invoices[tableRows.indexOf(props.row)]" />
+              <div class="actions q-gutter-xs">
+                <InvoiceIsPayed :invoice="invoices[tableRows.indexOf(props.row)]" />
                 <InvoiceToPdf
                   :variableSymbol="invoices[tableRows.indexOf(props.row)].variableSymbol"
                   :tableRows="invoices[tableRows.indexOf(props.row)].invoiceItems"
@@ -97,6 +96,7 @@ const tableRows = computed(() => {
                   :basePrice="totalBasePrice(invoices[tableRows.indexOf(props.row)])"
                   :vat="totalVat(invoices[tableRows.indexOf(props.row)])"
                 />
+                <RemoveInvoice :invoice="invoices[tableRows.indexOf(props.row)]" />
               </div>
             </q-td>
           </template>

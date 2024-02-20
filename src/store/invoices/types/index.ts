@@ -16,6 +16,7 @@ type Actions = {
   removeCompany: (id: string) => Promise<void>
   getCompanies: () => Promise<void>
   getInvoices: () => Promise<void>
+  updateIsPayedStatus: (id: string, invoice: SavedInvoice) => Promise<void>
 }
 
 type InvoicesStore = Store<'invoices', State, Getters, Actions>
