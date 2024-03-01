@@ -4,6 +4,7 @@ import type { Company, Invoice, SavedCompany, SavedInvoice } from '@/types/invoi
 type State = {
   companies: Array<SavedCompany>
   invoices: Array<SavedInvoice>
+  pageLocked: boolean
 }
 
 type Getters = {}
@@ -17,6 +18,7 @@ type Actions = {
   getCompanies: () => Promise<void>
   getInvoices: () => Promise<void>
   updateIsPayedStatus: (id: string, invoice: SavedInvoice) => Promise<void>
+  unlockInvoices: (val: string) => void
 }
 
 type InvoicesStore = Store<'invoices', State, Getters, Actions>

@@ -401,7 +401,7 @@ const saveInvoice = () => {
           <div class="row q-gutter-sm">
             <InvoiceToPdf
               :variableSymbol="variableSymbol"
-              :tableRows="tableRows"
+              :invoiceItems="tableRows"
               :totalVatPrice="(parseFloat(basePrice) + parseFloat(vat)).toFixed(2)"
               :supplier="selectedSupplier"
               :consumer="selectedConsumer"

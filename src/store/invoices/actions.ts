@@ -195,5 +195,8 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
     } finally {
       appStore.loading = false
     }
+  },
+  unlockInvoices(val) {
+    if (val === import.meta.env.VITE_APP_INVOICE_PASSWORD) this.pageLocked = false
   }
 }

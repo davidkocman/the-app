@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue'
+import { ref, watch, onBeforeMount, toRefs, WatchOptions } from 'vue'
 import { useMeta } from 'quasar'
 
 import useInvoicesStore from '@/store/invoices'
@@ -11,9 +11,11 @@ import ListOfCompanies from './components/ListOfCompanies.vue'
 import ListOfInvoices from './components/ListOfInvoices.vue'
 
 const invoicesStore = useInvoicesStore()
+const { pageLocked } = toRefs(invoicesStore)
 
 const pageTitle = ref('Invoices | The App')
-const tab = ref('listOfInvoices')
+const activeTab = ref('listOfInvoices')
+const enteredCode = ref('')
 
 useMeta(() => {
   return {
@@ -26,49 +28,81 @@ useMeta(() => {
   }
 })
 
+watch(
+  pageLocked,
+  (val) => {
+    if (!val) {
+      invoicesStore.getCompanies()
+      invoicesStore.getInvoices()
+    }
+  },
+  { once: true } as WatchOptions
+)
+
 onBeforeMount(() => {
-  invoicesStore.getCompanies()
-  invoicesStore.getInvoices()
+  if (!pageLocked.value) {
+    invoicesStore.getCompanies()
+    invoicesStore.getInvoices()
+  }
 })
 </script>
 
 <template>
   <q-page class="page-invoices q-py-md q-px-lg">
-    <div class="row justify-between items-center q-mb-lg">
-      <h6 class="text-h6">Invoices</h6>
-      <div class="row align-center justify-center q-gutter-sm">
-        <NewInvoice />
-        <NewCompany />
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <q-card>
-          <q-tabs
-            v-model="tab"
-            dense
-            class="text-grey"
-            align="left"
-            active-color="primary"
-            indicator-color="primary"
-            narrow-indicator
-          >
-            <q-tab name="listOfInvoices" label="Invoices" />
-            <q-tab name="listOfCompanies" label="Companies" />
-          </q-tabs>
+    <template v-if="pageLocked">
+      <q-dialog v-model="pageLocked" seamless>
+        <q-card style="min-width: 350px">
+          <q-card-section>
+            <div class="text-h6">Enter password</div>
+          </q-card-section>
 
-          <q-separator />
+          <q-card-section class="q-pt-none">
+            <q-input dense v-model="enteredCode" autofocus />
+          </q-card-section>
 
-          <q-tab-panels v-model="tab">
-            <q-tab-panel name="listOfInvoices">
-              <ListOfInvoices />
-            </q-tab-panel>
-            <q-tab-panel name="listOfCompanies">
-              <ListOfCompanies />
-            </q-tab-panel>
-          </q-tab-panels>
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat label="Submit" @click="invoicesStore.unlockInvoices(enteredCode)" />
+          </q-card-actions>
         </q-card>
+      </q-dialog>
+    </template>
+    <template v-else>
+      <div class="row justify-between items-center q-mb-lg">
+        <h6 class="text-h6">Invoices</h6>
+        <div class="row align-center justify-center q-gutter-sm">
+          <NewInvoice />
+          <NewCompany />
+        </div>
       </div>
-    </div>
+      <div class="row">
+        <div class="col">
+          <q-card>
+            <q-tabs
+              v-model="activeTab"
+              dense
+              class="text-grey"
+              align="left"
+              active-color="primary"
+              indicator-color="primary"
+              narrow-indicator
+            >
+              <q-tab name="listOfInvoices" label="Invoices" />
+              <q-tab name="listOfCompanies" label="Companies" />
+            </q-tabs>
+
+            <q-separator />
+
+            <q-tab-panels v-model="activeTab">
+              <q-tab-panel name="listOfInvoices">
+                <ListOfInvoices />
+              </q-tab-panel>
+              <q-tab-panel name="listOfCompanies">
+                <ListOfCompanies />
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
   </q-page>
 </template>

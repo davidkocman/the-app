@@ -40,7 +40,7 @@ const tableHeaders = ref([
   {
     name: 'variableSymbol',
     required: true,
-    label: 'Variable Symbol',
+    label: 'VS',
     align: 'left',
     field: 'variableSymbol',
     sortable: false,
@@ -89,7 +89,7 @@ const tableRows = computed(() => {
                 <InvoiceIsPayed :invoice="invoices[tableRows.indexOf(props.row)]" />
                 <InvoiceToPdf
                   :variableSymbol="invoices[tableRows.indexOf(props.row)].variableSymbol"
-                  :tableRows="invoices[tableRows.indexOf(props.row)].invoiceItems"
+                  :invoiceItems="invoices[tableRows.indexOf(props.row)].invoiceItems"
                   :totalVatPrice="totalVatPrice(invoices[tableRows.indexOf(props.row)])"
                   :supplier="invoices[tableRows.indexOf(props.row)].supplier"
                   :consumer="invoices[tableRows.indexOf(props.row)].consumer"
