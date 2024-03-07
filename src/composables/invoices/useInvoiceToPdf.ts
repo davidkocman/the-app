@@ -12,6 +12,9 @@ export default function useInvoiceToPdf(
   totalVatPrice: Ref<string>,
   supplier: Ref<Company>,
   consumer: Ref<Company>,
+  issueDate: Ref<string>,
+  deliveryDate: Ref<string>,
+  dueDate: Ref<string>,
   basePrice: Ref<string>,
   vat: Ref<string>
 ) {
@@ -23,6 +26,9 @@ export default function useInvoiceToPdf(
       totalVatPrice.value,
       supplier.value,
       consumer.value,
+      issueDate.value,
+      deliveryDate.value,
+      dueDate.value,
       basePrice.value,
       vat.value
     )

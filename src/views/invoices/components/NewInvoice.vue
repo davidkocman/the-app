@@ -14,19 +14,23 @@ const invoiceStore = useInvoicesStore()
 const { companies } = storeToRefs(invoiceStore)
 
 const TODAY = new Date()
-const YEAR = TODAY.getFullYear().toString().substring(2)
-const MONTH = TODAY.getMonth() + 1
-const DAY = TODAY.getDate()
 
 const dialog = ref(false)
 const selectedConsumer = ref<SavedCompany | null>(null)
 const selectedSupplier = ref<SavedCompany | null>(null)
-const variableSymbol = ref(`${YEAR}${MONTH < 10 ? '0' + MONTH : MONTH}01`)
 const vatRate = ref(20)
-const issueDate = ref(`${YEAR}/${MONTH}/${DAY}`)
-const dueDate = ref(`${YEAR}/${MONTH}/${DAY}`)
+const issueDate = ref(`${TODAY.toISOString().split('T')[0]}`)
+const dueDate = ref(`${TODAY.toISOString().split('T')[0]}`)
 const deliveryDate = ref('')
 const index = ref(0)
+
+const getInitialVariableSymbol = () => {
+  const YEAR = TODAY.getFullYear().toString().substr(-2)
+  const MONTH = TODAY.getMonth()
+  if (MONTH === 0) return `${YEAR}1201`
+  return `${YEAR}${MONTH < 10 ? '0' + MONTH : MONTH}01`
+}
+const variableSymbol = ref(getInitialVariableSymbol())
 
 const issueDateFormValue = computed(() => {
   return new Date(
@@ -36,14 +40,14 @@ const issueDateFormValue = computed(() => {
 const deliveryDateFormValue = computed(() => {
   return deliveryDate.value
     ? new Date(
-        `${deliveryDate.value.split('/')[1]}/${deliveryDate.value.split('/')[2]}/${deliveryDate.value.split('/')[0]}`
+        `${deliveryDate.value.split('-')[1]}/${deliveryDate.value.split('-')[2]}/${deliveryDate.value.split('-')[0]}`
       ).toLocaleDateString('sk')
     : ''
 })
 const dueDateFormValue = computed(() => {
   return dueDate.value
     ? new Date(
-        `${dueDate.value.split('/')[1]}/${dueDate.value.split('/')[2]}/${dueDate.value.split('/')[0]}`
+        `${dueDate.value.split('-')[1]}/${dueDate.value.split('-')[2]}/${dueDate.value.split('-')[0]}`
       ).toLocaleDateString('sk')
     : ''
 })
@@ -240,7 +244,7 @@ const saveInvoice = () => {
                       <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer">
                           <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                            <q-date v-model="issueDate">
+                            <q-date v-model="issueDate" mask="YYYY-MM-DD">
                               <div class="row items-center justify-end">
                                 <q-btn v-close-popup label="Close" color="primary" flat />
                               </div>
@@ -255,7 +259,7 @@ const saveInvoice = () => {
                       <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer">
                           <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                            <q-date v-model="deliveryDate">
+                            <q-date v-model="deliveryDate" mask="YYYY-MM-DD">
                               <div class="row items-center justify-end">
                                 <q-btn v-close-popup label="Close" color="primary" flat />
                               </div>
@@ -270,7 +274,7 @@ const saveInvoice = () => {
                       <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer">
                           <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                            <q-date v-model="dueDate">
+                            <q-date v-model="dueDate" mask="YYYY-MM-DD">
                               <div class="row items-center justify-end">
                                 <q-btn v-close-popup label="Close" color="primary" flat />
                               </div>
@@ -405,6 +409,9 @@ const saveInvoice = () => {
               :totalVatPrice="(parseFloat(basePrice) + parseFloat(vat)).toFixed(2)"
               :supplier="selectedSupplier"
               :consumer="selectedConsumer"
+              :issueDate="issueDate"
+              :deliveryDate="deliveryDate"
+              :dueDate="dueDate"
               :basePrice="basePrice"
               :vat="vat"
             />

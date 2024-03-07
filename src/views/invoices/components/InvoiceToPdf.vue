@@ -26,6 +26,18 @@ const props = defineProps({
     required: true,
     type: Object as PropType<Company>
   },
+  issueDate: {
+    required: true,
+    type: String
+  },
+  deliveryDate: {
+    required: true,
+    type: String
+  },
+  dueDate: {
+    required: true,
+    type: String
+  },
   basePrice: {
     required: true,
     type: String
@@ -36,7 +48,18 @@ const props = defineProps({
   }
 })
 
-const { variableSymbol, invoiceItems, totalVatPrice, supplier, consumer, basePrice, vat } = toRefs(props)
+const {
+  variableSymbol,
+  invoiceItems,
+  totalVatPrice,
+  supplier,
+  consumer,
+  issueDate,
+  deliveryDate,
+  dueDate,
+  basePrice,
+  vat
+} = toRefs(props)
 
 const { generateInvoice } = useInvoiceToPdf(
   variableSymbol,
@@ -44,6 +67,9 @@ const { generateInvoice } = useInvoiceToPdf(
   totalVatPrice,
   supplier,
   consumer,
+  issueDate,
+  deliveryDate,
+  dueDate,
   basePrice,
   vat
 )

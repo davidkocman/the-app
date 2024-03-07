@@ -53,11 +53,17 @@ onBeforeMount(() => {
       <q-dialog v-model="pageLocked" seamless>
         <q-card style="min-width: 350px">
           <q-card-section>
-            <div class="text-h6">Enter password</div>
+            <div class="text-h6">Page locked</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            <q-input dense v-model="enteredCode" autofocus />
+            <q-input
+              dense
+              v-model="enteredCode"
+              autofocus
+              type="password"
+              @keyup.enter=";[invoicesStore.unlockInvoices(enteredCode), (enteredCode = '')]"
+            />
           </q-card-section>
 
           <q-card-actions align="right" class="text-primary">
@@ -70,6 +76,7 @@ onBeforeMount(() => {
       <div class="row justify-between items-center q-mb-lg">
         <h6 class="text-h6">Invoices</h6>
         <div class="row align-center justify-center q-gutter-sm">
+          <q-btn v-if="!pageLocked" flat round color="primary" icon="lock" @click="pageLocked = true" />
           <NewInvoice />
           <NewCompany />
         </div>

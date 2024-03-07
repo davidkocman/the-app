@@ -46,7 +46,8 @@ const tableHeaders = ref([
     sortable: false,
     style: 'width: 150px'
   },
-  { name: 'consumer', align: 'left', label: 'Consumer name', field: 'consumer', style: 'width: auto' },
+  { name: 'consumer', align: 'left', label: 'Consumer name', field: 'consumer', style: 'width: 250px' },
+  { name: 'invoiceItems', align: 'left', label: 'Items', field: 'invoiceItems' },
   { name: 'totalPrice', align: 'left', label: 'Total price', field: 'totalPrice', style: 'width: 200px' },
   { name: 'actions', label: '', field: 'actions', style: 'width: 100px' }
 ])
@@ -83,6 +84,14 @@ const tableRows = computed(() => {
     <q-card class="invoices-list q-mb-md">
       <q-card-section class="q-pa-none">
         <q-table flat :rows="tableRows" :columns="tableHeaders" row-key="name" binary-state-sort>
+          <template v-slot:body-cell-invoiceItems="props">
+            <q-td key="invoiceItems" :props="props">
+              <ol>
+                <li v-for="item in props.row.invoiceItems" :key="item.name">{{ item.name }}</li>
+              </ol>
+            </q-td>
+          </template>
+          <!-- Table actions -->
           <template v-slot:body-cell-actions="props">
             <q-td :props="props" key="actions">
               <div class="actions q-gutter-xs">
@@ -93,6 +102,9 @@ const tableRows = computed(() => {
                   :totalVatPrice="totalVatPrice(invoices[tableRows.indexOf(props.row)])"
                   :supplier="invoices[tableRows.indexOf(props.row)].supplier"
                   :consumer="invoices[tableRows.indexOf(props.row)].consumer"
+                  :issueDate="invoices[tableRows.indexOf(props.row)].issueDate"
+                  :deliveryDate="invoices[tableRows.indexOf(props.row)].deliveryDate"
+                  :dueDate="invoices[tableRows.indexOf(props.row)].dueDate"
                   :basePrice="totalBasePrice(invoices[tableRows.indexOf(props.row)])"
                   :vat="totalVat(invoices[tableRows.indexOf(props.row)])"
                 />
