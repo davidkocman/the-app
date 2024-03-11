@@ -48,6 +48,7 @@ const tableHeaders = ref([
   },
   { name: 'consumer', align: 'left', label: 'Consumer name', field: 'consumer', style: 'width: 250px' },
   { name: 'invoiceItems', align: 'left', label: 'Items', field: 'invoiceItems' },
+  { name: 'deliveryDate', align: 'left', label: 'Delivery date', field: 'deliveryDate' },
   { name: 'totalPrice', align: 'left', label: 'Total price', field: 'totalPrice', style: 'width: 200px' },
   { name: 'actions', label: '', field: 'actions', style: 'width: 100px' }
 ])
@@ -56,6 +57,7 @@ type TableRows = {
   variableSymbol: string
   consumer: string
   totalPrice: string
+  deliveryDate: string
 }
 
 const tableRows = computed(() => {
@@ -65,7 +67,8 @@ const tableRows = computed(() => {
       variableSymbol: item.variableSymbol,
       consumer: item.consumer.name,
       totalPrice: '',
-      invoiceItems: []
+      invoiceItems: [],
+      deliveryDate: new Date(item.deliveryDate).toLocaleDateString('sk')
     }
     let sum = 0
     item.invoiceItems.forEach((itm: InvoiceItem) => {
