@@ -12,8 +12,8 @@ useMeta(() => {
   return {
     title: pageTitle.value,
     meta: {
-      description: { name: 'description', content: 'Notes' },
-      keywords: { name: 'keywords', content: 'notes, note, markdown, .md' },
+      description: { name: 'description', content: 'Movies' },
+      keywords: { name: 'keywords', content: 'movies, motion pictures, series, tv, reviews, actors' },
       equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' }
     }
   }

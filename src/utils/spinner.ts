@@ -7,7 +7,7 @@ export default (show: boolean) => {
 
   if (show) {
     Loading.show({
-      spinner: spinner,
+      spinner,
       spinnerSize: 60
     })
     return

@@ -7,8 +7,8 @@ useMeta(() => {
   return {
     title: pageTitle.value,
     meta: {
-      description: { name: 'description', content: 'Notes' },
-      keywords: { name: 'keywords', content: 'notes, note, markdown, .md' },
+      description: { name: 'description', content: 'News' },
+      keywords: { name: 'keywords', content: 'news' },
       equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' }
     }
   }

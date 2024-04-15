@@ -22,7 +22,7 @@ useMeta(() => {
     title: pageTitle.value,
     meta: {
       description: { name: 'description', content: 'Invoices' },
-      keywords: { name: 'keywords', content: 'invoices, invoice, download' },
+      keywords: { name: 'keywords', content: 'invoices, invoice, download, companies' },
       equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' }
     }
   }
