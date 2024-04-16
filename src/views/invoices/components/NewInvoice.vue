@@ -91,12 +91,12 @@ const tableHeaders = ref([
 ])
 const tableRows = ref<InvoiceItem[]>([
   {
-    name: '- Názov položky -',
+    name: `Vývoj GWI aplikácií (${new Date().getMonth()}/${new Date().getFullYear()})`,
     quantity: 1,
     unit: '',
-    price: 0,
+    price: 4330,
     vatRate: vatRate.value,
-    vatPrice: 0
+    vatPrice: 5196
   }
 ])
 
@@ -109,6 +109,7 @@ watch(
     deep: true
   }
 )
+
 const addInvoiceItem = () => {
   tableRows.value.push({
     name: '- Názov položky -',
@@ -132,21 +133,34 @@ const calculateVatPrice = () => {
     tableRows.value[index.value].price +
     (tableRows.value[index.value].vatRate * tableRows.value[index.value].price) / 100
 }
-
 const removeRow = (i: number) => {
   index.value = 0
   tableRows.value.splice(i, 1)
 }
-
 const saveInvoice = () => {
   invoiceStore.saveInvoice(invoice.value)
   dialog.value = false
+}
+const setDefaultSupplier = () => {
+  const defaultSupplier =
+    companies.value.find(
+      (company) => company.companyId === import.meta.env.VITE_APP_INVOICE_DEFAULT_SUPPLIER_COMPANY_ID
+    ) || null
+  if (defaultSupplier && !selectedSupplier.value) {
+    selectedSupplier.value = defaultSupplier
+  }
 }
 </script>
 
 <template>
   <div>
-    <q-btn color="primary" icon="add" label="New invoice" @click="dialog = true" data-cy="new-note-add-button" />
+    <q-btn
+      color="primary"
+      icon="add"
+      label="New invoice"
+      @click=";[(dialog = true), setDefaultSupplier()]"
+      data-cy="new-note-add-button"
+    />
 
     <q-dialog
       v-model="dialog"

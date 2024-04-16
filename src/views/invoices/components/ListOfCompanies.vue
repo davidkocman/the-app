@@ -37,6 +37,9 @@ const { companies } = storeToRefs(invoicesStore)
       <RemoveComapny :company="item" />
       <EditCompany :company="item" />
     </q-card-actions>
+    <div class="bg-icon absolute">
+      <q-icon name="apartment" size="6rem" />
+    </div>
   </q-card>
 </template>
 
@@ -45,6 +48,11 @@ const { companies } = storeToRefs(invoicesStore)
   background-color: var(--bg-base);
   .text-subtitle2 {
     color: var(--text-muted);
+  }
+  .bg-icon {
+    top: 16px;
+    right: 16px;
+    opacity: 0.05;
   }
 }
 </style>
