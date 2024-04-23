@@ -10,8 +10,11 @@ import NewInvoice from './components/NewInvoice.vue'
 import ListOfCompanies from './components/ListOfCompanies.vue'
 import ListOfInvoices from './components/ListOfInvoices.vue'
 
+// utils
+import { thousandSeparator } from '@/utils/helpers'
+
 const invoicesStore = useInvoicesStore()
-const { pageLocked } = toRefs(invoicesStore)
+const { pageLocked, totalInvoicesVatPrice, totalInvoicesPrice } = toRefs(invoicesStore)
 
 const pageTitle = ref('Invoices | The App')
 const activeTab = ref('listOfInvoices')
@@ -81,20 +84,31 @@ onBeforeMount(() => {
           <NewCompany />
         </div>
       </div>
+      <div v-if="totalInvoicesVatPrice && totalInvoicesPrice" class="q-mb-lg">
+        <div class="column items-end q-gutter-xs">
+          <q-card>
+            <q-card-section>
+              <h6>Total: {{ thousandSeparator(totalInvoicesVatPrice.toFixed(2)) }} €</h6>
+              <span class="text-caption"> {{ thousandSeparator(totalInvoicesPrice.toFixed(2)) }} € without VAT</span>
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
       <div class="row">
         <div class="col">
           <q-card>
             <q-tabs
               v-model="activeTab"
               dense
+              inline-label
               class="text-grey"
               align="left"
               active-color="primary"
               indicator-color="primary"
               narrow-indicator
             >
-              <q-tab name="listOfInvoices" label="Invoices" />
-              <q-tab name="listOfCompanies" label="Companies" />
+              <q-tab name="listOfInvoices" label="Invoices" icon="description" />
+              <q-tab name="listOfCompanies" label="Companies" icon="apartment" />
             </q-tabs>
 
             <q-separator />

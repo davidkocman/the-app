@@ -7,7 +7,10 @@ type State = {
   pageLocked: boolean
 }
 
-type Getters = {}
+type Getters = {
+  totalInvoicesPrice: number | null
+  totalInvoicesVatPrice: number | null
+}
 
 type Actions = {
   saveCompany: (payload: Company) => Promise<void>

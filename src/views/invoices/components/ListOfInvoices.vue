@@ -75,7 +75,7 @@ const tableRows = computed(() => {
       sum = sum + itm.vatPrice
       entry.invoiceItems.push(itm)
     })
-    entry.totalPrice = sum.toFixed(2) + ' EUR'
+    entry.totalPrice = sum.toFixed(2) + ' €'
     rows.push(entry)
   })
   return rows

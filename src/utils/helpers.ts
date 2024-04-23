@@ -126,6 +126,10 @@ const xAxisGroups = (list: Forecast[]) => {
   return groups
 }
 
+const thousandSeparator = (n: string) => {
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+}
+
 export {
   capitalize,
   calculatePercentage,
@@ -143,5 +147,6 @@ export {
   monthDiff,
   timeFromUnix,
   sunProgress,
-  xAxisGroups
+  xAxisGroups,
+  thousandSeparator
 }
