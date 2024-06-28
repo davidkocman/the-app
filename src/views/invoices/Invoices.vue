@@ -14,7 +14,8 @@ import ListOfInvoices from './components/ListOfInvoices.vue'
 import { thousandSeparator } from '@/utils/helpers'
 
 const invoicesStore = useInvoicesStore()
-const { pageLocked, totalInvoicesVatPrice, totalInvoicesPrice } = toRefs(invoicesStore)
+const { pageLocked, totalInvoicesVatPrice, totalInvoicesPrice, totalPayedInvoicesVatPrice, totalPayedInvoicesPrice } =
+  toRefs(invoicesStore)
 
 const pageTitle = ref('Invoices | The App')
 const activeTab = ref('listOfInvoices')
@@ -84,12 +85,26 @@ onBeforeMount(() => {
           <NewCompany />
         </div>
       </div>
-      <div v-if="totalInvoicesVatPrice && totalInvoicesPrice" class="q-mb-lg">
+      <div
+        v-if="totalInvoicesVatPrice && totalInvoicesPrice && totalPayedInvoicesVatPrice && totalPayedInvoicesPrice"
+        class="q-mb-lg"
+      >
         <div class="column items-end q-gutter-xs">
           <q-card>
             <q-card-section>
-              <h6>Total: {{ thousandSeparator(totalInvoicesVatPrice.toFixed(2)) }} €</h6>
-              <span class="text-caption"> {{ thousandSeparator(totalInvoicesPrice.toFixed(2)) }} € without VAT</span>
+              <div v-if="totalInvoicesVatPrice !== totalPayedInvoicesVatPrice" class="q-pb-sm">
+                <h6 class="text-orange-5">Total: {{ thousandSeparator(totalInvoicesVatPrice.toFixed(2)) }} €</h6>
+                <span class="text-caption text-orange-5">
+                  {{ thousandSeparator(totalInvoicesPrice.toFixed(2)) }} € without VAT</span
+                >
+              </div>
+              <q-separator v-if="totalInvoicesVatPrice !== totalPayedInvoicesVatPrice" />
+              <div class="q-pt-sm">
+                <h6 class="text-primary">Payed: {{ thousandSeparator(totalPayedInvoicesVatPrice.toFixed(2)) }} €</h6>
+                <span class="text-caption text-primary"
+                  >{{ thousandSeparator(totalPayedInvoicesPrice.toFixed(2)) }} € without VAT</span
+                >
+              </div>
             </q-card-section>
           </q-card>
         </div>

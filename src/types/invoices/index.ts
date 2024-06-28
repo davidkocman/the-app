@@ -40,7 +40,7 @@ interface SavedCompany extends Company {
 
 interface SavedInvoice extends Invoice {
   id: string
-  isPayed: boolean
+  isPayed?: boolean
 }
 
 export { Company, Invoice, InvoiceItem, SavedCompany, SavedInvoice }

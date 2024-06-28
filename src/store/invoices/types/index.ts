@@ -10,6 +10,8 @@ type State = {
 type Getters = {
   totalInvoicesPrice: number | null
   totalInvoicesVatPrice: number | null
+  totalPayedInvoicesPrice: number | null
+  totalPayedInvoicesVatPrice: number | null
 }
 
 type Actions = {
