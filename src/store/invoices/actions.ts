@@ -44,7 +44,7 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
       const docSnap = await getDoc(docRef)
 
       if (!docSnap.exists()) {
-        throw new Error('There is no such company in DB!')
+        appStore.reportError({ message: 'There is no such company in DB!' })
       }
 
       const payload: SavedCompany = {
@@ -70,7 +70,7 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
           return item.id === company.id ? { ...item, ...company } : item
         })
       } else {
-        throw new Error('You are not a creator of this item!')
+        appStore.reportError({ message: 'You are not a creator of this item!' })
       }
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
@@ -86,13 +86,13 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
       const docSnap = await getDoc(docRef)
 
       if (!docSnap.exists()) {
-        throw new Error('There is no such note in DB!')
+        appStore.reportError({ message: 'There is no such note in DB!' })
       }
       if (docSnap.data().user === auth.currentUser?.uid) {
         await deleteDoc(docRef)
         this.companies = this.companies.filter((item: SavedCompany) => item.id !== id)
       } else {
-        throw new Error('You are not a creator of this note!')
+        appStore.reportError({ message: 'You are not a creator of this note!' })
       }
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
@@ -108,13 +108,13 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
       const docSnap = await getDoc(docRef)
 
       if (!docSnap.exists()) {
-        throw new Error('There is no such note in DB!')
+        appStore.reportError({ message: 'There is no such note in DB!' })
       }
       if (docSnap.data().user === auth.currentUser?.uid) {
         await deleteDoc(docRef)
         this.invoices = this.invoices.filter((item: SavedInvoice) => item.id !== id)
       } else {
-        throw new Error('You are not a creator of this note!')
+        appStore.reportError({ message: 'You are not a creator of this note!' })
       }
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
@@ -130,7 +130,7 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
       const docSnap = await getDoc(docRef)
 
       if (!docSnap.exists()) {
-        throw new Error('There is no such invoice in DB!')
+        appStore.reportError({ message: 'There is no such invoice in DB!' })
       }
 
       if (docSnap.data().user === auth.currentUser?.uid) {
@@ -142,7 +142,7 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
           return item.id === id ? { ...item, ...invoice } : item
         })
       } else {
-        throw new Error('You are not a creator of this note!')
+        appStore.reportError({ message: 'You are not a creator of this note!' })
       }
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })

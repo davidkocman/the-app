@@ -48,43 +48,43 @@ const { activeLocation, currentWeatherData } = storeToRefs(weatherStore)
                 {{ currentWeatherData.weather[0].description }}
               </h5>
             </div>
-            <h2 class="temp text-h1 text-weight-bold">
+            <div class="temp text-h1 text-weight-bold">
               {{ parseFloat(currentWeatherData.main.temp.toFixed(0)) }}
               <span class="celsius-unit text-h4 text-weight-bold">°C</span>
-              <div class="min-max-temp absolute text-center">
-                <h3 class="text-subtitle2">
+              <h3 class="min-max-temp absolute text-center">
+                <span class="text-subtitle2">
                   <q-icon color="orange-7" name="north" title="High"></q-icon>
                   {{ parseFloat(currentWeatherData.main.temp_max.toFixed(0)) }}°
-                </h3>
-                <h3 class="text-subtitle2">
+                </span>
+                <span class="text-subtitle2">
                   <q-icon color="blue-7" name="south" title="Low"></q-icon>
                   {{ parseFloat(currentWeatherData.main.temp_min.toFixed(0)) }}°
-                </h3>
-              </div>
-            </h2>
+                </span>
+              </h3>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div class="row q-mb-xl">
-      <div class="col">
+      <div class="col-12 col-md-4 q-mb-md">
         <SunriseSunsetGauge />
       </div>
-      <div class="col">
+      <div class="col-12 col-md-4 q-mb-md">
         <HumidityGauge />
       </div>
-      <div class="col">
+      <div class="col-12 col-md-4">
         <WindGauge />
       </div>
     </div>
     <div class="row">
-      <div class="col">
+      <div class="col-12 col-md-4 q-mb-md">
         <FeelsLikeCard />
       </div>
-      <div class="col">
+      <div class="col-12 col-md-4 q-mb-md">
         <PressureCard />
       </div>
-      <div class="col">
+      <div class="col-12 col-md-4">
         <VisibilityCard />
       </div>
     </div>

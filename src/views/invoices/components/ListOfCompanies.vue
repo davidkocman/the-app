@@ -3,7 +3,7 @@ import { storeToRefs } from 'pinia'
 import useInvoicesStore from '@/store/invoices'
 
 import EditCompany from './EditCompany.vue'
-import RemoveComapny from './RemoveComapny.vue'
+import RemoveCompany from './RemoveCompany.vue'
 
 const invoicesStore = useInvoicesStore()
 const { companies } = storeToRefs(invoicesStore)
@@ -34,7 +34,7 @@ const { companies } = storeToRefs(invoicesStore)
       <div v-if="item.businessReg" class="text-caption">Obch. register vl. č.:{{ item.businessReg }}</div>
     </q-card-section>
     <q-card-actions align="right">
-      <RemoveComapny :company="item" />
+      <RemoveCompany :company="item" />
       <EditCompany :company="item" />
     </q-card-actions>
     <div class="bg-icon absolute">

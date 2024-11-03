@@ -27,7 +27,7 @@ const dialog = ref(false)
       <q-separator />
       <q-card-section class="scroll q-gutter-md">
         <div class="row">
-          <div class="col">Are you sure you want to remove this comapny?</div>
+          <div class="col">Are you sure you want to remove this company?</div>
         </div>
         <div class="row">
           <div class="col text-center">

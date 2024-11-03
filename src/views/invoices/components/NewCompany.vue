@@ -5,6 +5,9 @@ import useInvoicesStore from '@/store/invoices'
 // types
 import type { Company } from '@/types/invoices'
 
+// utils
+import { buttonLabel } from '@/utils/helpers'
+
 const { saveCompany } = useInvoicesStore()
 
 const dialog = ref(false)
@@ -46,7 +49,7 @@ const clearForm = () => {
 
 <template>
   <div>
-    <q-btn label="New company" color="primary" icon="apartment" @click="dialog = true" />
+    <q-btn :label="buttonLabel('New company')" color="primary" icon="apartment" @click="dialog = true" />
 
     <q-dialog v-model="dialog" persistent>
       <q-card style="min-width: 320px; width: 80vw">

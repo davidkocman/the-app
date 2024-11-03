@@ -12,7 +12,7 @@ const props = defineProps({
   },
   invoiceItems: {
     required: true,
-    type: Object as PropType<InvoiceItem[]>
+    type: Object as PropType<Array<InvoiceItem>>
   },
   totalVatPrice: {
     required: true,

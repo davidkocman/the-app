@@ -130,6 +130,10 @@ const thousandSeparator = (n: string) => {
   return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
 }
 
+const buttonLabel = (val: string) => {
+  return window.innerWidth < 768 ? '' : val
+}
+
 export {
   capitalize,
   calculatePercentage,
@@ -148,5 +152,6 @@ export {
   timeFromUnix,
   sunProgress,
   xAxisGroups,
-  thousandSeparator
+  thousandSeparator,
+  buttonLabel
 }

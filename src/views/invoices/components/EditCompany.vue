@@ -15,7 +15,7 @@ const props = defineProps({
 const { editCompany } = useInvoicesStore()
 
 const company = toRef(props, 'company')
-const isVatPayer = ref(company.value.vatId ? true : false)
+const isVatPayer = ref(!!company.value.vatId)
 const options = ref(['Slovenská republika', 'Česká republika'])
 const dialog = ref(false)
 </script>

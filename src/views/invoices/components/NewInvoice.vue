@@ -10,6 +10,9 @@ import InvoiceToPdf from '@/views/invoices/components/InvoiceToPdf.vue'
 // types
 import type { SavedCompany, InvoiceItem } from '@/types/invoices'
 
+// utils
+import { buttonLabel } from '@/utils/helpers'
+
 const invoiceStore = useInvoicesStore()
 const { companies } = storeToRefs(invoiceStore)
 
@@ -157,7 +160,7 @@ const setDefaultSupplier = () => {
     <q-btn
       color="primary"
       icon="add"
-      label="New invoice"
+      :label="buttonLabel('New invoice')"
       @click=";[(dialog = true), setDefaultSupplier()]"
       data-cy="new-note-add-button"
     />
@@ -251,7 +254,7 @@ const setDefaultSupplier = () => {
         <q-card-section>
           <div class="section-wrapper shadow-2 q-pa-sm rounded-borders">
             <div class="row q-gutter-md">
-              <div class="col">
+              <div class="col-10 col-md-6">
                 <div class="row q-gutter-md q-mb-md">
                   <div class="col">
                     <q-input outlined v-model="issueDateFormValue" label="Dátum vystavenia">
@@ -305,7 +308,7 @@ const setDefaultSupplier = () => {
                   </div>
                 </div>
               </div>
-              <div class="col"></div>
+              <div class="col-2 col-md-5"></div>
             </div>
           </div>
         </q-card-section>
@@ -394,8 +397,8 @@ const setDefaultSupplier = () => {
         </q-card-section>
         <q-card-section>
           <div class="row">
-            <div class="col-8"></div>
-            <div class="col-4">
+            <div class="col-4 col-md-8"></div>
+            <div class="col-8 col-md-4">
               <q-separator class="q-my-sm" />
               <div class="row">
                 <div class="col-8">Základ DPH</div>
