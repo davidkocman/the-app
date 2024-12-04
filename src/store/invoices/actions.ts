@@ -5,7 +5,7 @@ import getErrorMessage from '@/utils/handleCatchErrors'
 
 import type { PiniaActionAdaptor } from '@/types/store'
 import type { Actions, InvoicesStore } from './types'
-import { Company, Invoice, SavedCompany, SavedInvoice } from '@/types/invoices'
+import type { Company, Invoice, SavedCompany, SavedInvoice } from '@/types/invoices'
 
 export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
   async saveCompany(payload) {

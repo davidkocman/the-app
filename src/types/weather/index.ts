@@ -4,7 +4,7 @@ type SearchResult = {
   local_names: object
   lon: number
   name: string
-  state?: string
+  state: string
 }
 
 type Coordinates = {

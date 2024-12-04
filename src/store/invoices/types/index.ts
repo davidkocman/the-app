@@ -2,8 +2,8 @@ import { Store } from 'pinia'
 import type { Company, Invoice, SavedCompany, SavedInvoice } from '@/types/invoices'
 
 type State = {
-  companies: Array<SavedCompany> | []
-  invoices: Array<SavedInvoice> | []
+  companies: Array<SavedCompany>
+  invoices: Array<SavedInvoice>
   pageLocked: boolean
 }
 

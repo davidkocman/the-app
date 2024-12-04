@@ -1,7 +1,6 @@
 import { Store } from 'pinia'
 
 import type { UserData } from '@/types/user'
-import { User } from 'firebase/auth'
 
 type State = {
   userData: UserData | null
