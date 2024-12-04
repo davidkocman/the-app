@@ -8,4 +8,4 @@ type PiniaGetterAdaptor<GettersType, StoreType extends Store> = {
   [Key in keyof GettersType]: (this: StoreType, state: StoreType['$state']) => GettersType[Key]
 }
 
-export { PiniaActionAdaptor, PiniaGetterAdaptor }
+export type { PiniaActionAdaptor, PiniaGetterAdaptor }

@@ -255,4 +255,4 @@ type MovieList = {
   total_results: number
 }
 
-export { Movie, MovieDetails, TvShowDetails, Seasons, Reviews, MoviesSearchResponse, MovieList, MovieItem }
+export type { Movie, MovieDetails, TvShowDetails, Seasons, Reviews, MoviesSearchResponse, MovieList, MovieItem }

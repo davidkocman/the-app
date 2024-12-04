@@ -6,4 +6,4 @@ type UserData = {
   photoUrl?: string
 }
 
-export { UserData }
+export type { UserData }

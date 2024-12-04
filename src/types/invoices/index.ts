@@ -43,4 +43,4 @@ interface SavedInvoice extends Invoice {
   isPayed?: boolean
 }
 
-export { Company, Invoice, InvoiceItem, SavedCompany, SavedInvoice }
+export type { Company, Invoice, InvoiceItem, SavedCompany, SavedInvoice }

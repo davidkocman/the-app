@@ -8,4 +8,4 @@ interface SavedNote extends Note {
   id: string
 }
 
-export { SavedNote, Note }
+export type { SavedNote, Note }
