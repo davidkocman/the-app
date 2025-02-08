@@ -21,7 +21,7 @@ const TODAY = new Date()
 const dialog = ref(false)
 const selectedConsumer = ref<SavedCompany | null>(null)
 const selectedSupplier = ref<SavedCompany | null>(null)
-const vatRate = ref(20)
+const vatRate = ref(23)
 const issueDate = ref(`${TODAY.toISOString().split('T')[0]}`)
 const dueDate = ref(`${TODAY.toISOString().split('T')[0]}`)
 const deliveryDate = ref('')
@@ -99,13 +99,13 @@ const tableRows = ref<InvoiceItem[]>([
     unit: '',
     price: 4330,
     vatRate: vatRate.value,
-    vatPrice: 5196
+    vatPrice: 5325.90
   }
 ])
 
 watch(
   () => tableRows,
-  () => {
+  () => {    
     calculateVatPrice()
   },
   {
@@ -124,6 +124,8 @@ const addInvoiceItem = () => {
   })
 }
 const calculateVatPrice = () => {
+  console.log(tableRows.value)
+  
   tableRows.value[index.value].price = Number(tableRows.value[index.value].price)
   if (Number(tableRows.value[index.value].quantity)) {
     tableRows.value[index.value].vatPrice =
@@ -357,11 +359,11 @@ const setDefaultSupplier = () => {
                     </q-popup-edit>
                   </q-td>
                   <q-td key="vatRate" :props="props">
-                    {{ vatRate }}
-                    <q-popup-edit v-model="vatRate" title="DPH%" buttons v-slot="scope">
+                    {{ props.row.vatRate }}
+                    <q-popup-edit v-model="props.row.vatRate" title="DPH%" buttons v-slot="scope">
                       <q-input
                         type="number"
-                        v-model="vatRate"
+                        v-model="scope.value"
                         dense
                         autofocus
                         @keyup.enter="scope.set"
