@@ -51,7 +51,7 @@ const { activeLocation, currentWeatherData } = storeToRefs(weatherStore)
             <div class="temp text-h1 text-weight-bold">
               {{ parseFloat(currentWeatherData.main.temp.toFixed(0)) }}
               <span class="celsius-unit text-h4 text-weight-bold">°C</span>
-              <h3 class="min-max-temp absolute text-center">
+              <h3 class="min-max-temp absolute text-center column">
                 <span class="text-subtitle2">
                   <q-icon color="orange-7" name="north" title="High"></q-icon>
                   {{ parseFloat(currentWeatherData.main.temp_max.toFixed(0)) }}°
