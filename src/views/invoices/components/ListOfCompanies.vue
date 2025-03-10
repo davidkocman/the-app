@@ -10,7 +10,7 @@ const { companies } = storeToRefs(invoicesStore)
 </script>
 
 <template>
-  <q-card v-for="item in companies" v-bind:key="item.id" class="companies-list q-mb-md q-pa-sm shadow-2">
+  <q-card v-for="item in companies" v-bind:key="item.id" class="companies-list q-mb-md q-pa-sm shadow-0">
     <q-card-section>
       <div class="text-h6 q-mb-sm">{{ item.name }}</div>
       <div class="text-subtitle2">IČO: {{ item.companyId }}</div>

@@ -139,7 +139,7 @@ const clearForm = () => {
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn flat label="Cancel" color="primary" v-close-popup @click="clearForm" />
+          <q-btn flat label="Close" color="primary" v-close-popup @click="clearForm" />
           <q-btn label="Save" color="primary" v-close-popup @click="saveCompany(newCompany)" />
         </q-card-actions>
       </q-card>

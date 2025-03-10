@@ -90,7 +90,7 @@ onBeforeMount(() => {
         class="q-mb-lg"
       >
         <div class="column items-end q-gutter-xs">
-          <q-card>
+          <q-card class="shadow-1">
             <q-card-section>
               <div v-if="totalInvoicesVatPrice !== totalPayedInvoicesVatPrice" class="q-pb-sm">
                 <h6 class="text-orange-5">Total: {{ thousandSeparator(totalInvoicesVatPrice.toFixed(2)) }} €</h6>

@@ -41,12 +41,6 @@ export const actions: PiniaActionAdaptor<Actions, UserStore> = {
       this.loadingUser = false
     }
   },
-  /**
-   * Asynchronously logs in a user with the provided email and password.
-   *
-   * @param {string} email - The user's email address.
-   * @param {string} password - The user's password.
-   */
   async loginUser(email, password) {
     const appStore = useAppStore()
     this.loadingUser = true
@@ -68,16 +62,6 @@ export const actions: PiniaActionAdaptor<Actions, UserStore> = {
       this.loadingUser = false
     }
   },
-  /**
-   * Asynchronously logs out the user by resetting their session data and redirecting them to the login page.
-   *
-   * @async
-   * @function logoutUser
-   *
-   * @throws {Error} If there is an error signing out or reporting an error to the app store.
-   *
-   * @returns {void}
-   */
   async logoutUser() {
     const appStore = useAppStore()
     const notesStore = useNotesStore()
@@ -94,16 +78,9 @@ export const actions: PiniaActionAdaptor<Actions, UserStore> = {
       appStore.loading = false
     }
   },
-  /**
-   * Asynchronously retrieves the current user's authentication state and data.
-   *
-   * @returns A Promise that resolves with the current user object if they are authenticated,
-   * or null if they are not. The Promise may also reject with an error if there was an issue
-   * retrieving the authentication state.
-   */
   currentUser() {
     return new Promise((resolve, reject) => {
-      const unsubscribe = onAuthStateChanged(
+      onAuthStateChanged(
         auth,
         (user) => {
           const notesStore = useNotesStore()
@@ -127,7 +104,6 @@ export const actions: PiniaActionAdaptor<Actions, UserStore> = {
           reject(e)
         }
       )
-      unsubscribe()
     })
   },
   async updateUserName(name) {

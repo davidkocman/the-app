@@ -8,7 +8,7 @@ type State = {
 }
 
 type Getters = {
-  user: UserData | null
+  getUser: UserData | null
 }
 
 type Actions = {

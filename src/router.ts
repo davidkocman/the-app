@@ -7,7 +7,7 @@ const requireAuth = (_to: RouteLocationNormalized, _from: RouteLocationNormalize
   const userStore = useUserStore()
   const appStore = useAppStore()
   appStore.loading = true
-  const user = userStore.currentUser()
+  const user = userStore.getUser
   if (user) {
     next()
   } else {
