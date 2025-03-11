@@ -179,7 +179,7 @@ const options = computed(() => {
       },
       tooltip: {
         theme: appStore.isDarkMode ? 'dark' : 'light',
-        custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+        custom: ({ series, seriesIndex, dataPointIndex, w }: { series: number[][], seriesIndex: number, dataPointIndex: number, w: any }) => {
           return `<div class="q-pa-sm">
             <h4 class="text-caption">Gusts: <span class="text-weight-bold">${w.config.series[0].data[dataPointIndex].goals[0].value}</span> km/h</h4>
             <h4 class="text-caption">Speed: <span class="text-weight-bold">${series[seriesIndex][dataPointIndex]}</span> km/h</h4>

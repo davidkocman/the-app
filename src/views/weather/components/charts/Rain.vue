@@ -208,7 +208,7 @@ const options = computed(() => {
       },
       tooltip: {
         theme: appStore.isDarkMode ? 'dark' : 'light',
-        custom: ({ series, dataPointIndex }) => {
+        custom: ({ series, dataPointIndex }: { series: number[][], dataPointIndex: number }) => {
           return `<div class="q-pa-sm">
             <h4 class="text-caption">Chance: <span class="text-weight-bold">${series[0][dataPointIndex]}</span>%</h4>
             <h4 class="text-caption">Volume: <span class="text-weight-bold">${series[1][dataPointIndex]}</span> mm</h4>

@@ -12,7 +12,7 @@ const moviesStore = useMoviesStore()
   </div>
   <template v-if="!moviesStore.upcomingResultsWithPoster">
     <div class="skeleton-items">
-      <div v-for="(n, index) of 6" :key="index" class="upcoming-skeleton q-mb-sm">
+      <div v-for="(_n, index) of 6" :key="index" class="upcoming-skeleton q-mb-sm">
         <q-skeleton height="240px" width="100%" square />
       </div>
     </div>

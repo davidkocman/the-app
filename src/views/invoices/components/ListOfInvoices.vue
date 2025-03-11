@@ -36,7 +36,17 @@ const totalVat = (item: SavedInvoice) => {
   return ((Number(basePrice) * item.invoiceItems[0].vatRate) / 100).toFixed(2)
 }
 
-const tableHeaders = ref([
+type QuasarTableHeader = {
+  name: string
+  required?: boolean
+  label: string
+  align?: 'left' | 'center' | 'right'
+  field: string
+  sortable?: boolean
+  style?: string
+}
+
+const tableHeaders = ref<QuasarTableHeader[]>([
   {
     name: 'variableSymbol',
     required: true,

@@ -66,8 +66,8 @@ const vat = computed(() => {
 })
 const invoice = computed(() => {
   return {
-    consumer: selectedConsumer.value,
-    supplier: selectedSupplier.value,
+    consumer: selectedConsumer.value as SavedCompany,
+    supplier: selectedSupplier.value as SavedCompany,
     variableSymbol: variableSymbol.value,
     issueDate: issueDate.value,
     dueDate: dueDate.value,
@@ -76,7 +76,17 @@ const invoice = computed(() => {
   }
 })
 
-const tableHeaders = ref([
+type QuasarTableHeader = {
+  name: string
+  required?: boolean
+  label: string
+  align?: 'left' | 'center' | 'right'
+  field: string
+  sortable?: boolean
+  style?: string
+}
+
+const tableHeaders = ref<QuasarTableHeader[]>([
   {
     name: 'name',
     required: true,
@@ -99,7 +109,7 @@ const tableRows = ref<InvoiceItem[]>([
     unit: '',
     price: 4330,
     vatRate: vatRate.value,
-    vatPrice: 5325.90
+    vatPrice: vatRate.value/100 * 4330 + 4330
   }
 ])
 
@@ -123,9 +133,7 @@ const addInvoiceItem = () => {
     vatPrice: 0
   })
 }
-const calculateVatPrice = () => {
-  console.log(tableRows.value)
-  
+const calculateVatPrice = () => { 
   tableRows.value[index.value].price = Number(tableRows.value[index.value].price)
   if (Number(tableRows.value[index.value].quantity)) {
     tableRows.value[index.value].vatPrice =
