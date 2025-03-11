@@ -645,7 +645,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
 
   const getItemNumbers = () => {
     const y = 122
-    invoiceItems.forEach((item, index) => {
+    invoiceItems.forEach((_item, index) => {
       template.schemas[0][`itemNo${index + 1}`] = {
         type: 'text',
         position: {
@@ -669,7 +669,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
 
   const getItemNames = () => {
     const y = 122
-    invoiceItems.forEach((item, index) => {
+    invoiceItems.forEach((_item, index) => {
       template.schemas[0][`item${index + 1}Name`] = {
         type: 'text',
         position: {
@@ -693,7 +693,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
 
   const getItemQuantity = () => {
     const y = 122
-    invoiceItems.forEach((item, index) => {
+    invoiceItems.forEach((_item, index) => {
       template.schemas[0][`item${index + 1}Quantity`] = {
         type: 'text',
         position: {
@@ -717,7 +717,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
 
   const getItemPrice = () => {
     const y = 122
-    invoiceItems.forEach((item, index) => {
+    invoiceItems.forEach((_item, index) => {
       template.schemas[0][`item${index + 1}Price`] = {
         type: 'text',
         position: {
@@ -765,7 +765,7 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
 
   const getItemVatPrice = () => {
     const y = 122
-    invoiceItems.forEach((item, index) => {
+    invoiceItems.forEach((_item, index) => {
       template.schemas[0][`item${index + 1}VatPrice`] = {
         type: 'text',
         position: {
