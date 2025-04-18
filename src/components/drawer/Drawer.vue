@@ -35,6 +35,13 @@ const appStore = useAppStore()
 
           <q-item-section> Movies </q-item-section>
         </q-item>
+        <q-item clickable v-ripple to="/games" data-cy="toGames">
+          <q-item-section avatar>
+            <q-icon name="sports_esports" />
+          </q-item-section>
+
+          <q-item-section> Games </q-item-section>
+        </q-item>
         <q-item clickable v-ripple to="/notes" data-cy="toNotes">
           <q-item-section avatar>
             <q-icon name="notes" />

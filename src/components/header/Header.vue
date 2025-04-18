@@ -16,7 +16,7 @@ const userStore = useUserStore()
       </q-avatar> -->
       <q-toolbar-title>the App</q-toolbar-title>
       <DarkMode />
-      <q-btn flat round dense icon="logout" @click="userStore.logoutUser">
+      <q-btn flat round dense icon="logout" @click="userStore.logoutUser" data-cy="logout">
         <q-tooltip> Logout </q-tooltip>
       </q-btn>
     </q-toolbar>

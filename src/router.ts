@@ -3,10 +3,26 @@ import useAppStore from '@/store/app'
 import { createRouter, createWebHistory, RouterOptions, RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
 import Default from '@/layouts/Default.vue'
 
-const requireAuth = (_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
+/**
+ * Navigation guard to ensure that a user is authenticated before accessing a route.
+ * 
+ * This function checks if the current user is authenticated by invoking the `currentUser` method
+ * from the `userStore`. If the user is authenticated, the navigation proceeds to the requested route.
+ * Otherwise, the user is redirected to the login page (`/login`).
+ * 
+ * Additionally, it sets the `loading` state in the `appStore` to `true` while the authentication
+ * check is in progress and resets it to `false` after the check is complete.
+ * 
+ * @param _to - The target route being navigated to.
+ * @param _from - The current route being navigated away from.
+ * @param next - A function to resolve the navigation. Call `next()` to proceed, or pass a route
+ *               path (e.g., `/login`) to redirect.
+ */
+const requireAuth = async (_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
   const userStore = useUserStore()
   const appStore = useAppStore()
   appStore.loading = true
+  await userStore.currentUser()
   const user = userStore.getUser
   if (user) {
     next()
@@ -51,6 +67,10 @@ const routes = [
       {
         path: '/movies',
         component: () => import(/* webpackChunkName: "Movies" */ '@/views/movies/Movies.vue')
+      },
+      {
+        path: '/games',
+        component: () => import(/* webpackChunkName: "Games" */ '@/views/games/Games.vue')
       },
       {
         path: '/notes',

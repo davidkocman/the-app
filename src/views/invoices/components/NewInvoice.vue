@@ -104,12 +104,12 @@ const tableHeaders = ref<QuasarTableHeader[]>([
 ])
 const tableRows = ref<InvoiceItem[]>([
   {
-    name: `Vývoj GWI aplikácií (${new Date().getMonth()}/${new Date().getFullYear()})`,
+    name: `Vývoj SPA aplikácií (${new Date().getMonth()}/${new Date().getFullYear()})`,
     quantity: 1,
     unit: '',
-    price: 4330,
+    price: 1,
     vatRate: vatRate.value,
-    vatPrice: vatRate.value/100 * 4330 + 4330
+    vatPrice: vatRate.value/100 * 1 + 1
   }
 ])
 
