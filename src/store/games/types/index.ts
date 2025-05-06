@@ -1,12 +1,17 @@
 import { Store } from 'pinia'
 
+import type { GameResult } from '@/types/games'
+
 type State = {
-  games: null
+  games: Array<GameResult>
 }
 
-type Getters = {}
+type Getters = {
+  getCurrenthMonthUpcomingGames: Array<GameResult>
+}
 
 type Actions = {
+  fetchUpcomingGames: (requestedDate: string) => Promise<void>
 }
 
 type GamesStore = Store<'games', State, Getters, Actions>

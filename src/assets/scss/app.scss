@@ -9,6 +9,7 @@
   --chart-goal: #e74c3c;
   --wind-direction: #2980b9;
   --wind-direction-needle: #262626;
+  --games-weekday-bg: #c7c7c7;
 
   body {
     &.body {
@@ -23,6 +24,7 @@
         --chart-goal: #e74c3c;
         --wind-direction: #2980b9;
         --wind-direction-needle: #dfdfdf;
+        --games-weekday-bg: #1c1c1c;
       }
     }
   }
