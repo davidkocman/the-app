@@ -9,7 +9,7 @@ export interface UpcomingGamesResponse {
 export interface GameResult {
   added_by_status: AddedByStatus | null
   added: number
-  background_image: null | string
+  background_image: string
   clip: null
   community_rating?: number
   dominant_color: Color

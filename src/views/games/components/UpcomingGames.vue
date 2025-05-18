@@ -1,5 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onBeforeMount } from 'vue'
+
+// components
+import GameItem from './GameItem.vue'
 
 // store
 import useGamesStore from '@/store/games'
@@ -28,39 +31,31 @@ const currentMonthUpcomingGames = computed(() => {
   
   // Add the days of the month
   for (let i = 1; i <= lastDay.getDate(); i++) {
+    const currentDate = new Date(firstDay.getFullYear(), firstDay.getMonth(), i + 1).toISOString().slice(0, 10)
     days.push({
       hasValidDate: true,
-      date: new Date(firstDay.getFullYear(), firstDay.getMonth(), i + 1).toISOString().slice(0, 10),
+      date: currentDate,
+      items: gamesStore.getCurrenthMonthUpcomingGames.filter(game => game.released === currentDate) || []
     })
   }
   return days
 })
 
-const getDatesInCurrentMonth = () => {
-  const start = new Date(currentYearMonth.value)
-  const end = new Date(start.getFullYear(), start.getMonth() + 1 , 0)
-  const dates = []  
-  for (let i = start.getDate(); i <= end.getDate(); i++) {
-    dates.push(new Date(start.getFullYear(), start.getMonth(), i + 1).toISOString().slice(0, 10))
-  }
-  return dates
-}
-
 const nextMonth = () => {
   const now = new Date(currentYearMonth.value)
   const nextMonth = new Date(now.setMonth(now.getMonth() + 1))
   currentYearMonth.value = nextMonth.toISOString().slice(0, 7)
-  // gamesStore.fetchUpcomingGames(currentYearMonth.value)
+  gamesStore.fetchUpcomingGames(currentYearMonth.value)
 }
 const prevMonth = () => {
   const now = new Date(currentYearMonth.value)
   const prevMonth = new Date(now.setMonth(now.getMonth() - 1))
   currentYearMonth.value = prevMonth.toISOString().slice(0, 7)
-  // gamesStore.fetchUpcomingGames(currentYearMonth.value)
+  gamesStore.fetchUpcomingGames(currentYearMonth.value)
 }
 
 onBeforeMount(async () => {
-  // await gamesStore.fetchUpcomingGames(currentYearMonth.value)
+  await gamesStore.fetchUpcomingGames(currentYearMonth.value)
 })
 </script>
 
@@ -68,7 +63,7 @@ onBeforeMount(async () => {
   <div class="row">
     <div class="col row justify-between q-mb-md">
       <q-btn @click="prevMonth" :disable="currentYearMonth === new Date().toISOString().slice(0, 7)">Previous month</q-btn>
-      <div class="text-weight-bold">{{ new Date(currentYearMonth).toLocaleDateString('en-EN', {month: 'long', year: 'numeric'}) }}</div>
+        <div class="text-weight-bold">{{ new Date(currentYearMonth).toLocaleDateString('en-EN', {month: 'long', year: 'numeric'}) }}</div>
       <q-btn @click="nextMonth">Next month</q-btn>
     </div>
   </div>
@@ -82,17 +77,21 @@ onBeforeMount(async () => {
           </span>
         </div>
         <!-- Calendar days -->
-         <template v-for="day in currentMonthUpcomingGames" :key="day.date">
+         <template v-for="(day, index) in currentMonthUpcomingGames" :key="index">
            <div 
              v-if="day.hasValidDate"
-             :key="day.date"
-             :class="['calendar-day', { 'empty-day': !day }]"
+             class="current-month-day"
            >
-             <span class="text-weight-bold">
-               {{ day ? new Date(day.date).toLocaleDateString('sk-SK', { day: 'numeric' }) : '' }}
+             <span class="text-weight-bold" :class="[day.date && new Date(day.date).toISOString().slice(0, 10) === new Date().toISOString().slice(0, 10) ? 'current-day' : '']">
+               {{ day.date ? new Date(day.date).toLocaleDateString('sk-SK', { day: 'numeric' }) : '' }}
              </span>
+             <template v-if="day.items?.length">
+              <div  class="items-wrapper">
+                <GameItem v-for="item in day.items.slice(0, 1)" :key="item.id" :item="item" />
+              </div>
+             </template>
            </div>
-           <div v-else></div>
+           <div v-else class="not-current-month-day"></div>
          </template>
       </div>
     </div>
@@ -103,7 +102,7 @@ onBeforeMount(async () => {
 .calendar-grid {
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, auto);
   .weekday-header {
     padding: 12px;
     text-align: center;
@@ -115,27 +114,41 @@ onBeforeMount(async () => {
       padding: 4px 8px;
     }
   }
-  .calendar-day {
-    background-color: var(--games-weekday-bg);
+  .not-current-month-day,
+  .current-month-day {
     border-bottom-left-radius: 18px;
     border-bottom-right-radius: 18px;
     border-top-left-radius: 6px;
     border-top-right-radius: 18px;
+    background-color: var(--games-weekday-bg);
     border: 1px solid var(--bg-muted);
-    min-height: 200px;
+  }
+  .current-month-day {
+    min-height: 300px;
     overflow: hidden;
     position: relative;
-    &.empty-day {
-      background-color: transparent;
-      border: none;
-    }
     span {
+      background-color: var(--bg-muted);
+      border-bottom-right-radius: 6px;
       display: block;
       left: 0;
       padding: 2px 6px;
+      pointer-events: none;
       position: absolute;
       top: 0;
+      z-index: 9;
+      &.current-day {
+        background-color: $primary;
+      }
     }
+    .items-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      height: 100%;
+    }
+  }
+  .not-current-month-day {
+    opacity: 0.2;
   }
 }
 </style>
