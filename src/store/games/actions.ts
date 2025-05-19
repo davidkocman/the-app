@@ -5,7 +5,7 @@ import { URL } from '@/utils/rawgRequestParams'
 
 import type { PiniaActionAdaptor } from '@/types/store'
 import type { Actions, GamesStore } from './types'
-import type { GameResult } from '@/types/games'
+import type { UpcomingGamesItem } from '@/types/games'
 
 export const actions: PiniaActionAdaptor<Actions, GamesStore> = {
   async fetchUpcomingGames(requestedDate) {
@@ -26,12 +26,12 @@ export const actions: PiniaActionAdaptor<Actions, GamesStore> = {
       )
       const data = await response.json()
       if (data.results.length) {
-        const filteredGames = data.results.filter((game: GameResult) => {
+        const filteredGames = data.results.filter((game: UpcomingGamesItem) => {
           const tags = (game.tags || []).map(tag => tag.name.toLowerCase())
           return !tags.some(tag => TAGS.includes(tag))
-        }).sort((a: GameResult, b: GameResult) => new Date(a.released).getTime() - new Date(b.released).getTime()) || []
+        }).sort((a: UpcomingGamesItem, b: UpcomingGamesItem) => new Date(a.released).getTime() - new Date(b.released).getTime()) || []
         if (filteredGames.length) {
-          filteredGames.forEach((game: GameResult) => {
+          filteredGames.forEach((game: UpcomingGamesItem) => {
             this.games.push(game)
           })
         }
@@ -40,5 +40,28 @@ export const actions: PiniaActionAdaptor<Actions, GamesStore> = {
       console.error(e)
       appStore.reportError({ message: getErrorMessage(e) })
     }
+  },
+  async getItemInfo(id) {
+    try {
+      const response = await fetch(`${URL}/${id}?key=${import.meta.env.VITE_APP_RAWG_API_KEY}`)
+      const data = await response.json()
+      if (data && !this.gameItems.some(item => item.id === data.id)) {
+        this.gameItems.push(data)
+        this.gameDetail = data
+      }
+    } catch (e) {
+      console.error(e)
+      const appStore = useAppStore()
+      appStore.reportError({ message: getErrorMessage(e) })
+    }
+  },
+  showGameDetail(id) {
+    this.gameDetail = null
+    const detail = this.gameItems.find(item => item.id === id) || null
+    if (detail) {
+      this.gameDetail = detail
+      return
+    }
+    this.getItemInfo(id)
   }
 }

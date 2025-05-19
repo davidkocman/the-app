@@ -166,286 +166,284 @@ const setDefaultSupplier = () => {
 </script>
 
 <template>
-  <div>
-    <q-btn
-      color="primary"
-      icon="add"
-      :label="buttonLabel('New invoice')"
-      @click=";[(dialog = true), setDefaultSupplier()]"
-      data-cy="new-note-add-button"
-    />
+  <q-btn
+    color="primary"
+    icon="add"
+    :label="buttonLabel('New invoice')"
+    @click=";[(dialog = true), setDefaultSupplier()]"
+    data-cy="new-note-add-button"
+  />
 
-    <q-dialog
-      v-model="dialog"
-      persistent
-      maximized
-      transition-show="slide-up"
-      transition-hide="slide-down"
-      data-cy="new-note-dialog"
-    >
-      <q-card flat class="invoice-heading">
-        <q-bar>
-          <q-space />
-          <q-btn dense flat icon="close" v-close-popup @click="index = 0">
-            <q-tooltip class="bg-white text-primary">Close</q-tooltip>
-          </q-btn>
-        </q-bar>
-        <q-card-section>
-          <div class="section-wrapper shadow-2 q-pa-sm rounded-borders">
-            <div class="row q-mb-sm q-gutter-md">
-              <div class="col">
-                <q-select
-                  outlined
-                  v-model="selectedConsumer"
-                  :options="companies"
-                  option-label="name"
-                  option-value="id"
-                  label="Odberateľ"
-                />
-              </div>
-              <div class="col">
-                <q-select
-                  outlined
-                  v-model="selectedSupplier"
-                  :options="companies"
-                  option-label="name"
-                  option-value="id"
-                  label="Dodávateľ"
-                />
+  <q-dialog
+    v-model="dialog"
+    persistent
+    maximized
+    transition-show="slide-up"
+    transition-hide="slide-down"
+    data-cy="new-note-dialog"
+  >
+    <q-card flat class="invoice-heading">
+      <q-bar>
+        <q-space />
+        <q-btn dense flat icon="close" v-close-popup @click="index = 0">
+          <q-tooltip class="bg-white text-primary">Close</q-tooltip>
+        </q-btn>
+      </q-bar>
+      <q-card-section>
+        <div class="section-wrapper shadow-2 q-pa-sm rounded-borders">
+          <div class="row q-mb-sm q-gutter-md">
+            <div class="col">
+              <q-select
+                outlined
+                v-model="selectedConsumer"
+                :options="companies"
+                option-label="name"
+                option-value="id"
+                label="Odberateľ"
+              />
+            </div>
+            <div class="col">
+              <q-select
+                outlined
+                v-model="selectedSupplier"
+                :options="companies"
+                option-label="name"
+                option-value="id"
+                label="Dodávateľ"
+              />
+            </div>
+          </div>
+          <div class="row q-gutter-md">
+            <div class="col">
+              <div v-if="selectedConsumer" class="consumer-details q-pl-sm">
+                <h4 class="text-caption">
+                  {{ selectedConsumer.street }}
+                </h4>
+                <h4 class="text-caption">{{ selectedConsumer.zip }}, {{ selectedConsumer.city }}</h4>
+                <h4 class="text-caption">
+                  {{ selectedConsumer.country }}
+                </h4>
+                <q-separator class="q-my-sm" />
+                <h4 class="text-caption">
+                  IČO: <span class="text-subtitle2">{{ selectedConsumer.companyId }}</span>
+                </h4>
+                <h4 class="text-caption">
+                  DIČ: <span class="text-subtitle2">{{ selectedConsumer.taxId }}</span>
+                </h4>
+                <h4 v-if="selectedConsumer.vatId" class="text-caption">
+                  IČ DPH: <span class="text-subtitle2">{{ selectedConsumer.vatId }}</span>
+                </h4>
               </div>
             </div>
-            <div class="row q-gutter-md">
-              <div class="col">
-                <div v-if="selectedConsumer" class="consumer-details q-pl-sm">
-                  <h4 class="text-caption">
-                    {{ selectedConsumer.street }}
-                  </h4>
-                  <h4 class="text-caption">{{ selectedConsumer.zip }}, {{ selectedConsumer.city }}</h4>
-                  <h4 class="text-caption">
-                    {{ selectedConsumer.country }}
-                  </h4>
-                  <q-separator class="q-my-sm" />
-                  <h4 class="text-caption">
-                    IČO: <span class="text-subtitle2">{{ selectedConsumer.companyId }}</span>
-                  </h4>
-                  <h4 class="text-caption">
-                    DIČ: <span class="text-subtitle2">{{ selectedConsumer.taxId }}</span>
-                  </h4>
-                  <h4 v-if="selectedConsumer.vatId" class="text-caption">
-                    IČ DPH: <span class="text-subtitle2">{{ selectedConsumer.vatId }}</span>
-                  </h4>
-                </div>
-              </div>
-              <div class="col">
-                <div v-if="selectedSupplier" class="consumer-details q-pl-sm">
-                  <h4 class="text-caption">
-                    {{ selectedSupplier.street }}
-                  </h4>
-                  <h4 class="text-caption">{{ selectedSupplier.zip }}, {{ selectedSupplier.city }}</h4>
-                  <h4 class="text-caption">
-                    {{ selectedSupplier.country }}
-                  </h4>
-                  <q-separator class="q-my-sm" />
-                  <h4 class="text-caption">
-                    IČO: <span class="text-subtitle2">{{ selectedSupplier.companyId }}</span>
-                  </h4>
-                  <h4 class="text-caption">
-                    DIČ: <span class="text-subtitle2">{{ selectedSupplier.taxId }}</span>
-                  </h4>
-                  <h4 v-if="selectedSupplier.vatId" class="text-caption">
-                    IČ DPH: <span class="text-subtitle2">{{ selectedSupplier.vatId }}</span>
-                  </h4>
-                </div>
+            <div class="col">
+              <div v-if="selectedSupplier" class="consumer-details q-pl-sm">
+                <h4 class="text-caption">
+                  {{ selectedSupplier.street }}
+                </h4>
+                <h4 class="text-caption">{{ selectedSupplier.zip }}, {{ selectedSupplier.city }}</h4>
+                <h4 class="text-caption">
+                  {{ selectedSupplier.country }}
+                </h4>
+                <q-separator class="q-my-sm" />
+                <h4 class="text-caption">
+                  IČO: <span class="text-subtitle2">{{ selectedSupplier.companyId }}</span>
+                </h4>
+                <h4 class="text-caption">
+                  DIČ: <span class="text-subtitle2">{{ selectedSupplier.taxId }}</span>
+                </h4>
+                <h4 v-if="selectedSupplier.vatId" class="text-caption">
+                  IČ DPH: <span class="text-subtitle2">{{ selectedSupplier.vatId }}</span>
+                </h4>
               </div>
             </div>
           </div>
-        </q-card-section>
+        </div>
+      </q-card-section>
 
-        <q-card-section>
-          <div class="section-wrapper shadow-2 q-pa-sm rounded-borders">
-            <div class="row q-gutter-md">
-              <div class="col-10 col-md-6">
-                <div class="row q-gutter-md q-mb-md">
-                  <div class="col">
-                    <q-input outlined v-model="issueDateFormValue" label="Dátum vystavenia">
-                      <template v-slot:append>
-                        <q-icon name="event" class="cursor-pointer">
-                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                            <q-date v-model="issueDate" mask="YYYY-MM-DD">
-                              <div class="row items-center justify-end">
-                                <q-btn v-close-popup label="Close" color="primary" flat />
-                              </div>
-                            </q-date>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template>
-                    </q-input>
-                  </div>
-                  <div class="col">
-                    <q-input outlined v-model="deliveryDateFormValue" label="Dátum dodania">
-                      <template v-slot:append>
-                        <q-icon name="event" class="cursor-pointer">
-                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                            <q-date v-model="deliveryDate" mask="YYYY-MM-DD">
-                              <div class="row items-center justify-end">
-                                <q-btn v-close-popup label="Close" color="primary" flat />
-                              </div>
-                            </q-date>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template>
-                    </q-input>
-                  </div>
-                  <div class="col">
-                    <q-input outlined v-model="dueDateFormValue" label="Splatnosť">
-                      <template v-slot:append>
-                        <q-icon name="event" class="cursor-pointer">
-                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                            <q-date v-model="dueDate" mask="YYYY-MM-DD">
-                              <div class="row items-center justify-end">
-                                <q-btn v-close-popup label="Close" color="primary" flat />
-                              </div>
-                            </q-date>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template>
-                    </q-input>
-                  </div>
+      <q-card-section>
+        <div class="section-wrapper shadow-2 q-pa-sm rounded-borders">
+          <div class="row q-gutter-md">
+            <div class="col-10 col-md-6">
+              <div class="row q-gutter-md q-mb-md">
+                <div class="col">
+                  <q-input outlined v-model="issueDateFormValue" label="Dátum vystavenia">
+                    <template v-slot:append>
+                      <q-icon name="event" class="cursor-pointer">
+                        <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                          <q-date v-model="issueDate" mask="YYYY-MM-DD">
+                            <div class="row items-center justify-end">
+                              <q-btn v-close-popup label="Close" color="primary" flat />
+                            </div>
+                          </q-date>
+                        </q-popup-proxy>
+                      </q-icon>
+                    </template>
+                  </q-input>
                 </div>
-                <div class="row q-gutter-md q-mb-md">
-                  <div class="col">
-                    <q-input outlined v-model="variableSymbol" label="Variabilný symbol"></q-input>
-                  </div>
+                <div class="col">
+                  <q-input outlined v-model="deliveryDateFormValue" label="Dátum dodania">
+                    <template v-slot:append>
+                      <q-icon name="event" class="cursor-pointer">
+                        <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                          <q-date v-model="deliveryDate" mask="YYYY-MM-DD">
+                            <div class="row items-center justify-end">
+                              <q-btn v-close-popup label="Close" color="primary" flat />
+                            </div>
+                          </q-date>
+                        </q-popup-proxy>
+                      </q-icon>
+                    </template>
+                  </q-input>
+                </div>
+                <div class="col">
+                  <q-input outlined v-model="dueDateFormValue" label="Splatnosť">
+                    <template v-slot:append>
+                      <q-icon name="event" class="cursor-pointer">
+                        <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                          <q-date v-model="dueDate" mask="YYYY-MM-DD">
+                            <div class="row items-center justify-end">
+                              <q-btn v-close-popup label="Close" color="primary" flat />
+                            </div>
+                          </q-date>
+                        </q-popup-proxy>
+                      </q-icon>
+                    </template>
+                  </q-input>
                 </div>
               </div>
-              <div class="col-2 col-md-5"></div>
+              <div class="row q-gutter-md q-mb-md">
+                <div class="col">
+                  <q-input outlined v-model="variableSymbol" label="Variabilný symbol"></q-input>
+                </div>
+              </div>
             </div>
+            <div class="col-2 col-md-5"></div>
           </div>
-        </q-card-section>
+        </div>
+      </q-card-section>
 
-        <q-card-section>
-          <div class="section-wrapper shadow-2 q-pa-sm rounded-borders">
-            <q-table flat :rows="tableRows" :columns="tableHeaders" row-key="name" binary-state-sort>
-              <template v-slot:body="props">
-                <q-tr :props="props">
-                  <q-td key="name" :props="props">
-                    {{ props.row.name }}
-                    <q-popup-edit v-model="props.row.name" title="Zadajte nazov položky" buttons v-slot="scope">
-                      <q-input type="text" v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
-                    </q-popup-edit>
-                  </q-td>
-                  <q-td key="quantity" :props="props">
-                    {{ props.row.quantity > 1 ? props.row.quantity : '' }}
-                    <q-popup-edit v-model="props.row.quantity" title="Zadajte množstvo" buttons v-slot="scope">
-                      <q-input
-                        type="number"
-                        v-model="scope.value"
-                        dense
-                        autofocus
-                        @keyup.enter="scope.set"
-                        @update:model-value="index = props.rowIndex"
-                      />
-                    </q-popup-edit>
-                  </q-td>
-                  <q-td key="unit" :props="props">
-                    <div class="text-pre-wrap">{{ props.row.unit }}</div>
-                    <q-popup-edit v-model="props.row.unit" title="Zadajte jednotku" buttons v-slot="scope">
-                      <q-input type="text" v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
-                    </q-popup-edit>
-                  </q-td>
-                  <q-td key="price" :props="props">
-                    {{ Number(props.row.price).toFixed(2) }}
-                    <q-popup-edit v-model="props.row.price" title="Zadajte cenu" buttons v-slot="scope">
-                      <q-input
-                        type="number"
-                        v-model="scope.value"
-                        dense
-                        autofocus
-                        @keyup.enter="scope.set"
-                        @update:model-value="index = props.rowIndex"
-                      />
-                    </q-popup-edit>
-                  </q-td>
-                  <q-td key="vatRate" :props="props">
-                    {{ props.row.vatRate }}
-                    <q-popup-edit v-model="props.row.vatRate" title="DPH%" buttons v-slot="scope">
-                      <q-input
-                        type="number"
-                        v-model="scope.value"
-                        dense
-                        autofocus
-                        @keyup.enter="scope.set"
-                        @update:model-value="index = props.rowIndex"
-                      />
-                    </q-popup-edit>
-                  </q-td>
-                  <q-td key="vatPrice" :props="props">
-                    {{ props.row.vatPrice.toFixed(2) }}
-                  </q-td>
-                  <q-td v-if="tableRows.length > 1" :props="props" key="actions">
-                    <q-btn
-                      color="negative"
-                      icon="delete"
-                      no-caps
-                      flat
+      <q-card-section>
+        <div class="section-wrapper shadow-2 q-pa-sm rounded-borders">
+          <q-table flat :rows="tableRows" :columns="tableHeaders" row-key="name" binary-state-sort>
+            <template v-slot:body="props">
+              <q-tr :props="props">
+                <q-td key="name" :props="props">
+                  {{ props.row.name }}
+                  <q-popup-edit v-model="props.row.name" title="Zadajte nazov položky" buttons v-slot="scope">
+                    <q-input type="text" v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
+                  </q-popup-edit>
+                </q-td>
+                <q-td key="quantity" :props="props">
+                  {{ props.row.quantity > 1 ? props.row.quantity : '' }}
+                  <q-popup-edit v-model="props.row.quantity" title="Zadajte množstvo" buttons v-slot="scope">
+                    <q-input
+                      type="number"
+                      v-model="scope.value"
                       dense
-                      @click="removeRow(tableRows.indexOf(props.row))"
+                      autofocus
+                      @keyup.enter="scope.set"
+                      @update:model-value="index = props.rowIndex"
                     />
-                  </q-td>
-                </q-tr>
-              </template>
-            </q-table>
-            <q-btn
-              label="New invoice item"
-              icon="add"
-              color="primary"
-              class="q-my-sm"
-              @click="addInvoiceItem"
-              :disable="tableRows.length === 5"
-            />
-          </div>
-        </q-card-section>
-        <q-card-section>
-          <div class="row">
-            <div class="col-4 col-md-8"></div>
-            <div class="col-8 col-md-4">
-              <q-separator class="q-my-sm" />
-              <div class="row">
-                <div class="col-8">Základ DPH</div>
-                <div class="col-4 text-right">{{ basePrice }} EUR</div>
-              </div>
-              <div class="row">
-                <div class="col-8">DPH</div>
-                <div class="col-4 text-right">{{ vat }} EUR</div>
-              </div>
-              <q-separator class="q-my-sm" />
-              <div class="row">
-                <div class="col-8 text-weight-bold">Celkom</div>
-                <div class="col-4 text-right text-weight-bold">
-                  {{ (parseFloat(basePrice) + parseFloat(vat)).toFixed(2) }} EUR
-                </div>
+                  </q-popup-edit>
+                </q-td>
+                <q-td key="unit" :props="props">
+                  <div class="text-pre-wrap">{{ props.row.unit }}</div>
+                  <q-popup-edit v-model="props.row.unit" title="Zadajte jednotku" buttons v-slot="scope">
+                    <q-input type="text" v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
+                  </q-popup-edit>
+                </q-td>
+                <q-td key="price" :props="props">
+                  {{ Number(props.row.price).toFixed(2) }}
+                  <q-popup-edit v-model="props.row.price" title="Zadajte cenu" buttons v-slot="scope">
+                    <q-input
+                      type="number"
+                      v-model="scope.value"
+                      dense
+                      autofocus
+                      @keyup.enter="scope.set"
+                      @update:model-value="index = props.rowIndex"
+                    />
+                  </q-popup-edit>
+                </q-td>
+                <q-td key="vatRate" :props="props">
+                  {{ props.row.vatRate }}
+                  <q-popup-edit v-model="props.row.vatRate" title="DPH%" buttons v-slot="scope">
+                    <q-input
+                      type="number"
+                      v-model="scope.value"
+                      dense
+                      autofocus
+                      @keyup.enter="scope.set"
+                      @update:model-value="index = props.rowIndex"
+                    />
+                  </q-popup-edit>
+                </q-td>
+                <q-td key="vatPrice" :props="props">
+                  {{ props.row.vatPrice.toFixed(2) }}
+                </q-td>
+                <q-td v-if="tableRows.length > 1" :props="props" key="actions">
+                  <q-btn
+                    color="negative"
+                    icon="delete"
+                    no-caps
+                    flat
+                    dense
+                    @click="removeRow(tableRows.indexOf(props.row))"
+                  />
+                </q-td>
+              </q-tr>
+            </template>
+          </q-table>
+          <q-btn
+            label="New invoice item"
+            icon="add"
+            color="primary"
+            class="q-my-sm"
+            @click="addInvoiceItem"
+            :disable="tableRows.length === 5"
+          />
+        </div>
+      </q-card-section>
+      <q-card-section>
+        <div class="row">
+          <div class="col-4 col-md-8"></div>
+          <div class="col-8 col-md-4">
+            <q-separator class="q-my-sm" />
+            <div class="row">
+              <div class="col-8">Základ DPH</div>
+              <div class="col-4 text-right">{{ basePrice }} EUR</div>
+            </div>
+            <div class="row">
+              <div class="col-8">DPH</div>
+              <div class="col-4 text-right">{{ vat }} EUR</div>
+            </div>
+            <q-separator class="q-my-sm" />
+            <div class="row">
+              <div class="col-8 text-weight-bold">Celkom</div>
+              <div class="col-4 text-right text-weight-bold">
+                {{ (parseFloat(basePrice) + parseFloat(vat)).toFixed(2) }} EUR
               </div>
             </div>
           </div>
-        </q-card-section>
-        <q-card-section v-if="selectedSupplier && selectedConsumer && deliveryDate">
-          <div class="row q-gutter-sm">
-            <InvoiceToPdf
-              :variableSymbol="variableSymbol"
-              :invoiceItems="tableRows"
-              :totalVatPrice="(parseFloat(basePrice) + parseFloat(vat)).toFixed(2)"
-              :supplier="selectedSupplier"
-              :consumer="selectedConsumer"
-              :issueDate="issueDate"
-              :deliveryDate="deliveryDate"
-              :dueDate="dueDate"
-              :basePrice="basePrice"
-              :vat="vat"
-            />
-            <q-btn label="Save" icon="save" @click="saveInvoice" />
-          </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
-  </div>
+        </div>
+      </q-card-section>
+      <q-card-section v-if="selectedSupplier && selectedConsumer && deliveryDate">
+        <div class="row q-gutter-sm">
+          <InvoiceToPdf
+            :variableSymbol="variableSymbol"
+            :invoiceItems="tableRows"
+            :totalVatPrice="(parseFloat(basePrice) + parseFloat(vat)).toFixed(2)"
+            :supplier="selectedSupplier"
+            :consumer="selectedConsumer"
+            :issueDate="issueDate"
+            :deliveryDate="deliveryDate"
+            :dueDate="dueDate"
+            :basePrice="basePrice"
+            :vat="vat"
+          />
+          <q-btn label="Save" icon="save" @click="saveInvoice" />
+        </div>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>

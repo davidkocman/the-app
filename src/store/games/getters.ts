@@ -5,4 +5,7 @@ export const getters: PiniaGetterAdaptor<Getters, GamesStore> = {
   getCurrenthMonthUpcomingGames() {
     return this.games
   },
+  getGameDetail() {
+    return this.gameDetail
+  }
 }
