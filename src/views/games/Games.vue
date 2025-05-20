@@ -4,6 +4,7 @@ import { useMeta } from 'quasar'
 
 // components
 import UpcomingGames from './components/UpcomingGames.vue'
+import GameDetail from './components/GameDetail.vue'
 
 const pageTitle = ref('Upcoming games | The App')
 
@@ -29,5 +30,6 @@ useMeta(() => {
         <UpcomingGames />
       </div>
     </div>
+    <GameDetail />
   </q-page>
 </template>

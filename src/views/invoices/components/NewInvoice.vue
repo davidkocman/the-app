@@ -180,7 +180,7 @@ const setDefaultSupplier = () => {
     maximized
     transition-show="slide-up"
     transition-hide="slide-down"
-    data-cy="new-note-dialog"
+    data-cy="new-invoice-dialog"
   >
     <q-card flat class="invoice-heading">
       <q-bar>

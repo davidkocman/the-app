@@ -50,7 +50,7 @@ export interface AddedByStatus {
 }
 
 export enum Color {
-  The0F0F0F = "0f0f0f"
+  The0F0F0F = '0f0f0f'
 }
 
 export interface EsrbRating {
@@ -79,10 +79,10 @@ export interface Rating {
 }
 
 export enum Title {
-  Exceptional = "exceptional",
-  Meh = "meh",
-  Recommended = "recommended",
-  Skip = "skip"
+  Exceptional = 'exceptional',
+  Meh = 'meh',
+  Recommended = 'recommended',
+  Skip = 'skip'
 }
 
 export interface ShortScreenshot {
@@ -109,6 +109,7 @@ export interface GameItem {
   name: string
   name_original: string
   description: string
+  description_raw?: string
   metacritic: number
   metacritic_platforms: Array<MetacriticPlatform>
   released: string
@@ -153,11 +154,11 @@ export interface MetacriticPlatform {
   url: string
 }
 
-export interface Ratings { }
+export interface Ratings {}
 
-export interface Reactions { }
+export interface Reactions {}
 
-export interface AddedByStatus { }
+export interface AddedByStatus {}
 
 export interface EsrbRating {
   id: number
@@ -182,8 +183,7 @@ export interface Requirements {
   recommended: string
 }
 
-
 export enum Language {
-  Eng = "eng",
-  Rus = "rus"
+  Eng = 'eng',
+  Rus = 'rus'
 }
