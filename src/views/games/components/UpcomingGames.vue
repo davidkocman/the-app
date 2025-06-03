@@ -15,12 +15,12 @@ const currentMonthUpcomingGames = computed(() => {
   const firstDay = new Date(`${currentYearMonth.value}-01`)
   const lastDay = new Date(firstDay.getFullYear(), firstDay.getMonth() + 1, 0)
   const days = []
-  
+
   // Get the day of week for the first day (0 = Sunday, 1 = Monday, ...)
   let firstDayOfWeek = firstDay.getDay()
   // Convert Sunday from 0 to 7
   firstDayOfWeek = firstDayOfWeek === 0 ? 7 : firstDayOfWeek
-  
+
   // Add empty cells for days before the first day of month
   for (let i = 1; i < firstDayOfWeek; i++) {
     days.push({
@@ -28,14 +28,14 @@ const currentMonthUpcomingGames = computed(() => {
       date: null
     })
   }
-  
+
   // Add the days of the month
   for (let i = 1; i <= lastDay.getDate(); i++) {
     const currentDate = new Date(firstDay.getFullYear(), firstDay.getMonth(), i + 1).toISOString().slice(0, 10)
     days.push({
       hasValidDate: true,
       date: currentDate,
-      items: gamesStore.getCurrenthMonthUpcomingGames.filter(game => game.released === currentDate) || []
+      items: gamesStore.getCurrenthMonthUpcomingGames.filter((game) => game.released === currentDate) || []
     })
   }
   return days
@@ -62,8 +62,12 @@ onBeforeMount(async () => {
 <template>
   <div class="row">
     <div class="col row justify-between q-mb-md">
-      <q-btn @click="prevMonth" :disable="currentYearMonth === new Date().toISOString().slice(0, 7)">Previous month</q-btn>
-        <div class="text-weight-bold">{{ new Date(currentYearMonth).toLocaleDateString('en-EN', {month: 'long', year: 'numeric'}) }}</div>
+      <q-btn @click="prevMonth" :disable="currentYearMonth === new Date().toISOString().slice(0, 7)"
+        >Previous month</q-btn
+      >
+      <div class="text-weight-bold">
+        {{ new Date(currentYearMonth).toLocaleDateString('en-EN', { month: 'long', year: 'numeric' }) }}
+      </div>
       <q-btn @click="nextMonth">Next month</q-btn>
     </div>
   </div>
@@ -71,28 +75,36 @@ onBeforeMount(async () => {
     <div class="col">
       <div class="calendar-grid">
         <!-- Weekday headers -->
-        <div class="weekday-header text-weight-bold" v-for="day in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']" :key="day">
+        <div
+          class="weekday-header text-weight-bold"
+          v-for="day in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']"
+          :key="day"
+        >
           <span>
             {{ day }}
           </span>
         </div>
         <!-- Calendar days -->
-         <template v-for="(day, index) in currentMonthUpcomingGames" :key="index">
-           <div 
-             v-if="day.hasValidDate"
-             class="current-month-day"
-           >
-             <span class="text-weight-bold" :class="[day.date && new Date(day.date).toISOString().slice(0, 10) === new Date().toISOString().slice(0, 10) ? 'current-day' : '']">
-               {{ day.date ? new Date(day.date).toLocaleDateString('sk-SK', { day: 'numeric' }) : '' }}
-             </span>
-             <template v-if="day.items?.length">
-              <div  class="items-wrapper">
-                <GameItem v-for="item in day.items.slice(0, 1)" :key="item.id" :item="item" />
+        <template v-for="(day, index) in currentMonthUpcomingGames" :key="index">
+          <div v-if="day.hasValidDate" class="current-month-day">
+            <span
+              class="text-weight-bold"
+              :class="[
+                day.date && new Date(day.date).toISOString().slice(0, 10) === new Date().toISOString().slice(0, 10)
+                  ? 'current-day'
+                  : ''
+              ]"
+            >
+              {{ day.date ? new Date(day.date).toLocaleDateString('sk-SK', { day: 'numeric' }) : '' }}
+            </span>
+            <template v-if="day.items?.length">
+              <div class="items-wrapper">
+                <GameItem v-for="item in day.items.slice(0, 4)" :key="item.id" :item="item" />
               </div>
-             </template>
-           </div>
-           <div v-else class="not-current-month-day"></div>
-         </template>
+            </template>
+          </div>
+          <div v-else class="not-current-month-day"></div>
+        </template>
       </div>
     </div>
   </div>

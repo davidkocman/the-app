@@ -146,7 +146,7 @@ export interface GameItem {
   additions_count: number
   game_series_count: number
   esrb_rating: EsrbRating
-  platforms: Platform[]
+  platforms: PlatformMeta[]
 }
 
 export interface MetacriticPlatform {
@@ -166,13 +166,13 @@ export interface EsrbRating {
   name: string
 }
 
-export interface Platform {
-  platform: Platform2
+export interface PlatformMeta {
+  platform: Platform
   released_at: string
   requirements: Requirements
 }
 
-export interface Platform2 {
+export interface Platform {
   id: number
   slug: string
   name: string

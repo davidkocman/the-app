@@ -14,12 +14,9 @@ const gamesStore = useGamesStore()
 <template>
   <q-card :key="item.slug" class="game-item" @click="gamesStore.showGameDetail(item.id)">
     <q-img :src="item.background_image ? item.background_image : 'something'" :alt="item.slug" class="game-item__img">
-      <q-card-section class="absolute-bottom bg-opacity-50 text-white">
-        <h2 class="text-overline text-uppercase game-item__title">{{ item.name }}</h2>
-      </q-card-section>
-      <!-- <q-card-actions>
-        <q-btn flat label="Details" @click="$router.push({ name: 'game-details', params: { slug: item.slug } })" />
-      </q-card-actions> -->
+      <div class="game-item__img__title absolute-bottom bg-opacity-50 text-white">
+        <h2 class="text-overline text-uppercase">{{ item.name }}</h2>
+      </div>
     </q-img>
   </q-card>
 </template>
@@ -33,9 +30,13 @@ const gamesStore = useGamesStore()
     height: 100%;
     width: 100%;
     object-fit: cover;
-  }
-  &__title {
-    line-height: 1rem;
+    &__title {
+      padding: 0;
+      padding: 8px 16px 6px;
+      h2 {
+        line-height: 1.4rem;
+      }
+    }
   }
 }
 </style>
