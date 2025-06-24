@@ -91,7 +91,11 @@ const getInvoiceInputs = (
   }
   const getItemVatPrice = (inputs: { [key: string]: string }[]) => {
     invoiceItems.forEach((item, index) => {
-      inputs[0][`item${index + 1}VatPrice`] = Number(item.vatPrice).toFixed(2).toString()
+      if (item.vatRate !== 0) {
+        inputs[0][`item${index + 1}VatPrice`] = Number(item.vatPrice).toFixed(2).toString()
+        return
+      }
+      inputs[0][`item${index + 1}VatPrice`] = Number(item.price).toFixed(2).toString()
     })
   }
 
