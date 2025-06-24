@@ -32,6 +32,7 @@ type Invoice = {
   deliveryDate: string
   invoiceItems: InvoiceItem[]
   user?: string
+  zeroVatRateValue: string | null
 }
 
 interface SavedCompany extends Company {

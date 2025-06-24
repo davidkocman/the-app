@@ -17,7 +17,11 @@ const { invoices } = storeToRefs(invoicesStore)
 const totalVatPrice = (item: SavedInvoice) => {
   let sum = 0
   item.invoiceItems.forEach((item: InvoiceItem) => {
-    sum = sum + item.vatPrice
+    if (item.vatRate !== 0) {
+      sum = sum + item.vatPrice
+    } else {
+      sum = sum + item.price
+    }
   })
   return sum.toFixed(2)
 }
@@ -59,7 +63,8 @@ const tableHeaders = ref<QuasarTableHeader[]>([
   { name: 'consumer', align: 'left', label: 'Consumer name', field: 'consumer', style: 'width: 250px' },
   { name: 'invoiceItems', align: 'left', label: 'Items', field: 'invoiceItems' },
   { name: 'deliveryDate', align: 'left', label: 'Delivery date', field: 'deliveryDate' },
-  { name: 'totalPrice', align: 'left', label: 'Total price', field: 'totalPrice', style: 'width: 200px' },
+  { name: 'totalPrice', align: 'left', label: 'Billed', field: 'totalPrice', style: 'width: 200px' },
+  { name: 'vatRate', align: 'left', label: 'VAT (%)', field: 'vatRate', style: 'width: 200px' },
   { name: 'actions', label: '', field: 'actions', style: 'width: 100px' }
 ])
 
@@ -67,7 +72,9 @@ type TableRows = {
   variableSymbol: string
   consumer: string
   totalPrice: string
+  vatRate: number
   deliveryDate: string
+  zeroVatRateValue: string | null
 }
 
 const tableRows = computed(() => {
@@ -77,15 +84,22 @@ const tableRows = computed(() => {
       variableSymbol: item.variableSymbol,
       consumer: item.consumer.name,
       totalPrice: '',
+      vatRate: 0,
       invoiceItems: [],
-      deliveryDate: new Date(item.deliveryDate).toLocaleDateString('sk')
+      deliveryDate: new Date(item.deliveryDate).toLocaleDateString('sk'),
+      zeroVatRateValue: item.zeroVatRateValue ?? null
     }
     let sum = 0
     item.invoiceItems.forEach((itm: InvoiceItem) => {
-      sum = sum + itm.vatPrice
+      if (itm.vatRate !== 0) {
+        sum = sum + itm.vatPrice
+      } else {
+        sum = sum + itm.price
+      }
       entry.invoiceItems.push(itm)
     })
     entry.totalPrice = sum.toFixed(2) + ' €'
+    entry.vatRate = item.invoiceItems[0].vatRate
     rows.push(entry)
   })
   return rows
@@ -120,6 +134,7 @@ const tableRows = computed(() => {
                   :dueDate="invoices[tableRows.indexOf(props.row)].dueDate"
                   :basePrice="totalBasePrice(invoices[tableRows.indexOf(props.row)])"
                   :vat="totalVat(invoices[tableRows.indexOf(props.row)])"
+                  :zeroVatRateValue="invoices[tableRows.indexOf(props.row)].zeroVatRateValue"
                 />
                 <RemoveInvoice :invoice="invoices[tableRows.indexOf(props.row)]" />
               </div>

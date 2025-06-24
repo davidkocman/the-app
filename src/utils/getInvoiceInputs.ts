@@ -11,7 +11,8 @@ const getInvoiceInputs = (
   deliveryDate: string,
   dueDate: string,
   basePrice: string,
-  vat: string
+  vat: string,
+  zeroVatRateValue: string | null
 ) => {
   const inputs = [
     {
@@ -28,7 +29,7 @@ const getInvoiceInputs = (
       supplierAddress: `${consumer.street}, ${consumer.zip} ${consumer.city}, ${consumer.country}`,
       supplierId: `IČO: ${consumer.companyId}`,
       supplierTax: `DIČ: ${consumer.taxId}`,
-      supplierVat: `IČ DPH: ${consumer.vatId}`,
+      supplierVat: consumer.country === 'Slovenská republika' ? `IČ DPH: ${consumer.vatId}` : '',
       separator1: ' ',
       issueDateTitle: 'Dátum vystavenia:',
       issueDateValue: `${new Date(issueDate).toLocaleDateString('sk')}`,
@@ -54,7 +55,7 @@ const getInvoiceInputs = (
       tableHeadLineEnd: ' ',
       basePriceTitle: 'ZÁKLAD',
       basePrice: `${basePrice} EUR`,
-      vatTitle: 'DPH',
+      vatTitle: zeroVatRateValue ?? 'DPH',
       vat: `${vat} EUR`,
       totalToPayTitle: 'Celkom k úhrade',
       totalToPay: `${totalVatPrice} EUR`,

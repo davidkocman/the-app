@@ -1,4 +1,15 @@
-import { addDoc, doc, collection, getDocs, query, where, getDoc, updateDoc, deleteDoc, orderBy } from 'firebase/firestore'
+import {
+  addDoc,
+  doc,
+  collection,
+  getDocs,
+  query,
+  where,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+  orderBy
+} from 'firebase/firestore'
 import { auth, db } from '@/firebaseConfig'
 import useAppStore from '@/store/app'
 import getErrorMessage from '@/utils/handleCatchErrors'
@@ -184,7 +195,11 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
     const appStore = useAppStore()
     appStore.loading = true
     try {
-      const q = query(collection(db, 'invoices'), where('user', '==', auth.currentUser?.uid), orderBy('variableSymbol', 'desc'))
+      const q = query(
+        collection(db, 'invoices'),
+        where('user', '==', auth.currentUser?.uid),
+        orderBy('variableSymbol', 'desc')
+      )
       const querySnapshot = await getDocs(q)
       const docs: SavedInvoice[] = []
       querySnapshot.forEach((doc) => {

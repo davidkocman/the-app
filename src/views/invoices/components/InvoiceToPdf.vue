@@ -1,51 +1,26 @@
 <script setup lang="ts">
-import { PropType, toRefs } from 'vue'
+import { toRefs } from 'vue'
 import useInvoiceToPdf from '@/composables/invoices/useInvoiceToPdf'
 
 // types
 import type { InvoiceItem, Company } from '@/types/invoices'
 
-const props = defineProps({
-  variableSymbol: {
-    required: true,
-    type: String
-  },
-  invoiceItems: {
-    required: true,
-    type: Object as PropType<Array<InvoiceItem>>
-  },
-  totalVatPrice: {
-    required: true,
-    type: String
-  },
-  supplier: {
-    required: true,
-    type: Object as PropType<Company>
-  },
-  consumer: {
-    required: true,
-    type: Object as PropType<Company>
-  },
-  issueDate: {
-    required: true,
-    type: String
-  },
-  deliveryDate: {
-    required: true,
-    type: String
-  },
-  dueDate: {
-    required: true,
-    type: String
-  },
-  basePrice: {
-    required: true,
-    type: String
-  },
-  vat: {
-    required: true,
-    type: String
-  }
+type InvoiceToPdfProps = {
+  variableSymbol: string
+  invoiceItems: Array<InvoiceItem>
+  totalVatPrice: string
+  supplier: Company
+  consumer: Company
+  issueDate: string
+  deliveryDate: string
+  dueDate: string
+  basePrice: string
+  vat: string
+  zeroVatRateValue?: string | null
+}
+
+const props = withDefaults(defineProps<InvoiceToPdfProps>(), {
+  zeroVatRateValue: null
 })
 
 const {
@@ -58,7 +33,8 @@ const {
   deliveryDate,
   dueDate,
   basePrice,
-  vat
+  vat,
+  zeroVatRateValue
 } = toRefs(props)
 
 const { generateInvoice } = useInvoiceToPdf(
@@ -71,7 +47,8 @@ const { generateInvoice } = useInvoiceToPdf(
   deliveryDate,
   dueDate,
   basePrice,
-  vat
+  vat,
+  zeroVatRateValue
 )
 </script>
 

@@ -48,103 +48,101 @@ const clearForm = () => {
 </script>
 
 <template>
-  <div>
-    <q-btn :label="buttonLabel('New company')" color="primary" icon="apartment" @click="dialog = true" />
+  <q-btn :label="buttonLabel('New company')" color="primary" icon="apartment" @click="dialog = true" />
 
-    <q-dialog v-model="dialog" persistent>
-      <q-card style="min-width: 320px; width: 80vw">
-        <q-card-section>
-          <div class="text-h6">New company</div>
-        </q-card-section>
+  <q-dialog v-model="dialog" persistent>
+    <q-card style="min-width: 320px; width: 80vw">
+      <q-card-section>
+        <div class="text-h6">New company</div>
+      </q-card-section>
 
-        <q-separator />
+      <q-separator />
 
-        <q-card-section class="scroll q-gutter-md">
-          <div class="row">
-            <div class="col">
-              <q-input outlined dense v-model="newCompany.name" label="Name" />
-            </div>
+      <q-card-section class="scroll q-gutter-md">
+        <div class="row">
+          <div class="col">
+            <q-input outlined dense v-model="newCompany.name" label="Name" />
           </div>
-          <div class="row">
-            <div class="col">
-              <q-input outlined dense v-model="newCompany.street" label="Street" />
-            </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <q-input outlined dense v-model="newCompany.street" label="Street" />
           </div>
-          <div class="row">
-            <div class="col-4">
-              <q-input outlined dense v-model="newCompany.zip" label="ZIP" />
-            </div>
-            <div class="col-8 q-pl-sm">
-              <q-input outlined dense v-model="newCompany.city" label="City" />
-            </div>
+        </div>
+        <div class="row">
+          <div class="col-4">
+            <q-input outlined dense v-model="newCompany.zip" label="ZIP" />
           </div>
-          <div class="row">
-            <div class="col">
-              <q-select outlined dense v-model="newCompany.country" :options="options" label="Country" />
-            </div>
+          <div class="col-8 q-pl-sm">
+            <q-input outlined dense v-model="newCompany.city" label="City" />
           </div>
-        </q-card-section>
+        </div>
+        <div class="row">
+          <div class="col">
+            <q-select outlined dense v-model="newCompany.country" :options="options" label="Country" />
+          </div>
+        </div>
+      </q-card-section>
 
-        <q-separator />
+      <q-separator />
 
-        <q-card-section class="scroll q-gutter-md">
-          <div class="row">
-            <div class="col-6">
-              <q-input outlined dense v-model="newCompany.companyId" label="Company ID" />
-            </div>
-            <div class="col-6 q-pl-sm">
-              <q-input outlined dense v-model="newCompany.taxId" label="Tax ID" />
-            </div>
+      <q-card-section class="scroll q-gutter-md">
+        <div class="row">
+          <div class="col-6">
+            <q-input outlined dense v-model="newCompany.companyId" label="Company ID" />
           </div>
-          <div class="row">
-            <div class="col">
-              <q-checkbox v-model="isVatPayer" label="Is VAT payer?" />
-            </div>
+          <div class="col-6 q-pl-sm">
+            <q-input outlined dense v-model="newCompany.taxId" label="Tax ID" />
           </div>
-          <div v-if="isVatPayer" class="row">
-            <div class="col">
-              <q-input outlined dense v-model="newCompany.vatId" label="Vat ID" />
-            </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <q-checkbox v-model="isVatPayer" label="Is VAT payer?" />
           </div>
-        </q-card-section>
+        </div>
+        <div v-if="isVatPayer" class="row">
+          <div class="col">
+            <q-input outlined dense v-model="newCompany.vatId" label="Vat ID" />
+          </div>
+        </div>
+      </q-card-section>
 
-        <q-separator />
+      <q-separator />
 
-        <q-card-section class="scroll q-gutter-md">
-          <div class="row">
-            <div class="col">
-              <q-input outlined dense v-model="newCompany.iban" label="IBAN" />
-            </div>
+      <q-card-section class="scroll q-gutter-md">
+        <div class="row">
+          <div class="col">
+            <q-input outlined dense v-model="newCompany.iban" label="IBAN" />
           </div>
-          <div class="row">
-            <div class="col">
-              <q-input outlined dense v-model="newCompany.swift" label="SWIFT" />
-            </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <q-input outlined dense v-model="newCompany.swift" label="SWIFT" />
           </div>
-        </q-card-section>
+        </div>
+      </q-card-section>
 
-        <q-card-section class="scroll q-gutter-md">
-          <div class="row">
-            <div class="col">
-              <q-input outlined dense v-model="newCompany.registration" label="Registration" />
-            </div>
+      <q-card-section class="scroll q-gutter-md">
+        <div class="row">
+          <div class="col">
+            <q-input outlined dense v-model="newCompany.registration" label="Registration" />
           </div>
-          <div class="row">
-            <div class="col">
-              <q-input outlined dense v-model="newCompany.businessReg" label="Business register" />
-            </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <q-input outlined dense v-model="newCompany.businessReg" label="Business register" />
           </div>
-        </q-card-section>
+        </div>
+      </q-card-section>
 
-        <q-separator />
+      <q-separator />
 
-        <q-card-actions align="right">
-          <q-btn flat label="Close" color="primary" v-close-popup @click="clearForm" />
-          <q-btn label="Save" color="primary" v-close-popup @click="saveCompany(newCompany)" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-  </div>
+      <q-card-actions align="right">
+        <q-btn flat label="Close" color="primary" v-close-popup @click="clearForm" />
+        <q-btn label="Save" color="primary" v-close-popup @click="saveCompany(newCompany)" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <style lang="scss"></style>

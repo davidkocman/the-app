@@ -16,7 +16,8 @@ export default function useInvoiceToPdf(
   deliveryDate: Ref<string>,
   dueDate: Ref<string>,
   basePrice: Ref<string>,
-  vat: Ref<string>
+  vat: Ref<string>,
+  zeroVatRateValue: Ref<string | null>
 ) {
   const generateInvoice = () => {
     const template = getInvoiceTemplate(tableRows.value)
@@ -30,7 +31,8 @@ export default function useInvoiceToPdf(
       deliveryDate.value,
       dueDate.value,
       basePrice.value,
-      vat.value
+      vat.value,
+      zeroVatRateValue.value
     )
     generate({ template, inputs }).then((pdf) => {
       // Browser

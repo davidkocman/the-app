@@ -13,19 +13,60 @@ import type { SavedCompany, InvoiceItem } from '@/types/invoices'
 // utils
 import { buttonLabel } from '@/utils/helpers'
 
+// types
+type QuasarTableHeader = {
+  name: string
+  required?: boolean
+  label: string
+  align?: 'left' | 'center' | 'right'
+  field: string
+  sortable?: boolean
+  style?: string
+}
+
 const invoiceStore = useInvoicesStore()
 const { companies } = storeToRefs(invoiceStore)
 
 const TODAY = new Date()
 
+const deliveryDate = ref('')
 const dialog = ref(false)
+const dueDate = ref(`${TODAY.toISOString().split('T')[0]}`)
+const index = ref(0)
+const issueDate = ref(`${TODAY.toISOString().split('T')[0]}`)
 const selectedConsumer = ref<SavedCompany | null>(null)
 const selectedSupplier = ref<SavedCompany | null>(null)
-const vatRate = ref(23)
-const issueDate = ref(`${TODAY.toISOString().split('T')[0]}`)
-const dueDate = ref(`${TODAY.toISOString().split('T')[0]}`)
-const deliveryDate = ref('')
-const index = ref(0)
+const vatRate = ref(0)
+const zeroVatRateValue = ref<string | null>(null)
+
+const errorVatRate = ref(false)
+const errorVatRateMessage = ref('')
+const tableHeaders = ref<QuasarTableHeader[]>([
+  {
+    name: 'name',
+    required: true,
+    label: 'Názov položky',
+    align: 'left',
+    field: 'name',
+    sortable: false
+  },
+  { name: 'quantity', align: 'center', label: 'Množstvo', field: 'quantity' },
+  { name: 'unit', align: 'center', label: 'MJ', field: 'unit' },
+  { name: 'price', align: 'center', label: 'Cena bez DPH', field: 'price' },
+  { name: 'vatRate', align: 'center', label: 'DPH %', field: 'vatRate' },
+  { name: 'vatPrice', align: 'center', label: 'Spolu s DPH', field: 'vatPrice' },
+  { name: 'actions', label: '', field: 'actions' }
+])
+const tableRows = ref<InvoiceItem[]>([
+  {
+    name: `Vývoj FE aplikácií CNC (${new Date().getMonth()}/${new Date().getFullYear()})`,
+    quantity: 1,
+    unit: '',
+    price: 0,
+    vatRate: vatRate.value,
+    vatPrice: vatRate.value > 0 ? (vatRate.value / 100) * 1 + 1 : 0
+  }
+])
 
 const getInitialVariableSymbol = () => {
   const YEAR = TODAY.getFullYear().toString().substr(-2)
@@ -72,54 +113,22 @@ const invoice = computed(() => {
     issueDate: issueDate.value,
     dueDate: dueDate.value,
     deliveryDate: deliveryDate.value,
-    invoiceItems: tableRows.value
+    invoiceItems: tableRows.value,
+    zeroVatRateValue: zeroVatRateValue.value
   }
 })
-
-type QuasarTableHeader = {
-  name: string
-  required?: boolean
-  label: string
-  align?: 'left' | 'center' | 'right'
-  field: string
-  sortable?: boolean
-  style?: string
-}
-
-const tableHeaders = ref<QuasarTableHeader[]>([
-  {
-    name: 'name',
-    required: true,
-    label: 'Názov položky',
-    align: 'left',
-    field: 'name',
-    sortable: false
-  },
-  { name: 'quantity', align: 'center', label: 'Množstvo', field: 'quantity' },
-  { name: 'unit', align: 'center', label: 'MJ', field: 'unit' },
-  { name: 'price', align: 'center', label: 'Cena bez DPH', field: 'price' },
-  { name: 'vatRate', align: 'center', label: 'DPH %', field: 'vatRate' },
-  { name: 'vatPrice', align: 'center', label: 'Spolu s DPH', field: 'vatPrice' },
-  { name: 'actions', label: '', field: 'actions' }
-])
-const tableRows = ref<InvoiceItem[]>([
-  {
-    name: `Vývoj SPA aplikácií (${new Date().getMonth()}/${new Date().getFullYear()})`,
-    quantity: 1,
-    unit: '',
-    price: 1,
-    vatRate: vatRate.value,
-    vatPrice: vatRate.value/100 * 1 + 1
+const canSave = computed(() => {
+  if (tableRows.value.some((item) => item.vatRate === 0) && !zeroVatRateValue.value) {
+    return false
   }
-])
+  return true
+})
 
 watch(
-  () => tableRows,
-  () => {    
+  () => tableRows.value.map((item) => item.vatRate),
+  (val) => {
+    if (val.some((v) => v !== 0)) zeroVatRateValue.value = null
     calculateVatPrice()
-  },
-  {
-    deep: true
   }
 )
 
@@ -133,7 +142,7 @@ const addInvoiceItem = () => {
     vatPrice: 0
   })
 }
-const calculateVatPrice = () => { 
+const calculateVatPrice = () => {
   tableRows.value[index.value].price = Number(tableRows.value[index.value].price)
   if (Number(tableRows.value[index.value].quantity)) {
     tableRows.value[index.value].vatPrice =
@@ -162,6 +171,16 @@ const setDefaultSupplier = () => {
   if (defaultSupplier && !selectedSupplier.value) {
     selectedSupplier.value = defaultSupplier
   }
+}
+const minMaxVatRateValidation = (v: number) => {
+  if (v < 0 || v > 23) {
+    errorVatRate.value = true
+    errorVatRateMessage.value = 'The value must be between 0 and 23!'
+    return false
+  }
+  errorVatRate.value = false
+  errorVatRateMessage.value = ''
+  return true
 }
 </script>
 
@@ -317,7 +336,15 @@ const setDefaultSupplier = () => {
                 </div>
               </div>
             </div>
-            <div class="col-2 col-md-5"></div>
+            <div class="col-2 col-md-5">
+              <q-select
+                v-if="vatRate === 0"
+                outlined
+                v-model="zeroVatRateValue"
+                :options="['Dodanie je oslobodené od DPH', 'Prenesenie daňovej povinnosti']"
+                label="Povinný text"
+              />
+            </div>
           </div>
         </div>
       </q-card-section>
@@ -338,7 +365,7 @@ const setDefaultSupplier = () => {
                   <q-popup-edit v-model="props.row.quantity" title="Zadajte množstvo" buttons v-slot="scope">
                     <q-input
                       type="number"
-                      v-model="scope.value"
+                      v-model.number="scope.value"
                       dense
                       autofocus
                       @keyup.enter="scope.set"
@@ -357,7 +384,7 @@ const setDefaultSupplier = () => {
                   <q-popup-edit v-model="props.row.price" title="Zadajte cenu" buttons v-slot="scope">
                     <q-input
                       type="number"
-                      v-model="scope.value"
+                      v-model.number="scope.value"
                       dense
                       autofocus
                       @keyup.enter="scope.set"
@@ -367,14 +394,29 @@ const setDefaultSupplier = () => {
                 </q-td>
                 <q-td key="vatRate" :props="props">
                   {{ props.row.vatRate }}
-                  <q-popup-edit v-model="props.row.vatRate" title="DPH%" buttons v-slot="scope">
+                  <q-popup-edit
+                    v-model="props.row.vatRate"
+                    title="DPH%"
+                    buttons
+                    v-slot="scope"
+                    :validate="minMaxVatRateValidation"
+                  >
+                    {{ typeof scope.value }}
                     <q-input
                       type="number"
-                      v-model="scope.value"
+                      v-model.number="scope.value"
                       dense
                       autofocus
+                      :error="errorVatRate"
+                      :error-message="errorVatRateMessage"
                       @keyup.enter="scope.set"
-                      @update:model-value="index = props.rowIndex"
+                      @update:model-value="
+                        (val) => {
+                          scope.value = Number(val)
+                          index = props.rowIndex
+                          vatRate = Number(val)
+                        }
+                      "
                     />
                   </q-popup-edit>
                 </q-td>
@@ -427,7 +469,7 @@ const setDefaultSupplier = () => {
           </div>
         </div>
       </q-card-section>
-      <q-card-section v-if="selectedSupplier && selectedConsumer && deliveryDate">
+      <q-card-section v-if="selectedSupplier && selectedConsumer && deliveryDate && canSave">
         <div class="row q-gutter-sm">
           <InvoiceToPdf
             :variableSymbol="variableSymbol"
@@ -440,6 +482,7 @@ const setDefaultSupplier = () => {
             :dueDate="dueDate"
             :basePrice="basePrice"
             :vat="vat"
+            :zeroVatRateValue="zeroVatRateValue"
           />
           <q-btn label="Save" icon="save" @click="saveInvoice" />
         </div>
