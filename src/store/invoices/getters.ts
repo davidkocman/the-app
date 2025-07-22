@@ -19,7 +19,11 @@ export const getters: PiniaGetterAdaptor<Getters, InvoicesStore> = {
       let sum = 0
       this.invoices.forEach((invoice) => {
         invoice.invoiceItems.forEach((item) => {
-          sum = sum + item.vatPrice
+          if (item.vatPrice !== 0) {
+            sum = sum + item.vatPrice
+          } else {
+            sum = sum + item.price
+          }
         })
       })
       return sum
@@ -46,7 +50,11 @@ export const getters: PiniaGetterAdaptor<Getters, InvoicesStore> = {
       this.invoices.forEach((invoice) => {
         if (invoice.isPayed) {
           invoice.invoiceItems.forEach((item) => {
-            sum = sum + item.vatPrice
+            if (item.vatPrice !== 0) {
+              sum = sum + item.vatPrice
+            } else {
+              sum = sum + item.price
+            }
           })
         }
       })

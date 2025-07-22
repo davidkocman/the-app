@@ -93,13 +93,13 @@ onBeforeMount(() => {
           <q-card class="shadow-1">
             <q-card-section>
               <div v-if="totalInvoicesVatPrice !== totalPayedInvoicesVatPrice" class="q-pb-sm">
-                <h6 class="text-orange-5">Total: {{ thousandSeparator(totalInvoicesVatPrice.toFixed(2)) }} €</h6>
+                <h6 class="text-orange-5">Billed: {{ thousandSeparator(totalInvoicesVatPrice.toFixed(2)) }} €</h6>
                 <span class="text-caption text-orange-5">
                   {{ thousandSeparator(totalInvoicesPrice.toFixed(2)) }} € without VAT</span
                 >
               </div>
               <q-separator v-if="totalInvoicesVatPrice !== totalPayedInvoicesVatPrice" />
-              <div class="q-pt-sm">
+              <div>
                 <h6 class="text-primary">Payed: {{ thousandSeparator(totalPayedInvoicesVatPrice.toFixed(2)) }} €</h6>
                 <span class="text-caption text-primary"
                   >{{ thousandSeparator(totalPayedInvoicesPrice.toFixed(2)) }} € without VAT</span

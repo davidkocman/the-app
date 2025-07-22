@@ -12,6 +12,8 @@ import {
 } from 'firebase/auth'
 import useNotesStore from '@/store/notes'
 import useAppStore from '@/store/app'
+import useInvoicesStore from '@/store/invoices'
+
 import router from '@/router'
 import getErrorMessage from '@/utils/handleCatchErrors'
 
@@ -21,9 +23,10 @@ import type { UserData } from '@/types/user'
 
 /**
  * A collection of actions for managing user authentication and profile updates in a Pinia store.
- * 
+ *
  * @type {PiniaActionAdaptor<Actions, UserStore>}
- * 
+ *
+ * @property {Function} resetStores - Resets the state of the application, notes, and invoices stores to their initial values.
  * @property {Function} registerUser - Registers a new user with email and password, sends email verification, and updates the store.
  * @property {Function} loginUser - Logs in a user with email and password, updates the store, and handles session persistence.
  * @property {Function} logoutUser - Logs out the current user, clears user data, and resets related stores.
@@ -33,16 +36,32 @@ import type { UserData } from '@/types/user'
  */
 export const actions: PiniaActionAdaptor<Actions, UserStore> = {
   /**
+   * Resets the state of the application, notes, and invoices stores to their initial values.
+   *
+   * This method retrieves instances of the app, notes, and invoices stores,
+   * and calls their `$reset()` methods to clear any existing state.
+   *
+   * Useful for scenarios such as user logout or application reinitialization.
+   */
+  resetStores() {
+    const appStore = useAppStore()
+    const notesStore = useNotesStore()
+    const invoicesStore = useInvoicesStore()
+    appStore.$reset()
+    notesStore.$reset()
+    invoicesStore.$reset()
+  },
+  /**
    * Registers a new user using the provided email and password.
-   * 
+   *
    * This method creates a new user account with Firebase Authentication, sends an email
-   * verification to the newly created user, and updates the user data in the store. 
-   * If the registration is successful, the user is redirected to the home page. 
+   * verification to the newly created user, and updates the user data in the store.
+   * If the registration is successful, the user is redirected to the home page.
    * In case of an error, it reports the error and resets the user data.
-   * 
+   *
    * @param email - The email address of the user to register.
    * @param password - The password for the new user account.
-   * 
+   *
    * @throws Will report an error if the registration or email verification fails.
    */
   async registerUser(email, password) {
@@ -70,14 +89,14 @@ export const actions: PiniaActionAdaptor<Actions, UserStore> = {
   },
   /**
    * Logs in a user using the provided email and password credentials.
-   * 
+   *
    * This method sets the authentication persistence to session-based, attempts to sign in
    * the user with the given credentials, and updates the user data upon successful login.
    * It also handles loading states and error reporting during the process.
-   * 
+   *
    * @param email - The email address of the user attempting to log in.
    * @param password - The password associated with the provided email address.
-   * 
+   *
    * @throws Will report an error if the login attempt fails.
    */
   async loginUser(email, password) {
@@ -124,7 +143,7 @@ export const actions: PiniaActionAdaptor<Actions, UserStore> = {
    */
   async logoutUser() {
     const appStore = useAppStore()
-    const notesStore = useNotesStore()
+    this.resetStores()
     appStore.loading = true
     try {
       await signOut(auth)
@@ -134,16 +153,15 @@ export const actions: PiniaActionAdaptor<Actions, UserStore> = {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {
       this.userData = null
-      notesStore.$reset()
       appStore.loading = false
     }
   },
   /**
    * Monitors the authentication state of the user and updates the user data accordingly.
-   * 
-   * @returns {Promise<firebase.User | null>} A promise that resolves with the authenticated user object if the user is signed in, 
+   *
+   * @returns {Promise<firebase.User | null>} A promise that resolves with the authenticated user object if the user is signed in,
    * or `null` if the user is signed out. The promise rejects if an error occurs during the authentication state change process.
-   * 
+   *
    * @remarks
    * - If a user is authenticated, their data (email, UID, name, email verification status, and photo URL) is stored in `this.userData`.
    * - If no user is authenticated, `this.userData` is set to `null` and the notes store is reset.
@@ -179,13 +197,13 @@ export const actions: PiniaActionAdaptor<Actions, UserStore> = {
   },
   /**
    * Updates the current user's display name in the authentication profile and the local user data store.
-   * 
+   *
    * This function sets the application store's loading state to `true` while the update is in progress.
    * If the user is authenticated, it attempts to update the display name using the `updateProfile` method.
    * On success, it updates the local `userData` object with the new name. If an error occurs during the
    * update, it reports the error using the application store's `reportError` method. The loading state
    * is reset to `false` after the operation completes, regardless of success or failure.
-   * 
+   *
    * @param name - The new display name to set for the current user.
    * @throws Will report an error to the application store if the update fails.
    */
@@ -207,7 +225,7 @@ export const actions: PiniaActionAdaptor<Actions, UserStore> = {
    * Updates the avatar of the currently authenticated user.
    *
    * @param path - The URL or path to the new avatar image.
-   * 
+   *
    * @remarks
    * This method updates the `photoURL` property of the authenticated user's profile
    * using Firebase's `updateProfile` function. It also updates the local `userData.photoUrl`

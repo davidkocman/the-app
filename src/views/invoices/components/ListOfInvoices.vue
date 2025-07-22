@@ -110,7 +110,14 @@ const tableRows = computed(() => {
   <template v-if="invoices.length">
     <q-card class="invoices-list q-mb-md">
       <q-card-section class="q-pa-none">
-        <q-table flat :rows="tableRows" :columns="tableHeaders" row-key="name" binary-state-sort>
+        <q-table
+          flat
+          :rows="tableRows"
+          :columns="tableHeaders"
+          row-key="name"
+          binary-state-sort
+          :rows-per-page-options="[0, 12, 24, 32]"
+        >
           <template v-slot:body-cell-invoiceItems="props">
             <q-td key="invoiceItems" :props="props">
               <ol>

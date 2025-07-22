@@ -18,6 +18,7 @@ type Actions = {
   currentUser: () => UserData | null | unknown
   updateUserName: (name: string) => Promise<void>
   updateUserAvatar: (path: string) => Promise<void>
+  resetStores: () => void
 }
 
 type UserStore = Store<'user', State, Getters, Actions>

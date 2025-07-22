@@ -194,10 +194,18 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
     }
     const appStore = useAppStore()
     appStore.loading = true
+
+    // Get current year date range
+    const startOfYear = new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0] // Jan 1
+    const endOfYear = new Date(new Date().getFullYear() + 1, 0, 1).toISOString().split('T')[0] // Jan 1 next year
+
     try {
       const q = query(
         collection(db, 'invoices'),
         where('user', '==', auth.currentUser?.uid),
+        where('deliveryDate', '>=', startOfYear),
+        where('deliveryDate', '<', endOfYear),
+        orderBy('deliveryDate'),
         orderBy('variableSymbol', 'desc')
       )
       const querySnapshot = await getDocs(q)
