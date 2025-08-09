@@ -25,7 +25,7 @@ const invoice = toRef(props, 'invoice')
   <q-checkbox
     left-label
     v-model="invoice.isPayed"
-    label="Is payed"
+    label="Payed"
     @update:model-value="invoiceStore.updateIsPayedStatus(invoice.id, invoice)"
   />
 </template>

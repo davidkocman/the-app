@@ -24,7 +24,7 @@ const dialog = computed(() => {
 
 <template>
   <q-dialog
-    :model-value="dialog ? true : false"
+    :model-value="!!dialog"
     persistent
     maximized
     transition-show="slide-up"
@@ -34,7 +34,7 @@ const dialog = computed(() => {
     <q-card flat class="game-detail">
       <q-bar>
         <q-space />
-        <q-btn dense flat icon="close" v-close-popup @click="gameDetail = null">
+        <q-btn v-close-popup dense flat icon="close" @click="gameDetail = null">
           <q-tooltip class="bg-white text-primary">Close</q-tooltip>
         </q-btn>
       </q-bar>
@@ -91,7 +91,7 @@ const dialog = computed(() => {
         width: 100%;
         height: 200px;
         left: 0;
-        bottom: 0px;
+        bottom: 0;
         background: #000000;
         background: linear-gradient(0deg, $dark 0%, $dark 15%, rgba(255, 255, 255, 0) 100%);
       }

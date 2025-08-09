@@ -132,6 +132,13 @@ watch(
   }
 )
 
+watch(
+  () => tableRows.value.map((item) => item.price),
+  () => {
+    calculateVatPrice()
+  }
+)
+
 const addInvoiceItem = () => {
   tableRows.value.push({
     name: '- Názov položky -',
