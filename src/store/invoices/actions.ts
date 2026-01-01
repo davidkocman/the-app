@@ -196,7 +196,7 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
     appStore.loading = true
 
     // Get current year date range
-    const startOfYear = new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0] // Jan 1
+    const startOfYear = new Date(new Date().getFullYear() - 1, 0, 1).toISOString().split('T')[0] // Jan 1
     const endOfYear = new Date(new Date().getFullYear() + 1, 0, 1).toISOString().split('T')[0] // Jan 1 next year
 
     try {

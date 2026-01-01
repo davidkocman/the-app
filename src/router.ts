@@ -5,14 +5,14 @@ import Default from '@/layouts/Default.vue'
 
 /**
  * Navigation guard to ensure that a user is authenticated before accessing a route.
- * 
+ *
  * This function checks if the current user is authenticated by invoking the `currentUser` method
  * from the `userStore`. If the user is authenticated, the navigation proceeds to the requested route.
  * Otherwise, the user is redirected to the login page (`/login`).
- * 
+ *
  * Additionally, it sets the `loading` state in the `appStore` to `true` while the authentication
  * check is in progress and resets it to `false` after the check is complete.
- * 
+ *
  * @param _to - The target route being navigated to.
  * @param _from - The current route being navigated away from.
  * @param next - A function to resolve the navigation. Call `next()` to proceed, or pass a route
