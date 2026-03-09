@@ -38,7 +38,7 @@ watch(model, (value) => {
 </script>
 
 <template>
-  <div class="row q-mx-auto q-mb-lg q-px-md search-location">
+  <div class="row search-location">
     <div class="col">
       <q-select
         v-model="model"
