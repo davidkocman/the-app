@@ -7,5 +7,6 @@ export default function (): State {
     gameDetail: null,
     gameScreenshots: [],
     gameMovies: [],
+    gameRedditPosts: [],
   }
 }

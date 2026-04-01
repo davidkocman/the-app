@@ -1,6 +1,6 @@
 import { Store } from 'pinia'
 
-import type { UpcomingGamesItem, GameItem, Screenshot, Movie } from '@/types/games'
+import type { UpcomingGamesItem, GameItem, Screenshot, Movie, RedditPost } from '@/types/games'
 
 type State = {
   games: Array<UpcomingGamesItem>
@@ -8,6 +8,7 @@ type State = {
   gameDetail: GameItem | null
   gameScreenshots: Screenshot[]
   gameMovies: Movie[]
+  gameRedditPosts: RedditPost[]
 }
 
 type Getters = {
@@ -21,6 +22,7 @@ type Actions = {
   showGameDetail: (id: number) => void
   fetchGameScreenshots: (id: number) => Promise<void>
   fetchGameMovies: (id: number) => Promise<void>
+  fetchGameRedditPosts: (id: number) => Promise<void>
 }
 
 type GamesStore = Store<'games', State, Getters, Actions>

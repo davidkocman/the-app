@@ -72,6 +72,7 @@ export const actions: PiniaActionAdaptor<Actions, GamesStore> = {
     this.gameDetail = null
     this.gameScreenshots = []
     this.gameMovies = []
+    this.gameRedditPosts = []
     const detail = this.gameItems.find((item) => item.id === id) || null
     if (detail) {
       this.gameDetail = detail
@@ -80,6 +81,7 @@ export const actions: PiniaActionAdaptor<Actions, GamesStore> = {
     }
     this.fetchGameScreenshots(id)
     this.fetchGameMovies(id)
+    this.fetchGameRedditPosts(id)
   },
   async fetchGameScreenshots(id) {
     try {
@@ -101,6 +103,18 @@ export const actions: PiniaActionAdaptor<Actions, GamesStore> = {
       const data = await response.json()
       if (data.results) {
         this.gameMovies = data.results
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  },
+  async fetchGameRedditPosts(id) {
+    try {
+      const response = await fetch(`${RAWG_API_URL}/${id}/reddit?key=${RAWG_API_KEY}`)
+      if (!response.ok) return
+      const data = await response.json()
+      if (data.results) {
+        this.gameRedditPosts = data.results
       }
     } catch (e) {
       console.error(e)

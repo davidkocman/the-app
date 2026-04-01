@@ -220,3 +220,12 @@ export interface Movie {
   data: { '480': string; max: string }
 }
 
+export interface RedditPost {
+  id: number
+  name: string
+  text: string
+  url: string
+  username: string
+  created: string
+}
+

@@ -16,7 +16,7 @@ import type { Rating } from '@/types/games'
 
 const gamesStore = useGamesStore()
 const appStore = useAppStore()
-const { gameDetail, getGameDetail, gameScreenshots, gameMovies } = storeToRefs(gamesStore)
+const { gameDetail, getGameDetail, gameScreenshots, gameMovies, gameRedditPosts } = storeToRefs(gamesStore)
 const { isDarkMode } = storeToRefs(appStore)
 
 const dialog = computed(() => !!getGameDetail.value)
@@ -38,7 +38,7 @@ const ratingColorMap: Record<string, string> = {
   skip: '#e74c3c',
   meh: '#e67e22',
   recommended: '#3498db',
-  exceptional: '#27ae60',
+  exceptional: '#27ae60'
 }
 
 const ratingsChartSeries = computed(() => ((getGameDetail.value?.ratings as Rating[]) ?? []).map((r) => r.count))
@@ -82,9 +82,13 @@ const platformsWithRequirements = computed(() =>
 )
 
 const selectedMovie = ref(0)
+const redditExpanded = ref(false)
 
 watch(dialog, (val) => {
-  if (!val) selectedMovie.value = 0
+  if (!val) {
+    selectedMovie.value = 0
+    redditExpanded.value = false
+  }
 })
 </script>
 
@@ -191,6 +195,34 @@ watch(dialog, (val) => {
             <section class="game-data__section q-mt-lg">
               <div class="section-label text-caption q-mb-xs">About</div>
               <p class="text-body2 description">{{ description }}</p>
+            </section>
+
+            <!-- Reddit Posts -->
+            <section v-if="gameRedditPosts.length" class="game-data__section q-mt-lg">
+              <div class="section-label text-caption q-mb-sm reddit-toggle" @click="redditExpanded = !redditExpanded">
+                Reddit
+                <q-icon :name="redditExpanded ? 'expand_less' : 'expand_more'" size="14px" />
+              </div>
+              <div v-if="redditExpanded" class="flex column" style="gap: 8px">
+                <q-card v-for="post in gameRedditPosts" :key="post.id" flat bordered>
+                  <q-card-section>
+                    <a
+                      :href="post.url"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-subtitle2 reddit-post-link"
+                      >{{ post.name }}</a
+                    >
+                    <div class="text-caption" style="color: var(--text-muted)">{{ post.username }}</div>
+                  </q-card-section>
+                  <template v-if="post.text">
+                    <q-separator inset />
+                    <q-card-section>
+                      <p class="text-body2 reddit-post-text">{{ post.text.replace(/<[^>]*>/g, '') }}</p>
+                    </q-card-section>
+                  </template>
+                </q-card>
+              </div>
             </section>
           </div>
 
@@ -349,6 +381,27 @@ watch(dialog, (val) => {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+  }
+
+  .reddit-toggle {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+  }
+
+  .reddit-post-link {
+    color: $primary;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .reddit-post-text {
+    white-space: pre-line;
+    margin: 0;
   }
 
   .req-expansion {
