@@ -3,797 +3,544 @@ import { Template, BLANK_PDF } from '@pdfme/common'
 // types
 import type { InvoiceItem } from '@/types/invoices'
 
+type SchemaEntry = {
+  name: string
+  type: string
+  position: { x: number; y: number }
+  width: number
+  height: number
+  rotate?: number
+  alignment?: string
+  verticalAlignment?: string
+  fontSize?: number
+  lineHeight?: number
+  characterSpacing?: number
+  fontColor?: string
+  backgroundColor?: string
+  opacity?: number
+  fontName?: string
+}
+
 const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
-  const template: Template = {
-    basePdf: BLANK_PDF,
-    schemas: [
-      {
-        invoiceTitle: {
-          type: 'text',
-          position: {
-            x: 165,
-            y: 10.11
-          },
-          width: 40,
-          height: 5,
-          fontSize: 12,
-          fontColor: '#000000',
-          fontName: 'Roboto'
-        },
-        consumerTitle: {
-          type: 'text',
-          position: {
-            x: 10,
-            y: 30
-          },
-          width: 30,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 12,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#555555',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        consumerName: {
-          type: 'text',
-          position: {
-            x: 10,
-            y: 38
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 10,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        consumerAddress: {
-          type: 'text',
-          position: {
-            x: 10,
-            y: 43
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        consumerId: {
-          type: 'text',
-          position: {
-            x: 10,
-            y: 53
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        consumerTax: {
-          type: 'text',
-          position: {
-            x: 10,
-            y: 58
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        consumerVat: {
-          type: 'text',
-          position: {
-            x: 10,
-            y: 63
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        supplierTitle: {
-          type: 'text',
-          position: {
-            x: 110,
-            y: 30
-          },
-          width: 30,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 12,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#555555',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        supplierName: {
-          type: 'text',
-          position: {
-            x: 110,
-            y: 38
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 10,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        supplierAddress: {
-          type: 'text',
-          position: {
-            x: 110,
-            y: 43
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        supplierId: {
-          type: 'text',
-          position: {
-            x: 110,
-            y: 53
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        supplierTax: {
-          type: 'text',
-          position: {
-            x: 110,
-            y: 58
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        supplierVat: {
-          type: 'text',
-          position: {
-            x: 110,
-            y: 63
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        separator1: {
-          type: 'text',
-          position: {
-            x: 10,
-            y: 75
-          },
-          width: 190,
-          height: 1,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 0,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#ffffff',
-          backgroundColor: '#cacaca',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        issueDateTitle: {
-          type: 'text',
-          position: {
-            x: 10,
-            y: 80
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        issueDateValue: {
-          type: 'text',
-          position: {
-            x: 50,
-            y: 80
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        deliveryDateTitle: {
-          type: 'text',
-          position: {
-            x: 10,
-            y: 85
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        deliveryDateValue: {
-          type: 'text',
-          position: {
-            x: 50,
-            y: 85
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        dueDateTitle: {
-          type: 'text',
-          position: {
-            x: 10,
-            y: 90
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        dueDateValue: {
-          type: 'text',
-          position: {
-            x: 50,
-            y: 90
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        paymentMethod: {
-          type: 'text',
-          position: {
-            x: 110,
-            y: 80
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        sum: {
-          type: 'text',
-          position: {
-            x: 110,
-            y: 85
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        variableSymbol: {
-          type: 'text',
-          position: {
-            x: 110,
-            y: 90
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        iban: {
-          type: 'text',
-          position: {
-            x: 110,
-            y: 95
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        swift: {
-          type: 'text',
-          position: {
-            x: 110,
-            y: 100
-          },
-          width: 100,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          backgroundColor: '',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        itemNoTitle: {
-          type: 'text',
-          position: {
-            x: 10,
-            y: 115
-          },
-          width: 5,
-          height: 0.5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 10,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          opacity: 0.5,
-          fontName: 'Roboto'
-        },
-        itemNameTitle: {
-          type: 'text',
-          position: {
-            x: 20,
-            y: 115
-          },
-          width: 65,
-          height: 0.5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 10,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          opacity: 0.5,
-          fontName: 'Roboto'
-        },
-        quantityTitle: {
-          type: 'text',
-          position: {
-            x: 90,
-            y: 115
-          },
-          width: 20,
-          height: 0.5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 10,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          opacity: 0.5,
-          fontName: 'Roboto'
-        },
-        priceTitle: {
-          type: 'text',
-          position: {
-            x: 115,
-            y: 115
-          },
-          width: 30,
-          height: 0.5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 10,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          opacity: 0.5,
-          fontName: 'Roboto'
-        },
-        vatRateTitle: {
-          type: 'text',
-          position: {
-            x: 150,
-            y: 115
-          },
-          width: 20,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 10,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          opacity: 0.5,
-          fontName: 'Roboto'
-        },
-        vatPriceTitle: {
-          type: 'text',
-          position: {
-            x: 175,
-            y: 115
-          },
-          width: 25,
-          height: 5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 10,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#000000',
-          opacity: 0.5,
-          fontName: 'Roboto'
-        },
-        tableHeadLine: {
-          type: 'text',
-          position: {
-            x: 10,
-            y: 120
-          },
-          width: 190,
-          height: 0.5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 0,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#ffffff',
-          backgroundColor: '#000000',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        registration: {
-          type: 'text',
-          position: {
-            x: 85,
-            y: 285
-          },
-          width: 60,
-          height: 0.5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#838383',
-          opacity: 1,
-          fontName: 'Roboto'
-        },
-        businessReg: {
-          type: 'text',
-          position: {
-            x: 85,
-            y: 290
-          },
-          width: 60,
-          height: 0.5,
-          rotate: 0,
-          alignment: 'left',
-          verticalAlignment: 'top',
-          fontSize: 8,
-          lineHeight: 1,
-          characterSpacing: 0,
-          fontColor: '#838383',
-          opacity: 1,
-          fontName: 'Roboto'
-        }
-      }
-    ]
-  }
-
-  const getItemNumbers = () => {
-    const y = 122
-    invoiceItems.forEach((_item, index) => {
-      template.schemas[0][`itemNo${index + 1}`] = {
-        type: 'text',
-        position: {
-          x: 10,
-          y: y + index * 5
-        },
-        width: 5,
-        height: 5,
-        rotate: 0,
-        alignment: 'left',
-        verticalAlignment: 'top',
-        fontSize: 10,
-        lineHeight: 1,
-        characterSpacing: 0,
-        fontColor: '#000000',
-        opacity: 0.5,
-        fontName: 'Roboto'
-      }
-    })
-  }
-
-  const getItemNames = () => {
-    const y = 122
-    invoiceItems.forEach((_item, index) => {
-      template.schemas[0][`item${index + 1}Name`] = {
-        type: 'text',
-        position: {
-          x: 20,
-          y: y + index * 5
-        },
-        width: 65,
-        height: 5,
-        rotate: 0,
-        alignment: 'left',
-        verticalAlignment: 'top',
-        fontSize: 10,
-        lineHeight: 1,
-        characterSpacing: 0,
-        fontColor: '#000000',
-        opacity: 1,
-        fontName: 'Roboto'
-      }
-    })
-  }
-
-  const getItemQuantity = () => {
-    const y = 122
-    invoiceItems.forEach((_item, index) => {
-      template.schemas[0][`item${index + 1}Quantity`] = {
-        type: 'text',
-        position: {
-          x: 90,
-          y: y + index * 5
-        },
-        width: 20,
-        height: 5,
-        rotate: 0,
-        alignment: 'left',
-        verticalAlignment: 'top',
-        fontSize: 10,
-        lineHeight: 1,
-        characterSpacing: 0,
-        fontColor: '#000000',
-        opacity: 1,
-        fontName: 'Roboto'
-      }
-    })
-  }
-
-  const getItemPrice = () => {
-    const y = 122
-    invoiceItems.forEach((_item, index) => {
-      template.schemas[0][`item${index + 1}Price`] = {
-        type: 'text',
-        position: {
-          x: 115,
-          y: y + index * 5
-        },
-        width: 30,
-        height: 5,
-        rotate: 0,
-        alignment: 'left',
-        verticalAlignment: 'top',
-        fontSize: 10,
-        lineHeight: 1,
-        characterSpacing: 0,
-        fontColor: '#000000',
-        opacity: 1,
-        fontName: 'Roboto'
-      }
-    })
-  }
-
-  const getItemVatRate = () => {
-    const y = 122
-    invoiceItems.forEach((_item, index) => {
-      template.schemas[0][`item${index + 1}VatRate`] = {
-        type: 'text',
-        position: {
-          x: 150,
-          y: y + index * 5
-        },
-        width: 20,
-        height: 5,
-        rotate: 0,
-        alignment: 'left',
-        verticalAlignment: 'top',
-        fontSize: 10,
-        lineHeight: 1,
-        characterSpacing: 0,
-        fontColor: '#000000',
-        opacity: 1,
-        fontName: 'Roboto'
-      }
-    })
-  }
-
-  const getItemVatPrice = () => {
-    const y = 122
-    invoiceItems.forEach((_item, index) => {
-      template.schemas[0][`item${index + 1}VatPrice`] = {
-        type: 'text',
-        position: {
-          x: 175,
-          y: y + index * 5
-        },
-        width: 25,
-        height: 5,
-        rotate: 0,
-        alignment: 'left',
-        verticalAlignment: 'top',
-        fontSize: 10,
-        lineHeight: 1,
-        characterSpacing: 0,
-        fontColor: '#000000',
-        opacity: 1,
-        fontName: 'Roboto'
-      }
-    })
-  }
-
-  const tableHeadLineEnd = () => {
-    template.schemas[0]['tableHeadLineEnd'] = {
+  const staticSchemas: SchemaEntry[] = [
+    {
+      name: 'invoiceTitle',
       type: 'text',
-      position: {
-        x: 10,
-        y: 123 + invoiceItems.length * 5
-      },
+      position: { x: 165, y: 10.11 },
+      width: 40,
+      height: 5,
+      fontSize: 12,
+      fontColor: '#000000',
+      fontName: 'Roboto'
+    },
+    {
+      name: 'consumerTitle',
+      type: 'text',
+      position: { x: 10, y: 30 },
+      width: 30,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 12,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#555555',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'consumerName',
+      type: 'text',
+      position: { x: 10, y: 38 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'consumerAddress',
+      type: 'text',
+      position: { x: 10, y: 43 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'consumerId',
+      type: 'text',
+      position: { x: 10, y: 53 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'consumerTax',
+      type: 'text',
+      position: { x: 10, y: 58 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'consumerVat',
+      type: 'text',
+      position: { x: 10, y: 63 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'supplierTitle',
+      type: 'text',
+      position: { x: 110, y: 30 },
+      width: 30,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 12,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#555555',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'supplierName',
+      type: 'text',
+      position: { x: 110, y: 38 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'supplierAddress',
+      type: 'text',
+      position: { x: 110, y: 43 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'supplierId',
+      type: 'text',
+      position: { x: 110, y: 53 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'supplierTax',
+      type: 'text',
+      position: { x: 110, y: 58 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'supplierVat',
+      type: 'text',
+      position: { x: 110, y: 63 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'separator1',
+      type: 'text',
+      position: { x: 10, y: 75 },
+      width: 190,
+      height: 1,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 0,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#ffffff',
+      backgroundColor: '#cacaca',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'issueDateTitle',
+      type: 'text',
+      position: { x: 10, y: 80 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'issueDateValue',
+      type: 'text',
+      position: { x: 50, y: 80 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'deliveryDateTitle',
+      type: 'text',
+      position: { x: 10, y: 85 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'deliveryDateValue',
+      type: 'text',
+      position: { x: 50, y: 85 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'dueDateTitle',
+      type: 'text',
+      position: { x: 10, y: 90 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'dueDateValue',
+      type: 'text',
+      position: { x: 50, y: 90 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'paymentMethod',
+      type: 'text',
+      position: { x: 110, y: 80 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'sum',
+      type: 'text',
+      position: { x: 110, y: 85 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'variableSymbol',
+      type: 'text',
+      position: { x: 110, y: 90 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'iban',
+      type: 'text',
+      position: { x: 110, y: 95 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'swift',
+      type: 'text',
+      position: { x: 110, y: 100 },
+      width: 100,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      backgroundColor: '',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'itemNoTitle',
+      type: 'text',
+      position: { x: 10, y: 115 },
+      width: 5,
+      height: 0.5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 0.5,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'itemNameTitle',
+      type: 'text',
+      position: { x: 20, y: 115 },
+      width: 65,
+      height: 0.5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 0.5,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'quantityTitle',
+      type: 'text',
+      position: { x: 90, y: 115 },
+      width: 20,
+      height: 0.5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 0.5,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'priceTitle',
+      type: 'text',
+      position: { x: 115, y: 115 },
+      width: 30,
+      height: 0.5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 0.5,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'vatRateTitle',
+      type: 'text',
+      position: { x: 150, y: 115 },
+      width: 20,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 0.5,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'vatPriceTitle',
+      type: 'text',
+      position: { x: 175, y: 115 },
+      width: 25,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 0.5,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'tableHeadLine',
+      type: 'text',
+      position: { x: 10, y: 120 },
       width: 190,
       height: 0.5,
       rotate: 0,
@@ -806,16 +553,165 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
       backgroundColor: '#000000',
       opacity: 1,
       fontName: 'Roboto'
-    }
-  }
-
-  const basePriceTitlePosition = () => {
-    template.schemas[0]['basePriceTitle'] = {
+    },
+    {
+      name: 'registration',
       type: 'text',
-      position: {
-        x: 110,
-        y: 130 + invoiceItems.length * 5
-      },
+      position: { x: 85, y: 285 },
+      width: 60,
+      height: 0.5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#838383',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'businessReg',
+      type: 'text',
+      position: { x: 85, y: 290 },
+      width: 60,
+      height: 0.5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 8,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#838383',
+      opacity: 1,
+      fontName: 'Roboto'
+    }
+  ]
+
+  const dynamicSchemas: SchemaEntry[] = []
+  const y = 122
+
+  invoiceItems.forEach((_item, index) => {
+    dynamicSchemas.push({
+      name: `itemNo${index + 1}`,
+      type: 'text',
+      position: { x: 10, y: y + index * 5 },
+      width: 5,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 0.5,
+      fontName: 'Roboto'
+    })
+    dynamicSchemas.push({
+      name: `item${index + 1}Name`,
+      type: 'text',
+      position: { x: 20, y: y + index * 5 },
+      width: 65,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 1,
+      fontName: 'Roboto'
+    })
+    dynamicSchemas.push({
+      name: `item${index + 1}Quantity`,
+      type: 'text',
+      position: { x: 90, y: y + index * 5 },
+      width: 20,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 1,
+      fontName: 'Roboto'
+    })
+    dynamicSchemas.push({
+      name: `item${index + 1}Price`,
+      type: 'text',
+      position: { x: 115, y: y + index * 5 },
+      width: 30,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 1,
+      fontName: 'Roboto'
+    })
+    dynamicSchemas.push({
+      name: `item${index + 1}VatRate`,
+      type: 'text',
+      position: { x: 150, y: y + index * 5 },
+      width: 20,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 1,
+      fontName: 'Roboto'
+    })
+    dynamicSchemas.push({
+      name: `item${index + 1}VatPrice`,
+      type: 'text',
+      position: { x: 175, y: y + index * 5 },
+      width: 25,
+      height: 5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 10,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#000000',
+      opacity: 1,
+      fontName: 'Roboto'
+    })
+  })
+
+  const tailSchemas: SchemaEntry[] = [
+    {
+      name: 'tableHeadLineEnd',
+      type: 'text',
+      position: { x: 10, y: 123 + invoiceItems.length * 5 },
+      width: 190,
+      height: 0.5,
+      rotate: 0,
+      alignment: 'left',
+      verticalAlignment: 'top',
+      fontSize: 0,
+      lineHeight: 1,
+      characterSpacing: 0,
+      fontColor: '#ffffff',
+      backgroundColor: '#000000',
+      opacity: 1,
+      fontName: 'Roboto'
+    },
+    {
+      name: 'basePriceTitle',
+      type: 'text',
+      position: { x: 110, y: 130 + invoiceItems.length * 5 },
       width: 40,
       height: 5,
       rotate: 0,
@@ -827,16 +723,11 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
       fontColor: '#000000',
       opacity: 1,
       fontName: 'Roboto'
-    }
-  }
-
-  const basePricePosition = () => {
-    template.schemas[0]['basePrice'] = {
+    },
+    {
+      name: 'basePrice',
       type: 'text',
-      position: {
-        x: 170,
-        y: 130 + invoiceItems.length * 5
-      },
+      position: { x: 170, y: 130 + invoiceItems.length * 5 },
       width: 40,
       height: 5,
       rotate: 0,
@@ -848,16 +739,11 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
       fontColor: '#000000',
       opacity: 1,
       fontName: 'Roboto'
-    }
-  }
-
-  const vatTitlePosition = () => {
-    template.schemas[0]['vatTitle'] = {
+    },
+    {
+      name: 'vatTitle',
       type: 'text',
-      position: {
-        x: 110,
-        y: 135 + invoiceItems.length * 5
-      },
+      position: { x: 110, y: 135 + invoiceItems.length * 5 },
       width: 190,
       height: 5,
       rotate: 0,
@@ -869,16 +755,11 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
       fontColor: '#000000',
       opacity: 1,
       fontName: 'Roboto'
-    }
-  }
-
-  const vatPosition = () => {
-    template.schemas[0]['vat'] = {
+    },
+    {
+      name: 'vat',
       type: 'text',
-      position: {
-        x: 170,
-        y: 135 + invoiceItems.length * 5
-      },
+      position: { x: 170, y: 135 + invoiceItems.length * 5 },
       width: 40,
       height: 5,
       rotate: 0,
@@ -890,16 +771,11 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
       fontColor: '#000000',
       opacity: 1,
       fontName: 'Roboto'
-    }
-  }
-
-  const totalToPayTitlePosition = () => {
-    template.schemas[0]['totalToPayTitle'] = {
+    },
+    {
+      name: 'totalToPayTitle',
       type: 'text',
-      position: {
-        x: 110,
-        y: 140 + invoiceItems.length * 5
-      },
+      position: { x: 110, y: 140 + invoiceItems.length * 5 },
       width: 60,
       height: 6,
       rotate: 0,
@@ -912,16 +788,11 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
       backgroundColor: '#e1e1e1',
       opacity: 1,
       fontName: 'Roboto'
-    }
-  }
-
-  const totalToPayPosition = () => {
-    template.schemas[0]['totalToPay'] = {
+    },
+    {
+      name: 'totalToPay',
       type: 'text',
-      position: {
-        x: 170,
-        y: 140 + invoiceItems.length * 5
-      },
+      position: { x: 170, y: 140 + invoiceItems.length * 5 },
       width: 30,
       height: 6,
       rotate: 0,
@@ -935,21 +806,12 @@ const getInvoiceTemplate = (invoiceItems: InvoiceItem[]) => {
       opacity: 1,
       fontName: 'Roboto'
     }
-  }
+  ]
 
-  getItemNumbers()
-  getItemNames()
-  getItemQuantity()
-  getItemPrice()
-  getItemVatRate()
-  getItemVatPrice()
-  tableHeadLineEnd()
-  basePriceTitlePosition()
-  basePricePosition()
-  vatTitlePosition()
-  vatPosition()
-  totalToPayTitlePosition()
-  totalToPayPosition()
+  const template: Template = {
+    basePdf: BLANK_PDF,
+    schemas: [[...staticSchemas, ...dynamicSchemas, ...tailSchemas]]
+  }
 
   return template
 }

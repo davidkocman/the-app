@@ -70,11 +70,40 @@ export const actions: PiniaActionAdaptor<Actions, GamesStore> = {
   },
   showGameDetail(id) {
     this.gameDetail = null
+    this.gameScreenshots = []
+    this.gameMovies = []
     const detail = this.gameItems.find((item) => item.id === id) || null
     if (detail) {
       this.gameDetail = detail
-      return
+    } else {
+      this.getItemInfo(id)
     }
-    this.getItemInfo(id)
+    this.fetchGameScreenshots(id)
+    this.fetchGameMovies(id)
+  },
+  async fetchGameScreenshots(id) {
+    try {
+      const response = await fetch(`${RAWG_API_URL}/${id}/screenshots?key=${RAWG_API_KEY}`)
+      const data = await response.json()
+      if (data.results) {
+        this.gameScreenshots = data.results
+      }
+    } catch (e) {
+      console.error(e)
+      const appStore = useAppStore()
+      appStore.reportError({ message: getErrorMessage(e) })
+    }
+  },
+  async fetchGameMovies(id) {
+    try {
+      const response = await fetch(`${RAWG_API_URL}/${id}/movies?key=${RAWG_API_KEY}`)
+      if (!response.ok) return
+      const data = await response.json()
+      if (data.results) {
+        this.gameMovies = data.results
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
 }

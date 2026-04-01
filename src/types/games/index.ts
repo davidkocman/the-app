@@ -147,6 +147,10 @@ export interface GameItem {
   game_series_count: number
   esrb_rating: EsrbRating
   platforms: PlatformMeta[]
+  genres: Genre[]
+  tags: Tag[]
+  developers: Developer[]
+  publishers: Publisher[]
 }
 
 export interface MetacriticPlatform {
@@ -154,7 +158,7 @@ export interface MetacriticPlatform {
   url: string
 }
 
-export interface Ratings {}
+export type Ratings = Rating[]
 
 export interface Reactions {}
 
@@ -187,3 +191,32 @@ export enum Language {
   Eng = 'eng',
   Rus = 'rus'
 }
+
+export interface Developer {
+  id: number
+  name: string
+  slug: string
+  games_count: number
+  image_background: string
+}
+
+export interface Publisher {
+  id: number
+  name: string
+  slug: string
+  games_count: number
+  image_background: string
+}
+
+export interface Screenshot {
+  id: number
+  image: string
+}
+
+export interface Movie {
+  id: number
+  name: string
+  preview: string
+  data: { '480': string; max: string }
+}
+
