@@ -11,6 +11,12 @@ const gamesStore = useGamesStore()
 
 const currentYearMonth = ref(new Date().toISOString().slice(0, 7))
 
+const minYearMonth = computed(() => {
+  const d = new Date()
+  d.setMonth(d.getMonth() - 6)
+  return d.toISOString().slice(0, 7)
+})
+
 const currentMonthUpcomingGames = computed(() => {
   const firstDay = new Date(`${currentYearMonth.value}-01`)
   const lastDay = new Date(firstDay.getFullYear(), firstDay.getMonth() + 1, 0)
@@ -62,7 +68,7 @@ onBeforeMount(async () => {
 <template>
   <div class="row">
     <div class="col row justify-between q-mb-md">
-      <q-btn @click="prevMonth" :disable="currentYearMonth === new Date().toISOString().slice(0, 7)"
+      <q-btn @click="prevMonth" :disable="currentYearMonth <= minYearMonth"
         >Previous month</q-btn
       >
       <div class="text-weight-bold">

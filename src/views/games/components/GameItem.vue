@@ -13,11 +13,17 @@ const gamesStore = useGamesStore()
 
 <template>
   <q-card :key="item.slug" class="game-item" @click="gamesStore.showGameDetail(item.id)">
-    <q-img :src="item.background_image ? item.background_image : 'something'" :alt="item.slug" class="game-item__img">
+    <q-img v-if="item.background_image" :src="item.background_image" :alt="item.slug" class="game-item__img">
       <div class="game-item__img__title absolute-bottom bg-opacity-50 text-white">
         <h2 class="text-overline text-uppercase">{{ item.name }}</h2>
       </div>
     </q-img>
+    <div v-else class="game-item__placeholder column items-center justify-center">
+      <q-icon name="sports_esports" size="3rem" color="grey-6" />
+      <div class="game-item__img__title absolute-bottom bg-opacity-50 text-white">
+        <h2 class="text-overline text-uppercase">{{ item.name }}</h2>
+      </div>
+    </div>
   </q-card>
 </template>
 
@@ -26,6 +32,12 @@ const gamesStore = useGamesStore()
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  &__placeholder {
+    height: 100%;
+    width: 100%;
+    background-color: var(--games-weekday-bg);
+    position: relative;
+  }
   &__img {
     height: 100%;
     width: 100%;

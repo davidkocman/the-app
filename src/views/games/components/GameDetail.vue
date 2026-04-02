@@ -336,7 +336,7 @@ watch(dialog, (val) => {
   .game-data {
     max-width: 1200px;
     margin: 0 auto;
-    padding-top: 200px;
+    padding-top: 30vh;
     padding-bottom: 48px;
 
     &__meta {
