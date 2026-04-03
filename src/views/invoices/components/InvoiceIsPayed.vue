@@ -26,6 +26,7 @@ const invoice = toRef(props, 'invoice')
     left-label
     v-model="invoice.isPayed"
     label="Payed"
+    :color="invoice.isPayed ? 'primary' : 'warning'"
     @update:model-value="invoiceStore.updateIsPayedStatus(invoice.id, invoice)"
   />
 </template>
