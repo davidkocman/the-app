@@ -4,6 +4,8 @@ export default function (): State {
   return {
     companies: [],
     invoices: [],
-    pageLocked: true
+    pageLocked: true,
+    selectedYear: new Date().getFullYear(),
+    selectedConsumer: null
   }
 }

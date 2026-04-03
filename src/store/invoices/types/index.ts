@@ -5,6 +5,8 @@ type State = {
   companies: Array<SavedCompany>
   invoices: Array<SavedInvoice>
   pageLocked: boolean
+  selectedYear: number
+  selectedConsumer: string | null
 }
 
 type Getters = {

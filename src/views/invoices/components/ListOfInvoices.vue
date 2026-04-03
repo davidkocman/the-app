@@ -9,10 +9,22 @@ import RemoveInvoice from './RemoveInvoice.vue'
 import InvoiceIsPayed from './InvoiceIsPayed.vue'
 
 // types
-import type { SavedInvoice, InvoiceItem, Invoice } from '@/types/invoices'
+import type { SavedInvoice, InvoiceItem } from '@/types/invoices'
 
 const invoicesStore = useInvoicesStore()
-const { invoices } = storeToRefs(invoicesStore)
+const { invoices, selectedYear, selectedConsumer } = storeToRefs(invoicesStore)
+
+const availableYears = computed(() => {
+  const years = new Set<number>()
+  invoices.value.forEach((inv) => years.add(new Date(inv.deliveryDate).getFullYear()))
+  return Array.from(years).sort()
+})
+
+const availableConsumers = computed(() => {
+  const names = new Set<string>()
+  invoices.value.forEach((inv) => names.add(inv.consumer.name))
+  return Array.from(names).sort()
+})
 
 const totalVatPrice = (item: SavedInvoice) => {
   let sum = 0
@@ -64,6 +76,7 @@ const tableHeaders = ref<QuasarTableHeader[]>([
   { name: 'invoiceItems', align: 'left', label: 'Items', field: 'invoiceItems' },
   { name: 'deliveryDate', align: 'left', label: 'Delivery date', field: 'deliveryDate' },
   { name: 'totalPrice', align: 'left', label: 'Billed', field: 'totalPrice', style: 'width: 200px' },
+  { name: 'vatAmount', align: 'left', label: 'VAT', field: 'vatAmount', style: 'width: 150px' },
   { name: 'vatRate', align: 'left', label: 'VAT (%)', field: 'vatRate', style: 'width: 200px' },
   { name: 'actions', label: '', field: 'actions', style: 'width: 100px' }
 ])
@@ -72,36 +85,51 @@ type TableRows = {
   variableSymbol: string
   consumer: string
   totalPrice: string
+  vatAmount: string
   vatRate: number
   deliveryDate: string
   zeroVatRateValue: string | null
+  invoiceItems: InvoiceItem[]
+  originalInvoice: SavedInvoice
 }
 
 const tableRows = computed(() => {
   const rows: TableRows[] = []
-  invoices.value.forEach((item: Invoice) => {
-    const entry: TableRows & { invoiceItems: InvoiceItem[] } = {
-      variableSymbol: item.variableSymbol,
-      consumer: item.consumer.name,
-      totalPrice: '',
-      vatRate: 0,
-      invoiceItems: [],
-      deliveryDate: new Date(item.deliveryDate).toLocaleDateString('sk'),
-      zeroVatRateValue: item.zeroVatRateValue ?? null
-    }
-    let sum = 0
-    item.invoiceItems.forEach((itm: InvoiceItem) => {
-      if (itm.vatRate !== 0) {
-        sum = sum + itm.vatPrice
-      } else {
-        sum = sum + itm.price
-      }
-      entry.invoiceItems.push(itm)
+  invoices.value
+    .filter((item) => {
+      const year = new Date(item.deliveryDate).getFullYear()
+      if (year !== selectedYear.value) return false
+      if (selectedConsumer.value !== null && item.consumer.name !== selectedConsumer.value) return false
+      return true
     })
-    entry.totalPrice = sum.toFixed(2) + ' €'
-    entry.vatRate = item.invoiceItems[0].vatRate
-    rows.push(entry)
-  })
+    .forEach((item: SavedInvoice) => {
+      const entry: TableRows = {
+        variableSymbol: item.variableSymbol,
+        consumer: item.consumer.name,
+        totalPrice: '',
+        vatAmount: '',
+        vatRate: 0,
+        invoiceItems: [],
+        deliveryDate: new Date(item.deliveryDate).toLocaleDateString('sk'),
+        zeroVatRateValue: item.zeroVatRateValue ?? null,
+        originalInvoice: item
+      }
+      let sum = 0
+      let baseSum = 0
+      item.invoiceItems.forEach((itm: InvoiceItem) => {
+        if (itm.vatRate !== 0) {
+          sum = sum + itm.vatPrice
+        } else {
+          sum = sum + itm.price
+        }
+        baseSum = baseSum + itm.price
+        entry.invoiceItems.push(itm)
+      })
+      entry.totalPrice = sum.toFixed(2) + ' €'
+      entry.vatAmount = (sum - baseSum).toFixed(2) + ' €'
+      entry.vatRate = item.invoiceItems[0].vatRate
+      rows.push(entry)
+    })
   return rows
 })
 </script>
@@ -109,45 +137,75 @@ const tableRows = computed(() => {
 <template>
   <template v-if="invoices.length">
     <q-card class="invoices-list q-mb-md">
+      <q-card-section class="q-p-md">
+        <div class="row q-gutter-sm items-center">
+          <q-select
+            v-model="selectedYear"
+            :options="availableYears"
+            label="Year"
+            dense
+            outlined
+            style="min-width: 120px"
+          />
+          <q-select
+            v-model="selectedConsumer"
+            :options="availableConsumers"
+            label="Consumer"
+            clearable
+            dense
+            outlined
+            style="min-width: 220px"
+          />
+        </div>
+      </q-card-section>
       <q-card-section class="q-pa-none">
-        <q-table
-          flat
-          :rows="tableRows"
-          :columns="tableHeaders"
-          row-key="name"
-          binary-state-sort
-          :rows-per-page-options="[0, 12, 24, 32]"
-        >
-          <template v-slot:body-cell-invoiceItems="props">
-            <q-td key="invoiceItems" :props="props">
-              <ol>
-                <li v-for="item in props.row.invoiceItems" :key="item.name">{{ item.name }}</li>
-              </ol>
-            </q-td>
-          </template>
-          <!-- Table actions -->
-          <template v-slot:body-cell-actions="props">
-            <q-td :props="props" key="actions">
-              <div class="actions q-gutter-xs">
-                <InvoiceIsPayed :invoice="invoices[tableRows.indexOf(props.row)]" />
-                <InvoiceToPdf
-                  :variableSymbol="invoices[tableRows.indexOf(props.row)].variableSymbol"
-                  :invoiceItems="invoices[tableRows.indexOf(props.row)].invoiceItems"
-                  :totalVatPrice="totalVatPrice(invoices[tableRows.indexOf(props.row)])"
-                  :supplier="invoices[tableRows.indexOf(props.row)].supplier"
-                  :consumer="invoices[tableRows.indexOf(props.row)].consumer"
-                  :issueDate="invoices[tableRows.indexOf(props.row)].issueDate"
-                  :deliveryDate="invoices[tableRows.indexOf(props.row)].deliveryDate"
-                  :dueDate="invoices[tableRows.indexOf(props.row)].dueDate"
-                  :basePrice="totalBasePrice(invoices[tableRows.indexOf(props.row)])"
-                  :vat="totalVat(invoices[tableRows.indexOf(props.row)])"
-                  :zeroVatRateValue="invoices[tableRows.indexOf(props.row)].zeroVatRateValue"
-                />
-                <RemoveInvoice :invoice="invoices[tableRows.indexOf(props.row)]" />
-              </div>
-            </q-td>
-          </template>
-        </q-table>
+        <template v-if="tableRows.length">
+          <q-table
+            flat
+            :rows="tableRows"
+            :columns="tableHeaders"
+            row-key="name"
+            binary-state-sort
+            :rows-per-page-options="[0, 12, 24, 32]"
+          >
+            <template v-slot:body-cell-invoiceItems="props">
+              <q-td key="invoiceItems" :props="props">
+                <ol>
+                  <li v-for="item in props.row.invoiceItems" :key="item.name">{{ item.name }}</li>
+                </ol>
+              </q-td>
+            </template>
+            <!-- Table actions -->
+            <template v-slot:body-cell-actions="props">
+              <q-td :props="props" key="actions">
+                <div class="actions q-gutter-xs">
+                  <InvoiceIsPayed :invoice="props.row.originalInvoice" />
+                  <InvoiceToPdf
+                    :variableSymbol="props.row.originalInvoice.variableSymbol"
+                    :invoiceItems="props.row.originalInvoice.invoiceItems"
+                    :totalVatPrice="totalVatPrice(props.row.originalInvoice)"
+                    :supplier="props.row.originalInvoice.supplier"
+                    :consumer="props.row.originalInvoice.consumer"
+                    :issueDate="props.row.originalInvoice.issueDate"
+                    :deliveryDate="props.row.originalInvoice.deliveryDate"
+                    :dueDate="props.row.originalInvoice.dueDate"
+                    :basePrice="totalBasePrice(props.row.originalInvoice)"
+                    :vat="totalVat(props.row.originalInvoice)"
+                    :zeroVatRateValue="props.row.originalInvoice.zeroVatRateValue"
+                  />
+                  <RemoveInvoice :invoice="props.row.originalInvoice" />
+                </div>
+              </q-td>
+            </template>
+          </q-table>
+        </template>
+        <template v-else>
+          <q-card-section>
+            <div class="row q-gutter-sm">
+              <div class="col text-center">No items</div>
+            </div>
+          </q-card-section>
+        </template>
       </q-card-section>
     </q-card>
   </template>
