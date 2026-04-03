@@ -4,8 +4,7 @@ import { storeToRefs } from 'pinia'
 import useInvoicesStore from '@/store/invoices'
 
 // components
-import InvoiceToPdf from './InvoiceToPdf.vue'
-import RemoveInvoice from './RemoveInvoice.vue'
+import InvoiceActionsMenu from './InvoiceActionsMenu.vue'
 import InvoiceIsPayed from './InvoiceIsPayed.vue'
 
 // types
@@ -180,8 +179,8 @@ const tableRows = computed(() => {
               <q-td :props="props" key="actions">
                 <div class="actions q-gutter-xs">
                   <InvoiceIsPayed :invoice="props.row.originalInvoice" />
-                  <InvoiceToPdf
-                    :variableSymbol="props.row.originalInvoice.variableSymbol"
+                  <InvoiceActionsMenu
+                    :invoice="props.row.originalInvoice"
                     :invoiceItems="props.row.originalInvoice.invoiceItems"
                     :totalVatPrice="totalVatPrice(props.row.originalInvoice)"
                     :supplier="props.row.originalInvoice.supplier"
@@ -193,7 +192,6 @@ const tableRows = computed(() => {
                     :vat="totalVat(props.row.originalInvoice)"
                     :zeroVatRateValue="props.row.originalInvoice.zeroVatRateValue"
                   />
-                  <RemoveInvoice :invoice="props.row.originalInvoice" />
                 </div>
               </q-td>
             </template>
