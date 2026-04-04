@@ -113,6 +113,32 @@ export const actions: PiniaActionAdaptor<Actions, InvoicesStore> = {
       appStore.loading = false
     }
   },
+  async editInvoice(id, payload) {
+    const appStore = useAppStore()
+    appStore.loading = true
+    try {
+      const docRef = doc(db, 'invoices', id)
+      const docSnap = await getDoc(docRef)
+
+      if (!docSnap.exists()) {
+        appStore.reportError({ message: 'There is no such invoice in DB!' })
+        return
+      }
+
+      if (docSnap.data().user === auth.currentUser?.uid) {
+        await updateDoc(docRef, { ...payload })
+        this.invoices = this.invoices.map((item: SavedInvoice) => {
+          return item.id === id ? { ...item, ...payload } : item
+        })
+      } else {
+        appStore.reportError({ message: 'You are not a creator of this invoice!' })
+      }
+    } catch (e) {
+      appStore.reportError({ message: getErrorMessage(e) })
+    } finally {
+      appStore.loading = false
+    }
+  },
   async removeInvoice(id) {
     const appStore = useAppStore()
     appStore.loading = true

@@ -2,6 +2,7 @@
 import { ref, watch, onBeforeMount, toRefs, WatchOptions } from 'vue'
 import { useMeta } from 'quasar'
 
+// store
 import useInvoicesStore from '@/store/invoices'
 
 // components

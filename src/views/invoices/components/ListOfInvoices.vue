@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
+
+// store
 import useInvoicesStore from '@/store/invoices'
 
 // components

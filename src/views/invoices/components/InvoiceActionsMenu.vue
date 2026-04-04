@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { ref, computed, toRefs } from 'vue'
-import useInvoiceToPdf from '@/composables/invoices/useInvoiceToPdf'
+
+// store
 import useInvoicesStore from '@/store/invoices'
+
+// composables
+import useInvoiceToPdf from '@/composables/invoices/useInvoiceToPdf'
+
+// components
+import EditInvoice from './EditInvoice.vue'
 
 // types
 import type { InvoiceItem, Company, SavedInvoice } from '@/types/invoices'
@@ -55,6 +62,7 @@ const { generateInvoice } = useInvoiceToPdf(
 )
 
 const { removeInvoice } = useInvoicesStore()
+const editDialog = ref(false)
 const removeDialog = ref(false)
 </script>
 
@@ -68,6 +76,12 @@ const removeDialog = ref(false)
           </q-item-section>
           <q-item-section>Preview</q-item-section>
         </q-item>
+        <q-item v-if="!invoice.isPayed" clickable v-close-popup @click="editDialog = true">
+          <q-item-section avatar>
+            <q-icon name="edit" color="primary" />
+          </q-item-section>
+          <q-item-section>Edit</q-item-section>
+        </q-item>
         <q-separator />
         <q-item clickable v-close-popup @click="removeDialog = true">
           <q-item-section avatar>
@@ -78,6 +92,8 @@ const removeDialog = ref(false)
       </q-list>
     </q-menu>
   </q-btn>
+
+  <EditInvoice v-model="editDialog" :invoice="invoice" />
 
   <q-dialog v-model="removeDialog" persistent>
     <q-card style="min-width: 320px; width: 80vw">
