@@ -1,58 +1,40 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { SavedLocation } from '@/types/weather'
 import { storeToRefs } from 'pinia'
 import useWeatherStore from '@/store/weather'
 import useSavedLocations from '@/composables/weather/useSavedLocations'
 
-type positionType = 'top' | 'right' | 'standard' | 'bottom' | 'left' | undefined
-
 const weatherStore = useWeatherStore()
 const { activeLocation, activeRegion, coordinates } = storeToRefs(weatherStore)
-const { hasSavedLocations, savedLocations, removeSavedLocation } = useSavedLocations()
+const { savedLocations, removeSavedLocation } = useSavedLocations()
 
-const dialog = ref<boolean>(false)
-const position = ref<positionType>('top')
-
-// A function that is called when the button is clicked. It sets the position of the dialog and sets
-// the dialog to true.
-const open = (pos: positionType) => {
-  position.value = pos
-  dialog.value = true
-}
-// A function that is called when a saved location is clicked. It sets the active location, active
-// region, and coordinates to the location that was clicked. It then closes the dialog.
-const updateRegion = (location: SavedLocation): void => {
+const selectLocation = (location: SavedLocation): void => {
   activeLocation.value = location.name
   activeRegion.value = location.region
   coordinates.value = { lat: location.lat, lon: location.lon }
-  dialog.value = false
+  weatherStore.getWeatherData()
 }
 </script>
 
 <template>
-  <q-btn v-if="hasSavedLocations" icon="star_rate" color="primary" size="md" flat dense @click="open('right')">
+  <q-btn-dropdown flat icon="location_on" color="primary" size="md">
     <q-tooltip>Saved locations</q-tooltip>
-  </q-btn>
-  <q-dialog v-model="dialog" :position="position">
-    <q-card>
-      <q-card-section
+    <q-list style="min-width: 200px">
+      <q-item
         v-for="(location, index) in savedLocations"
         :key="index"
-        class="locations row items-center justify-between no-wrap"
+        clickable
+        v-close-popup
+        @click="selectLocation(location)"
       >
-        <span class="text-subtitle2" @click=";[weatherStore.getWeatherData(), updateRegion(location)]">{{
-          location.name
-        }}</span>
-        <q-btn icon="close" color="negative" flat @click="removeSavedLocation(location.name)"></q-btn>
-      </q-card-section>
-    </q-card>
-  </q-dialog>
+        <q-item-section>
+          <q-item-label>{{ location.name }}</q-item-label>
+          <q-item-label caption>{{ location.region }}</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-btn icon="close" color="negative" flat dense size="sm" @click.stop="removeSavedLocation(location.name)" />
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </q-btn-dropdown>
 </template>
-
-<style lang="scss" scoped>
-.locations {
-  cursor: pointer;
-  gap: 10px;
-}
-</style>

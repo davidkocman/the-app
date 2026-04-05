@@ -19,7 +19,7 @@ const { currentWeatherData } = storeToRefs(weatherStore)
             <span class="text-caption text-weight-light">km/h</span>
           </h5>
           <h6 v-if="currentWeatherData.wind.gust" class="text-h6">
-            <span class="text-caption">gust:</span> {{ (currentWeatherData.wind.gust * 3.6).toFixed(0) }}
+            <span class="text-caption">gusts:</span> {{ (currentWeatherData.wind.gust * 3.6).toFixed(0) }}
             <span class="text-caption text-weight-light">km/h</span>
           </h6>
         </div>

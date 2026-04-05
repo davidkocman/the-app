@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
 // utils
@@ -6,6 +7,9 @@ import { getWeatherIconUrl } from '@/utils/openWeatherRequestUrl'
 
 // Store
 import useWeatherStore from '@/store/weather/'
+
+// Composables
+import useSavedLocations from '@/composables/weather/useSavedLocations'
 
 // Components
 import SunriseSunsetGauge from './SunriseSunsetGauge.vue'
@@ -16,17 +20,32 @@ import PressureCard from './PressureCard.vue'
 import VisibilityCard from './VisibilityCard.vue'
 
 const weatherStore = useWeatherStore()
-const { activeLocation, currentWeatherData } = storeToRefs(weatherStore)
+const { activeLocation, activeRegion, coordinates, currentWeatherData } = storeToRefs(weatherStore)
+const { savedLocations, saveLocation } = useSavedLocations()
+
+const isAlreadySaved = computed(() => savedLocations.value.some((l) => l.name === activeLocation.value))
 </script>
 
 <template>
   <div v-if="currentWeatherData" class="current-weather">
     <div class="row q-mb-xl">
       <div class="col">
-        <div class="location text-center">
-          <h4 class="text-h4">
+        <div class="location flex flex-center q-gutter-sm">
+          <h4 class="text-h4 q-my-none">
             {{ activeLocation }}
           </h4>
+          <q-btn
+            v-if="!isAlreadySaved"
+            icon="add_location_alt"
+            color="primary"
+            flat
+            dense
+            round
+            class="q-ma-none"
+            @click="saveLocation([coordinates.lat as number, coordinates.lon as number], activeLocation, activeRegion)"
+          >
+            <q-tooltip>Save location</q-tooltip>
+          </q-btn>
         </div>
       </div>
     </div>
