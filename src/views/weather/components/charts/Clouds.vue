@@ -12,6 +12,7 @@ import dayjs from 'dayjs'
 import { xAxisGroups } from '@/utils/helpers'
 
 // types
+import type { ApexOptions } from 'apexcharts'
 import type { Forecast } from '@/types/weather'
 
 const weatherStore = useWeatherStore()
@@ -41,7 +42,7 @@ const series = computed(() => {
   }
   return null
 })
-const options = computed(() => {
+const options = computed<ApexOptions | null>(() => {
   if (forecastDataList.value) {
     return {
       annotations: {
@@ -165,7 +166,15 @@ const options = computed(() => {
       },
       tooltip: {
         theme: appStore.isDarkMode ? 'dark' : 'light',
-        custom: ({ series, seriesIndex, dataPointIndex }: { series: number[][], seriesIndex: number, dataPointIndex: number }) => {
+        custom: ({
+          series,
+          seriesIndex,
+          dataPointIndex
+        }: {
+          series: number[][]
+          seriesIndex: number
+          dataPointIndex: number
+        }) => {
           return `<div class="q-pa-sm">
             <h4 class="text-caption">Clouds: <span class="text-weight-bold">${series[seriesIndex][dataPointIndex]}</span>%</h4>
             </div>`
@@ -178,5 +187,5 @@ const options = computed(() => {
 </script>
 
 <template>
-  <VueApexCharts v-if="forecastDataList" :series="series" :options="options" height="400" />
+  <VueApexCharts v-if="options" :series="series" :options="options" height="400" />
 </template>

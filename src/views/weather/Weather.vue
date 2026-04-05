@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMeta } from 'quasar'
 
@@ -29,11 +29,22 @@ useMeta(() => {
   }
 })
 
-const { hasSavedLocations, resolveSavedLocations } = useSavedLocations()
+const { hasSavedLocations, savedLocations, resolveSavedLocations } = useSavedLocations()
 const weatherStore = useWeatherStore()
 const { currentWeatherData } = storeToRefs(weatherStore)
 
 resolveSavedLocations()
+
+onMounted(() => {
+  if (savedLocations.value.length > 0) {
+    const first = savedLocations.value[0]
+    weatherStore.activeLocation = first.name
+    weatherStore.activeRegion = first.region
+    weatherStore.coordinates.lat = first.lat
+    weatherStore.coordinates.lon = first.lon
+    weatherStore.getWeatherData()
+  }
+})
 </script>
 
 <template>
