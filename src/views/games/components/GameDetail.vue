@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import VueApexCharts from 'vue3-apexcharts'
+import type { ApexOptions } from 'apexcharts'
 
 // store
 import useGamesStore from '@/store/games'
@@ -27,13 +28,6 @@ const description = computed(() =>
     : (getGameDetail.value?.description.replace(/<\/?p>|<br\s*\/?>/gi, '\n\n') ?? '')
 )
 
-const ratingLabel = computed(() => {
-  const map: Record<number, string> = { 1: 'Skip', 2: 'Meh', 3: 'Recommended', 4: 'Exceptional' }
-  return map[getGameDetail.value?.rating_top ?? 0] ?? 'N/A'
-})
-
-const ratingColor = computed(() => ratingColorMap[ratingLabel.value.toLowerCase()] ?? 'var(--text-muted)')
-
 const ratingColorMap: Record<string, string> = {
   skip: '#e74c3c',
   meh: '#e67e22',
@@ -41,9 +35,16 @@ const ratingColorMap: Record<string, string> = {
   exceptional: '#27ae60'
 }
 
+const ratingLabel = computed(() => {
+  const map: Record<number, string> = { 1: 'Skip', 2: 'Meh', 3: 'Recommended', 4: 'Exceptional' }
+  return map[getGameDetail.value?.rating_top ?? 0] ?? 'N/A'
+})
+
+const ratingColor = computed(() => ratingColorMap[ratingLabel.value.toLowerCase()] ?? 'var(--text-muted)')
+
 const ratingsChartSeries = computed(() => ((getGameDetail.value?.ratings as Rating[]) ?? []).map((r) => r.count))
 
-const ratingsChartOptions = computed(() => ({
+const ratingsChartOptions = computed<ApexOptions>(() => ({
   chart: { type: 'donut', background: 'transparent', toolbar: { show: false } },
   labels: ((getGameDetail.value?.ratings as Rating[]) ?? []).map((r) => r.title),
   colors: ((getGameDetail.value?.ratings as Rating[]) ?? []).map((r) => ratingColorMap[r.title] ?? '#aaa'),
