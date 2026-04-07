@@ -90,8 +90,16 @@ export interface ShortScreenshot {
   image: string
 }
 
+export interface StoreInfo {
+  id: number
+  name: string
+  slug: string
+  domain: string
+}
+
 export interface Store {
-  store: Genre
+  id: number
+  store: StoreInfo
 }
 
 export interface Tag {
@@ -151,6 +159,7 @@ export interface GameItem {
   tags: Tag[]
   developers: Developer[]
   publishers: Publisher[]
+  stores: Store[]
 }
 
 export interface MetacriticPlatform {
