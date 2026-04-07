@@ -8,6 +8,9 @@ import type { ApexOptions } from 'apexcharts'
 import useGamesStore from '@/store/games'
 import useAppStore from '@/store/app'
 
+// components
+import ScreenShots from './ScreenShots.vue'
+
 // utils
 import { platformData } from '@/utils/resolvePlatform'
 
@@ -135,11 +138,7 @@ watch(dialog, (val) => {
                   {{ getGameDetail?.released ? new Date(getGameDetail.released).toLocaleDateString('sk-SK') : 'TBA' }}
                 </div>
                 <div class="platforms flex items-center">
-                  <div
-                    v-for="platformMeta in sortedPlatforms"
-                    :key="platformMeta.platform.id"
-                    class="platform"
-                  >
+                  <div v-for="platformMeta in sortedPlatforms" :key="platformMeta.platform.id" class="platform">
                     <q-icon
                       size="20px"
                       :name="platformData(platformMeta.platform.slug)?.icon"
@@ -155,13 +154,17 @@ watch(dialog, (val) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   class="game-title-link"
-                >{{ getGameDetail.name }}</a>
+                  >{{ getGameDetail.name }}</a
+                >
                 <template v-else>{{ getGameDetail?.name }}</template>
               </h2>
             </div>
 
             <!-- Rating -->
-            <div class="game-data__rating q-mt-md flex items-center">
+            <div
+              v-if="(getGameDetail?.ratings as Rating[])?.length"
+              class="game-data__rating q-mt-md flex items-center"
+            >
               <span class="rating-label" :style="{ color: ratingColor }">{{ ratingLabel }}</span>
               <span class="text-caption q-ml-sm" style="color: var(--text-muted)">
                 {{ getGameDetail?.ratings_count?.toLocaleString() }} ratings
@@ -225,7 +228,8 @@ watch(dialog, (val) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     class="store-link"
-                  >{{ s.store.name }}</a>
+                    >{{ s.store.name }}</a
+                  >
                   <span v-else class="store-name">{{ s.store.name }}</span>
                   <span v-if="index < getGameDetail.stores.length - 1" class="store-separator">|</span>
                 </template>
@@ -271,19 +275,7 @@ watch(dialog, (val) => {
           <div class="col-12 col-md-7 game-data__right">
             <!-- Screenshots -->
             <section v-if="gameScreenshots.length" class="game-data__section q-mb-lg">
-              <div class="screenshots-grid">
-                <q-img
-                  v-for="shot in gameScreenshots"
-                  :key="shot.id"
-                  :src="shot.image"
-                  class="screenshot-thumb"
-                  :ratio="16 / 9"
-                >
-                  <template #loading>
-                    <q-spinner-dots color="primary" />
-                  </template>
-                </q-img>
-              </div>
+              <ScreenShots :screenshots="gameScreenshots" />
             </section>
 
             <!-- System Requirements -->
@@ -375,7 +367,7 @@ watch(dialog, (val) => {
   }
 
   .game-data {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
     padding-top: 30vh;
     padding-bottom: 48px;
@@ -475,17 +467,6 @@ watch(dialog, (val) => {
     .req-text {
       white-space: pre-line;
     }
-  }
-
-  .screenshots-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 8px;
-  }
-
-  .screenshot-thumb {
-    border-radius: 6px;
-    overflow: hidden;
   }
 
   .video-player video {
