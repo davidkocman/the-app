@@ -23,17 +23,13 @@ onMounted(async () => {
 })
 
 const closestGames = computed(() => {
-  const futureGames = games.value.filter(
-    (g) => g.background_image && new Date(g.released).getTime() >= today.getTime()
-  )
+  const futureGames = games.value.filter((g) => g.background_image && new Date(g.released).getTime() >= today.getTime())
   if (!futureGames.length) return []
 
   const closest = futureGames.reduce((a, b) =>
     new Date(a.released).getTime() < new Date(b.released).getTime() ? a : b
   )
-  return futureGames
-    .filter((g) => g.released === closest.released)
-    .slice(0, 3)
+  return futureGames.filter((g) => g.released === closest.released).slice(0, 3)
 })
 
 const closestDate = computed(() => {
@@ -47,21 +43,13 @@ const closestDate = computed(() => {
     <q-card-section class="q-pb-xs">
       <div class="row items-center justify-between no-wrap">
         <div class="text-h6 text-weight-bold">Upcoming games</div>
-        <q-btn
-          flat
-          dense
-          round
-          icon="open_in_new"
-          color="primary"
-          size="sm"
-          @click="router.push('/games')"
-        >
+        <q-btn flat dense round icon="open_in_new" color="primary" size="sm" @click="router.push('/games')">
           <q-tooltip>View all games</q-tooltip>
         </q-btn>
       </div>
     </q-card-section>
 
-    <q-card-section v-if="loading" class="flex flex-center" style="min-height: 120px;">
+    <q-card-section v-if="loading" class="flex flex-center" style="min-height: 120px">
       <q-spinner-dots color="primary" size="40px" />
     </q-card-section>
 
@@ -77,11 +65,7 @@ const closestDate = computed(() => {
         </div>
       </q-card-section>
       <div class="games-widget__row">
-        <div
-          v-for="game in closestGames"
-          :key="game.slug"
-          class="games-widget__item"
-        >
+        <div v-for="game in closestGames" :key="game.slug" class="games-widget__item">
           <GameItem :item="game" />
         </div>
       </div>
@@ -99,6 +83,7 @@ const closestDate = computed(() => {
     display: flex;
     flex: 1;
     padding: 0 16px 16px;
+    gap: 8px;
   }
 
   &__item {
@@ -108,6 +93,10 @@ const closestDate = computed(() => {
     :deep(.game-item),
     :deep(.game-item__img) {
       height: 100%;
+    }
+
+    :deep(.game-item__img__title) {
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(18, 18, 18, 1) 100%);
     }
   }
 }

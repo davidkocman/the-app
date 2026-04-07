@@ -8,6 +8,7 @@ import App from './App.vue'
 import '@quasar/extras/roboto-font-latin-ext/roboto-font-latin-ext.css'
 import '@quasar/extras/material-icons/material-icons.css'
 import '@quasar/extras/material-symbols-sharp/material-symbols-sharp.css'
+import '@quasar/extras/mdi-v7/mdi-v7.css'
 
 // Import Quasar css
 import 'quasar/src/css/index.sass'

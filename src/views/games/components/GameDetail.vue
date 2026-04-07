@@ -36,8 +36,10 @@ const ratingColorMap: Record<string, string> = {
 }
 
 const ratingLabel = computed(() => {
-  const map: Record<number, string> = { 1: 'Skip', 2: 'Meh', 3: 'Recommended', 4: 'Exceptional' }
-  return map[getGameDetail.value?.rating_top ?? 0] ?? 'N/A'
+  const ratings = (getGameDetail.value?.ratings as Rating[]) ?? []
+  if (!ratings.length) return 'N/A'
+  const top = ratings.reduce((a, b) => (b.percent > a.percent ? b : a))
+  return top.title.charAt(0).toUpperCase() + top.title.slice(1)
 })
 
 const ratingColor = computed(() => ratingColorMap[ratingLabel.value.toLowerCase()] ?? 'var(--text-muted)')
@@ -82,6 +84,17 @@ const platformsWithRequirements = computed(() =>
   (getGameDetail.value?.platforms ?? []).filter((p) => p.requirements?.minimum || p.requirements?.recommended)
 )
 
+const pcSlugs = new Set(['pc', 'mac', 'linux'])
+
+const sortedPlatforms = computed(() => {
+  const platforms = getGameDetail.value?.platforms ?? []
+  return [...platforms].sort((a, b) => {
+    const aIsPC = pcSlugs.has(a.platform.slug) ? 0 : 1
+    const bIsPC = pcSlugs.has(b.platform.slug) ? 0 : 1
+    return aIsPC - bIsPC
+  })
+})
+
 const selectedMovie = ref(0)
 const redditExpanded = ref(false)
 
@@ -123,19 +136,28 @@ watch(dialog, (val) => {
                 </div>
                 <div class="platforms flex items-center">
                   <div
-                    v-for="platformMeta in getGameDetail?.platforms"
+                    v-for="platformMeta in sortedPlatforms"
                     :key="platformMeta.platform.id"
                     class="platform"
                   >
                     <q-icon
                       size="20px"
-                      :name="platformData(platformMeta.platform.id)?.icon"
-                      :title="platformData(platformMeta.platform.id)?.name"
+                      :name="platformData(platformMeta.platform.slug)?.icon"
+                      :title="platformData(platformMeta.platform.slug)?.name ?? platformMeta.platform.name"
                     />
                   </div>
                 </div>
               </div>
-              <h2 class="text-h2 text-weight-bold">{{ getGameDetail?.name }}</h2>
+              <h2 class="text-h2 text-weight-bold">
+                <a
+                  v-if="getGameDetail?.website"
+                  :href="getGameDetail.website"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="game-title-link"
+                >{{ getGameDetail.name }}</a>
+                <template v-else>{{ getGameDetail?.name }}</template>
+              </h2>
             </div>
 
             <!-- Rating -->
@@ -189,6 +211,24 @@ watch(dialog, (val) => {
               <div v-if="getGameDetail?.publishers?.length" class="game-data__section col-12 col-sm-6">
                 <div class="section-label text-caption q-mb-xs">Publisher</div>
                 <div>{{ getGameDetail.publishers.map((p) => p.name).join(', ') }}</div>
+              </div>
+            </div>
+
+            <!-- Stores -->
+            <div v-if="getGameDetail?.stores?.length" class="game-data__section q-mt-md">
+              <div class="section-label text-caption q-mb-xs">Stores</div>
+              <div class="flex" style="gap: 6px; flex-wrap: wrap">
+                <template v-for="(s, index) in getGameDetail.stores" :key="s.id">
+                  <a
+                    v-if="s.store.domain"
+                    :href="`https://${s.store.domain}`"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="store-link"
+                  >{{ s.store.name }}</a>
+                  <span v-else class="store-name">{{ s.store.name }}</span>
+                  <span v-if="index < getGameDetail.stores.length - 1" class="store-separator">|</span>
+                </template>
               </div>
             </div>
 
@@ -382,6 +422,25 @@ watch(dialog, (val) => {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+  }
+
+  .store-link {
+    color: $primary;
+    text-decoration: none;
+    font-size: 0.875rem;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .store-name {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .store-separator {
+    color: var(--text-muted);
+    font-size: 0.875rem;
   }
 
   .reddit-toggle {
