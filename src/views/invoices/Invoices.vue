@@ -54,6 +54,14 @@ onBeforeMount(() => {
 
 <template>
   <q-page class="page-invoices q-py-md q-px-lg">
+    <div class="row justify-between items-center q-mb-md">
+      <h1 class="text-h4 q-my-none">Invoices</h1>
+      <div v-if="!pageLocked" class="row align-center justify-center q-gutter-sm">
+        <q-btn flat round color="primary" icon="lock" @click="pageLocked = true" />
+        <NewInvoice />
+        <NewCompany />
+      </div>
+    </div>
     <template v-if="pageLocked">
       <q-dialog v-model="pageLocked" seamless>
         <q-card style="min-width: 350px">
@@ -78,14 +86,6 @@ onBeforeMount(() => {
       </q-dialog>
     </template>
     <template v-else>
-      <div class="row justify-between items-center q-mb-lg">
-        <h6 class="text-h6">Invoices</h6>
-        <div class="row align-center justify-center q-gutter-sm">
-          <q-btn v-if="!pageLocked" flat round color="primary" icon="lock" @click="pageLocked = true" />
-          <NewInvoice />
-          <NewCompany />
-        </div>
-      </div>
       <div
         v-if="totalInvoicesVatPrice && totalInvoicesPrice && totalPayedInvoicesVatPrice && totalPayedInvoicesPrice"
         class="q-mb-lg"

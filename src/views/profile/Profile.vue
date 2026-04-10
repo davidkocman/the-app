@@ -22,7 +22,7 @@ useMeta(() => {
 <template>
   <q-page class="page-profile q-py-md q-px-lg">
     <div class="row justify-between items-center q-mb-sm">
-      <h1 class="text-h6">Profile</h1>
+      <h1 class="text-h4 q-my-none">Profile</h1>
     </div>
     <div class="row">
       <div class="col-12 col-md-6">

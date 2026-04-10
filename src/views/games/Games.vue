@@ -21,9 +21,9 @@ useMeta(() => {
 </script>
 
 <template>
-  <q-page class="page-games q-pa-md">
-    <div class="row justify-between items-center q-mb-sm">
-      <h1 class="text-h6">Games</h1>
+  <q-page class="page-games q-py-md q-px-lg">
+    <div class="row justify-between items-center q-mb-lg">
+      <h1 class="text-h4 q-my-none">Games</h1>
     </div>
     <div class="row">
       <div class="col">

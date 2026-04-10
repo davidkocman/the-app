@@ -49,11 +49,9 @@ onMounted(() => {
 
 <template>
   <q-page class="page-weather q-py-md q-px-lg">
-    <div class="row q-col-gutter-md q-mb-md items-center">
-      <div class="col-12 col-md-6">
-        <h1 class="text-h4 q-my-none">Weather</h1>
-      </div>
-      <div class="col-12 col-md-6 row justify-end items-center q-gutter-sm">
+    <div class="row q-mb-lg items-center justify-between">
+      <h1 class="text-h4 q-my-none">Weather</h1>
+      <div class="flex justify-end items-center">
         <SavedLocations v-if="hasSavedLocations" />
         <SearchLocation />
       </div>
@@ -85,5 +83,3 @@ onMounted(() => {
     </div>
   </q-page>
 </template>
-
-

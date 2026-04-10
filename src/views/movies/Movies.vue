@@ -25,7 +25,8 @@ const { searchFor, searchResult } = storeToRefs(moviesStore)
 
 <template>
   <q-page class="page-movies q-py-md q-px-lg">
-    <div class="row justify-end items-center q-mb-sm">
+    <div class="row justify-between q-mb-lg">
+      <h1 class="text-h4 q-my-none">Movies</h1>
       <q-btn color="primary" icon="search" round size="sm">
         <q-menu class="q-px-sm">
           <div class="q-py-md q-gutter-sm">
