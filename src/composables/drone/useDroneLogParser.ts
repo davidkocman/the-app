@@ -19,8 +19,7 @@ export default function useDroneLogParser() {
 
         let keychains
         if (parser.version >= 13) {
-          const apiKey = import.meta.env.VITE_APP_DJI_API_KEY as string
-          keychains = await parser.fetchKeychains(apiKey, DJI_KEYCHAINS_PROXY)
+          keychains = await parser.fetchKeychains('', DJI_KEYCHAINS_PROXY)
         }
 
         const frames = parser.frames(keychains)
