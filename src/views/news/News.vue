@@ -17,8 +17,8 @@ useMeta(() => {
 
 <template>
   <q-page class="page-news q-py-md q-px-lg">
-    <div class="row justify-between items-center">
-      <h1 class="text-h6">News</h1>
+    <div class="row justify-between items-center q-mb-lg">
+      <h1 class="text-h4 q-my-none">News</h1>
     </div>
   </q-page>
 </template>

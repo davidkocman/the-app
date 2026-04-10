@@ -44,6 +44,7 @@ watch(model, (value) => {
         v-model="model"
         standout
         clearable
+        dense
         hide-dropdown-icon
         input-debounce="300"
         label="Search"

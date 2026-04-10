@@ -20,9 +20,9 @@ useMeta(() => {
 </script>
 
 <template>
-  <q-page class="page-dashboard q-pa-md">
-    <div class="row justify-between items-center q-mb-md">
-      <h1 class="text-h6">Dashboard</h1>
+  <q-page class="page-dashboard q-py-md q-px-lg">
+    <div class="row justify-between items-center q-mb-lg">
+      <h1 class="text-h4 q-my-none">Dashboard</h1>
     </div>
 
     <div class="row q-col-gutter-md">

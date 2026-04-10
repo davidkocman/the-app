@@ -26,8 +26,8 @@ onBeforeMount(() => {
 
 <template>
   <q-page class="page-notes q-py-md q-px-lg">
-    <div class="row justify-between items-center q-mb-sm">
-      <h6 class="text-h6">Notes</h6>
+    <div class="row justify-between items-center q-mb-lg">
+      <h1 class="text-h4 q-my-none">Notes</h1>
       <NewNote />
     </div>
     <div class="row">

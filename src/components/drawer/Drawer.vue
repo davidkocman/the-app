@@ -64,6 +64,14 @@ const appStore = useAppStore()
           <q-item-section> Weather </q-item-section>
         </q-item>
 
+        <q-item clickable v-ripple to="/drone" data-cy="toDrone">
+          <q-item-section avatar>
+            <q-icon name="mdi-quadcopter" />
+          </q-item-section>
+
+          <q-item-section> Drone </q-item-section>
+        </q-item>
+
         <q-separator />
 
         <q-item clickable v-ripple to="/profile" data-cy="toProfile">

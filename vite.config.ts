@@ -5,6 +5,11 @@ import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      '/api': 'http://localhost:3000'
+    }
+  },
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')
