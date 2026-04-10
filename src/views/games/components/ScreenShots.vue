@@ -32,12 +32,12 @@ const hasMultipleScreenshots = computed(() => (props.screenshots.length > 1 ? tr
   <div v-if="screenshots.length" class="screenshots">
     <q-carousel
       v-model="slide"
-      :animated="animated"
+      :animated
       :arrows="hasMultipleScreenshots ? arrows : false"
-      :swipeable="swipeable"
-      :navigation="navigation"
-      :infinite="infinite"
-      :autoplay="autoplay"
+      :swipeable
+      :navigation
+      :infinite
+      :autoplay
       height="auto"
       class="screenshots__carousel"
     >

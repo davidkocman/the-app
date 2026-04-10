@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import useInvoicesStore from '@/store/invoices'
 
@@ -7,11 +8,17 @@ import RemoveCompany from './RemoveCompany.vue'
 
 const invoicesStore = useInvoicesStore()
 const { companies } = storeToRefs(invoicesStore)
+
+const sortedCompanies = computed(() =>
+  [...companies.value].sort((a, b) => (a.companyId === '47858486' ? -1 : b.companyId === '47858486' ? 1 : 0))
+)
 </script>
 
 <template>
   <div class="companies-list">
-    <q-card v-for="item in companies" v-bind:key="item.id" class="companies-list__item q-mb-md q-pa-sm shadow-0">
+    <div class="row q-col-gutter-md">
+    <div v-for="item in sortedCompanies" v-bind:key="item.id" class="col-12 col-sm-6 col-lg-4">
+    <q-card class="companies-list__item q-pa-sm shadow-0 full-height">
       <q-card-section>
         <div class="text-h6 q-mb-sm">{{ item.name }}</div>
         <div class="text-subtitle2">IČO: {{ item.companyId }}</div>
@@ -42,6 +49,8 @@ const { companies } = storeToRefs(invoicesStore)
         <q-icon name="apartment" size="6rem" />
       </div>
     </q-card>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -49,6 +58,12 @@ const { companies } = storeToRefs(invoicesStore)
 .companies-list {
   &__item {
     background-color: var(--bg-base);
+    display: flex;
+    flex-direction: column;
+
+    .q-card__actions {
+      margin-top: auto;
+    }
     .text-subtitle2 {
       color: var(--text-muted);
     }
