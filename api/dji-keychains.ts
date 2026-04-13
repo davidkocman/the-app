@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
-const DJI_API_URL = 'https://dev.dji.com/openapi/v1/flight-records/keychains'
+const DJI_KEYCHAINS_URL = 'https://dev.dji.com/openapi/v1/flight-records/keychains'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -12,7 +12,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: 'DJI API key not configured' })
   }
 
-  const response = await fetch(DJI_API_URL, {
+  const response = await fetch(DJI_KEYCHAINS_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
