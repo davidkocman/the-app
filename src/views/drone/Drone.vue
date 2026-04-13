@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useMeta } from 'quasar'
 import useDroneStore from '@/store/drone'
-import useDroneLogParser from '@/composables/drone/useDroneLogParser'
+import DroneFileUpload from './components/DroneFileUpload.vue'
 
 const pageTitle = ref('Drone flight data | The App')
 
@@ -18,15 +18,6 @@ useMeta(() => {
 })
 
 const droneStore = useDroneStore()
-const { parseFiles } = useDroneLogParser()
-
-const files = ref<File[] | null>(null)
-
-const handleParse = async () => {
-  if (!files.value?.length) return
-  await parseFiles(files.value)
-  files.value = null
-}
 </script>
 
 <template>
@@ -35,27 +26,7 @@ const handleParse = async () => {
       <h1 class="text-h4 q-my-none">Flight log</h1>
     </div>
 
-    <div class="row q-mb-md items-center">
-      <q-file
-        v-model="files"
-        multiple
-        accept=".txt"
-        label="Select .txt log files"
-        outlined
-        style="min-width: 320px"
-      >
-        <template #prepend>
-          <q-icon name="mdi-quadcopter" />
-        </template>
-      </q-file>
-      <q-btn
-        class="q-ml-sm"
-        color="primary"
-        label="Parse"
-        :disable="!files?.length"
-        @click="handleParse"
-      />
-    </div>
+    <DroneFileUpload />
 
     <q-list bordered separator v-if="droneStore.getRecords.length">
       <q-expansion-item
