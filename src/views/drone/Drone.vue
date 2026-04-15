@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useMeta } from 'quasar'
 import useDroneStore from '@/store/drone'
 import DroneFileUpload from './components/DroneFileUpload.vue'
@@ -18,43 +18,21 @@ useMeta(() => {
 })
 
 const droneStore = useDroneStore()
+onMounted(() => droneStore.fetchFlightLogs())
 </script>
 
 <template>
   <q-page class="page-drone q-py-md q-px-lg">
-    <div class="row q-mb-lg items-center justify-between">
+    <div class="row q-mb-lg items-center">
       <h1 class="text-h4 q-my-none">Flight log</h1>
     </div>
 
-    <DroneFileUpload />
+    <div class="row q-col-gutter-md">
+      <div class="col-12 col-md-3">
+        <DroneFileUpload />
+      </div>
 
-    <q-list bordered separator v-if="droneStore.getRecords.length">
-      <q-expansion-item
-        v-for="record in droneStore.getRecords"
-        :key="record.id"
-        :label="record.fileName"
-        :caption="`${record.frames.length} frames · ${record.parsedAt}`"
-        expand-separator
-      >
-        <q-card>
-          <q-card-section>
-            <pre class="text-caption">{{ JSON.stringify(record.frames[0], null, 2) }}</pre>
-          </q-card-section>
-          <q-card-actions>
-            <q-btn
-              flat
-              color="negative"
-              icon="delete"
-              label="Remove"
-              @click="droneStore.removeRecord(record.id)"
-            />
-          </q-card-actions>
-        </q-card>
-      </q-expansion-item>
-    </q-list>
-
-    <div v-else class="text-grey text-center q-mt-xl">
-      No flight records yet. Upload .txt log files to get started.
+      <div class="col-12 col-md"></div>
     </div>
   </q-page>
 </template>

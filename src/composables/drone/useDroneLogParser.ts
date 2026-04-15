@@ -12,6 +12,7 @@ export default function useDroneLogParser() {
   const parseFiles = async (files: File[]) => {
     appStore.loading = true
     try {
+      await droneStore.clearFlightLogs()
       for (const file of files) {
         const buffer = await file.arrayBuffer()
         const bytes = new Uint8Array(buffer)
@@ -23,12 +24,14 @@ export default function useDroneLogParser() {
         }
 
         const frames = parser.frames(keychains)
-        droneStore.addRecord({
+        const record = {
           id: `${file.name}-${Date.now()}`,
           fileName: file.name,
           frames,
           parsedAt: new Date().toISOString()
-        })
+        }
+        droneStore.addRecord(record)
+        await droneStore.saveFlightLog(record)
       }
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
