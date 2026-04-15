@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useMeta } from 'quasar'
 import useDroneStore from '@/store/drone'
 import DroneFileUpload from './components/DroneFileUpload.vue'
+import AircraftInfo from './components/AircraftInfo.vue'
 
 const pageTitle = ref('Drone flight data | The App')
 
@@ -32,7 +33,9 @@ onMounted(() => droneStore.fetchFlightLogs())
         <DroneFileUpload />
       </div>
 
-      <div class="col-12 col-md"></div>
+      <div class="col-12 col-md">
+        <AircraftInfo />
+      </div>
     </div>
   </q-page>
 </template>

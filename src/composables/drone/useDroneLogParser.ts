@@ -27,11 +27,11 @@ export default function useDroneLogParser() {
         const record = {
           id: `${file.name}-${Date.now()}`,
           fileName: file.name,
-          frames,
+          frameCount: frames.length,
           parsedAt: new Date().toISOString()
         }
         droneStore.addRecord(record)
-        await droneStore.saveFlightLog(record)
+        await droneStore.saveFlightLog(record, frames)
       }
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })

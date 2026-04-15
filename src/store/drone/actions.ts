@@ -42,14 +42,14 @@ export const actions: PiniaActionAdaptor<Actions, DroneStore> = {
     await supabase.from('flight_logs').delete().eq('user_id', uid)
     this.records = []
   },
-  async saveFlightLog(record) {
+  async saveFlightLog(record, frames) {
     const appStore = useAppStore()
     const uid = auth.currentUser?.uid
     if (!uid) return
 
     appStore.loading = true
     try {
-      const json = JSON.stringify(record.frames)
+      const json = JSON.stringify(frames)
       const blob = new Blob([json], { type: 'application/json' })
       const safeId = record.id.replace(/[^a-zA-Z0-9._-]/g, '_')
       const storagePath = `${uid}/${safeId}.json`
@@ -68,7 +68,7 @@ export const actions: PiniaActionAdaptor<Actions, DroneStore> = {
         .insert({
           user_id: uid,
           file_name: record.fileName,
-          frame_count: record.frames.length,
+          frame_count: record.frameCount,
           parsed_at: record.parsedAt,
           frames_url: framesUrl,
           storage_path: storagePath
@@ -81,6 +81,20 @@ export const actions: PiniaActionAdaptor<Actions, DroneStore> = {
       this.records = this.records.map((r) =>
         r.id === record.id ? { ...r, id: insertData.id, framesUrl, storagePath } : r
       )
+    } catch (e) {
+      appStore.reportError({ message: getErrorMessage(e) })
+    } finally {
+      appStore.loading = false
+    }
+  },
+  async loadFrames(record) {
+    if (!record.framesUrl) return
+    const appStore = useAppStore()
+    appStore.loading = true
+    try {
+      const res = await fetch(record.framesUrl)
+      this.frames = await res.json()
+      this.activeRecordId = record.id
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {
@@ -105,10 +119,9 @@ export const actions: PiniaActionAdaptor<Actions, DroneStore> = {
       this.records = (data as unknown as FlightLogRow[]).map((d) => ({
         id: d.id,
         fileName: d.file_name,
-        frames: [],
+        frameCount: d.frame_count,
         parsedAt: d.parsed_at,
         framesUrl: d.frames_url,
-        frameCount: d.frame_count,
         storagePath: d.storage_path
       }))
     } catch (e) {
