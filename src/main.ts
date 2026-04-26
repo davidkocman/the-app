@@ -1,7 +1,7 @@
 import router from '@/router'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-import { Quasar, Loading, Notify, QuasarPluginOptions, QSpinner } from 'quasar'
+import { Quasar, Loading, Notify, Dialog, QuasarPluginOptions, QSpinner } from 'quasar'
 import App from './App.vue'
 
 // Import icon libraries
@@ -20,7 +20,8 @@ myApp.use(router)
 const quasarOptions: QuasarPluginOptions = {
   plugins: {
     Loading,
-    Notify
+    Notify,
+    Dialog
   },
   config: {
     loading: {

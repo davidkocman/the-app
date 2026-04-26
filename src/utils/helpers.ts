@@ -126,6 +126,10 @@ const xAxisGroups = (list: Forecast[]) => {
   return groups
 }
 
+// Convert meters per second to kilometers per hour
+// ----------------------------------
+const msToKmh = (ms: number, decimals = 1) => (ms * 3.6).toFixed(decimals)
+
 const thousandSeparator = (n: string) => {
   return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
 }
@@ -153,5 +157,6 @@ export {
   sunProgress,
   xAxisGroups,
   thousandSeparator,
-  buttonLabel
+  buttonLabel,
+  msToKmh
 }

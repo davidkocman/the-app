@@ -1,8 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useMeta } from 'quasar'
 import useDroneStore from '@/store/drone'
-import useDroneLogParser from '@/composables/drone/useDroneLogParser'
+import DroneFileUpload from './components/DroneFileUpload.vue'
+import AircraftInfo from './components/AircraftInfo.vue'
+import FlightSummary from './components/FlightSummary.vue'
+import FlightMap from './components/FlightMap.vue'
+import AltitudeChart from './components/AltitudeChart.vue'
+import SpeedChart from './components/SpeedChart.vue'
+import BatteryChart from './components/BatteryChart.vue'
+import FlightEvents from './components/FlightEvents.vue'
+import OrientationChart from './components/OrientationChart.vue'
+import SignalChart from './components/SignalChart.vue'
+import GpsChart from './components/GpsChart.vue'
+import GimbalChart from './components/GimbalChart.vue'
+import BatteryCells from './components/BatteryCells.vue'
+import CameraEvents from './components/CameraEvents.vue'
 
 const pageTitle = ref('Drone flight data | The App')
 
@@ -18,72 +31,78 @@ useMeta(() => {
 })
 
 const droneStore = useDroneStore()
-const { parseFiles } = useDroneLogParser()
-
-const files = ref<File[] | null>(null)
-
-const handleParse = async () => {
-  if (!files.value?.length) return
-  await parseFiles(files.value)
-  files.value = null
-}
+onMounted(() => droneStore.fetchFlightLogs())
 </script>
 
 <template>
   <q-page class="page-drone q-py-md q-px-lg">
-    <div class="row q-mb-lg items-center justify-between">
+    <div class="row q-mb-lg items-center">
       <h1 class="text-h4 q-my-none">Flight log</h1>
     </div>
 
-    <div class="row q-mb-md items-center">
-      <q-file
-        v-model="files"
-        multiple
-        accept=".txt"
-        label="Select .txt log files"
-        outlined
-        style="min-width: 320px"
-      >
-        <template #prepend>
-          <q-icon name="mdi-quadcopter" />
-        </template>
-      </q-file>
-      <q-btn
-        class="q-ml-sm"
-        color="primary"
-        label="Parse"
-        :disable="!files?.length"
-        @click="handleParse"
-      />
-    </div>
+    <div class="row q-col-gutter-md">
+      <div class="col-12 col-md-3">
+        <DroneFileUpload />
+      </div>
 
-    <q-list bordered separator v-if="droneStore.getRecords.length">
-      <q-expansion-item
-        v-for="record in droneStore.getRecords"
-        :key="record.id"
-        :label="record.fileName"
-        :caption="`${record.frames.length} frames · ${record.parsedAt}`"
-        expand-separator
-      >
-        <q-card>
-          <q-card-section>
-            <pre class="text-caption">{{ JSON.stringify(record.frames[0], null, 2) }}</pre>
-          </q-card-section>
-          <q-card-actions>
-            <q-btn
-              flat
-              color="negative"
-              icon="delete"
-              label="Remove"
-              @click="droneStore.removeRecord(record.id)"
-            />
-          </q-card-actions>
-        </q-card>
-      </q-expansion-item>
-    </q-list>
+      <div class="col-12 col-md-9">
+        <div class="row q-col-gutter-md">
+          <!-- Static info -->
+          <div class="col-12 col-sm-6">
+            <AircraftInfo />
+          </div>
+          <div class="col-12 col-sm-6">
+            <FlightSummary />
+          </div>
 
-    <div v-else class="text-grey text-center q-mt-xl">
-      No flight records yet. Upload .txt log files to get started.
+          <!-- Altitude -->
+          <div class="col-12">
+            <AltitudeChart />
+          </div>
+
+          <!-- Speed + Battery -->
+          <div class="col-12 col-md-6">
+            <SpeedChart />
+          </div>
+          <div class="col-12 col-md-6">
+            <BatteryChart />
+          </div>
+
+          <!-- Orientation + Signal -->
+          <div class="col-12 col-md-6">
+            <OrientationChart />
+          </div>
+          <div class="col-12 col-md-6">
+            <SignalChart />
+          </div>
+
+          <!-- GPS + Gimbal -->
+          <div class="col-12 col-md-6">
+            <GpsChart />
+          </div>
+          <div class="col-12 col-md-6">
+            <GimbalChart />
+          </div>
+
+          <!-- Battery cells + Camera events -->
+          <div class="col-12 col-md-6">
+            <BatteryCells />
+          </div>
+          <div class="col-12 col-md-6">
+            <FlightEvents />
+          </div>
+
+          <!-- Flight events timeline -->
+          <div class="col-12">
+            <CameraEvents />
+          </div>
+
+          <!-- Flight path -->
+          <div class="col-12">
+            <FlightMap />
+          </div>
+        </div>
+      </div>
     </div>
   </q-page>
 </template>
