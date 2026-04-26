@@ -40,7 +40,7 @@ const onAdded = async (files: readonly File[]) => {
     ref="uploaderRef"
     label="Select .txt log file"
     accept=".txt"
-    :max-files="3"
+    :max-files="6"
     multiple
     auto-upload
     @added="onAdded"
