@@ -3,11 +3,9 @@ import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMeta } from 'quasar'
 
-// Composables
 import useSavedLocations from '@/composables/weather/useSavedLocations'
 import useWeatherStore from '@/store/weather'
 
-// Components
 import SearchLocation from '@/views/weather/components/SearchLocation.vue'
 import SavedLocations from '@/views/weather/components/SavedLocations.vue'
 import CurrentWeather from './components/CurrentWeather.vue'
@@ -18,16 +16,14 @@ import Rain from './components/charts/Rain.vue'
 
 const pageTitle = ref('Weather | The App')
 
-useMeta(() => {
-  return {
-    title: pageTitle.value,
-    meta: {
-      description: { name: 'description', content: 'Weather' },
-      keywords: { name: 'keywords', content: 'weather, forecast, slovakia weather, charts' },
-      equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' }
-    }
+useMeta(() => ({
+  title: pageTitle.value,
+  meta: {
+    description: { name: 'description', content: 'Weather' },
+    keywords: { name: 'keywords', content: 'weather, forecast, slovakia weather, charts' },
+    equiv: { 'http-equiv': 'Content-Type', content: 'text/html; charset=UTF-8' }
   }
-})
+}))
 
 const { hasSavedLocations, savedLocations, resolveSavedLocations } = useSavedLocations()
 const weatherStore = useWeatherStore()
@@ -60,22 +56,22 @@ onMounted(() => {
     <CurrentWeather class="q-mb-lg" />
 
     <div v-if="currentWeatherData" class="row q-col-gutter-md">
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-sm-6">
         <q-card class="q-pa-sm">
           <TemperatureChart />
         </q-card>
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-sm-6">
         <q-card class="q-pa-sm">
           <Rain />
         </q-card>
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-sm-6">
         <q-card class="q-pa-sm">
           <WindChart />
         </q-card>
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-sm-6">
         <q-card class="q-pa-sm">
           <Clouds />
         </q-card>

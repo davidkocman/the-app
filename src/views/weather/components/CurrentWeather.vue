@@ -2,22 +2,13 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
-// utils
 import { getWeatherIconUrl } from '@/utils/openWeatherRequestUrl'
-
-// Store
 import useWeatherStore from '@/store/weather/'
-
-// Composables
 import useSavedLocations from '@/composables/weather/useSavedLocations'
 
-// Components
 import SunriseSunsetGauge from './SunriseSunsetGauge.vue'
 import HumidityGauge from './HumidityGauge.vue'
 import WindGauge from './WindGauge.vue'
-import FeelsLikeCard from './FeelsLikeCard.vue'
-import PressureCard from './PressureCard.vue'
-import VisibilityCard from './VisibilityCard.vue'
 
 const weatherStore = useWeatherStore()
 const { activeLocation, activeRegion, coordinates, currentWeatherData } = storeToRefs(weatherStore)
@@ -28,83 +19,111 @@ const isAlreadySaved = computed(() => savedLocations.value.some((l) => l.name ==
 
 <template>
   <div v-if="currentWeatherData" class="current-weather">
-    <div class="row q-mb-xl">
-      <div class="col">
-        <div class="location flex flex-center q-gutter-sm">
-          <h4 class="text-h4 q-my-none">
-            {{ activeLocation }}
-          </h4>
-          <q-btn
-            v-if="!isAlreadySaved"
-            icon="add_location_alt"
-            color="primary"
-            flat
-            dense
-            round
-            class="q-ma-none"
-            @click="saveLocation([coordinates.lat as number, coordinates.lon as number], activeLocation, activeRegion)"
-          >
-            <q-tooltip>Save location</q-tooltip>
-          </q-btn>
-        </div>
-      </div>
-    </div>
-    <div class="row q-mb-xl">
-      <div class="col">
-        <div class="top-wrapper q-mx-auto">
-          <div class="weather-condition flex justify-center q-mx-auto">
-            <div class="condition">
-              <q-img
-                :src="getWeatherIconUrl(currentWeatherData.weather[0].icon)"
-                spinner-color="primary"
-                fit="none"
-                width="100px"
-                height="100px"
-                class="flex item-center"
-                img-class="condition-icon"
-              />
-              <h5 class="condition-description text-overline absolute">
-                {{ currentWeatherData.weather[0].description }}
-              </h5>
+    <!-- Hero card -->
+    <q-card class="hero-card q-mb-md overflow-hidden">
+      <div class="hero-bg">
+        <div class="row hero-inner">
+          <!-- Left: temperature + location -->
+          <div class="col-12 col-sm-7 hero-left">
+            <div class="flex items-center location-row q-mb-md">
+              <q-icon name="location_on" size="1.1rem" class="q-mr-xs location-pin" />
+              <span class="text-h6 text-weight-medium location-name">{{ activeLocation }}</span>
+              <span v-if="activeRegion" class="text-body2 q-ml-sm region-label gt-xs">{{ activeRegion }}</span>
+              <q-btn
+                v-if="!isAlreadySaved"
+                icon="bookmark_add"
+                flat
+                dense
+                round
+                size="sm"
+                class="q-ml-sm save-btn"
+                @click="saveLocation([coordinates.lat as number, coordinates.lon as number], activeLocation, activeRegion)"
+              >
+                <q-tooltip>Save location</q-tooltip>
+              </q-btn>
             </div>
-            <div class="temp text-h1 text-weight-bold">
-              {{ parseFloat(currentWeatherData.main.temp.toFixed(0)) }}
-              <span class="celsius-unit text-h4 text-weight-bold">°C</span>
-              <h3 class="min-max-temp absolute text-center column">
-                <span class="text-subtitle2">
-                  <q-icon color="orange-7" name="north" title="High"></q-icon>
-                  {{ parseFloat(currentWeatherData.main.temp_max.toFixed(0)) }}°
+
+            <div class="hero-left-body">
+              <!-- Temp column -->
+              <div class="temp-col">
+                <div class="flex items-start">
+                  <span class="big-temp">{{ parseFloat(currentWeatherData.main.temp.toFixed(0)) }}</span>
+                  <div class="flex column q-ml-sm q-pt-xs">
+                    <span class="celsius-unit">°C</span>
+                    <div class="hi-lo q-mt-xs">
+                      <div class="text-body2 hi-val">
+                        <q-icon name="north" size="xs" />
+                        {{ parseFloat(currentWeatherData.main.temp_max.toFixed(0)) }}°
+                      </div>
+                      <div class="text-body2 lo-val">
+                        <q-icon name="south" size="xs" />
+                        {{ parseFloat(currentWeatherData.main.temp_min.toFixed(0)) }}°
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Condition column -->
+              <div class="condition-col flex column items-center justify-center condition-row">
+                <q-img
+                  :src="getWeatherIconUrl(currentWeatherData.weather[0].icon)"
+                  fit="contain"
+                  class="condition-icon"
+                />
+                <span class="condition-label q-mt-xs text-center">
+                  {{ currentWeatherData.weather[0].description }}
                 </span>
-                <span class="text-subtitle2">
-                  <q-icon color="blue-7" name="south" title="Low"></q-icon>
-                  {{ parseFloat(currentWeatherData.main.temp_min.toFixed(0)) }}°
-                </span>
-              </h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: quick stats -->
+          <div class="col-12 col-sm-5 hero-right">
+            <div class="stats-row">
+              <div class="stat-item">
+                <div class="stat-label">Feels like</div>
+                <div class="stat-value">
+                  <q-icon name="sym_s_thermometer" class="stat-icon" />
+                  {{ currentWeatherData.main.feels_like.toFixed(0) }}<span class="stat-unit">°C</span>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">Pressure</div>
+                <div class="stat-value">
+                  <q-icon name="sym_s_speed" class="stat-icon" />
+                  {{ currentWeatherData.main.pressure }}<span class="stat-unit"> hPa</span>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">Visibility</div>
+                <div class="stat-value">
+                  <q-icon name="visibility" class="stat-icon" />
+                  {{ currentWeatherData.visibility / 1000 }}<span class="stat-unit"> km</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="row q-mb-xl">
-      <div class="col-12 col-md-4 q-mb-md">
-        <SunriseSunsetGauge />
+    </q-card>
+
+    <!-- Gauges row -->
+    <div class="row q-col-gutter-md">
+      <div class="col-12 col-sm-6 col-md-4">
+        <q-card class="gauge-card q-pa-md">
+          <SunriseSunsetGauge />
+        </q-card>
       </div>
-      <div class="col-12 col-md-4 q-mb-md">
-        <HumidityGauge />
+      <div class="col-12 col-sm-6 col-md-4">
+        <q-card class="gauge-card q-pa-md">
+          <HumidityGauge />
+        </q-card>
       </div>
-      <div class="col-12 col-md-4">
-        <WindGauge />
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 col-md-4 q-mb-md">
-        <FeelsLikeCard />
-      </div>
-      <div class="col-12 col-md-4 q-mb-md">
-        <PressureCard />
-      </div>
-      <div class="col-12 col-md-4">
-        <VisibilityCard />
+      <div class="col-12 col-sm-12 col-md-4">
+        <q-card class="gauge-card q-pa-md">
+          <WindGauge />
+        </q-card>
       </div>
     </div>
   </div>
@@ -112,43 +131,167 @@ const isAlreadySaved = computed(() => savedLocations.value.some((l) => l.name ==
 
 <style lang="scss">
 .current-weather {
-  .region {
-    color: var(--text-muted);
-  }
-  .top-wrapper {
-    max-width: 460px;
-    .weather-condition {
-      .condition {
-        position: relative;
-        .condition-icon {
-          height: auto;
-          max-width: 100%;
-          width: auto;
-        }
-        .condition-description {
-          white-space: nowrap;
-          bottom: -14px;
-          left: 50%;
-          transform: translateX(-50%);
+  .hero-card {
+    .hero-bg {
+      background: linear-gradient(135deg, #1a3348 0%, #2c5364 45%, #1e6fa0 100%);
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .hero-inner {
+      padding: 1.25rem;
+      align-items: center;
+
+      @media (min-width: 600px) {
+        padding: 2rem 2.5rem;
+      }
+    }
+
+    .hero-left {
+      .location-pin { opacity: 0.7; }
+      .region-label { opacity: 0.6; }
+      .save-btn { opacity: 0.7; color: rgba(255, 255, 255, 0.85); }
+
+      .location-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 55vw;
+
+        @media (min-width: 600px) {
+          max-width: none;
         }
       }
 
-      .temp {
-        position: relative;
-        .celsius-unit {
-          position: absolute;
-          top: 5px;
-          right: -40px;
+      .big-temp {
+        font-size: clamp(4.5rem, 18vw, 7.5rem);
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -3px;
+        color: rgba(255, 255, 255, 0.97);
+
+        @media (min-width: 600px) {
+          font-size: clamp(5rem, 9vw, 7.5rem);
         }
-        .min-max-temp {
-          bottom: 10px;
-          right: -44px;
-          h3 {
-            line-height: 22px;
+      }
+
+      .celsius-unit {
+        font-size: clamp(1.4rem, 4vw, 2rem);
+        font-weight: 300;
+        opacity: 0.85;
+        line-height: 1;
+      }
+
+      .hi-lo {
+        .hi-val { color: #ffab76; }
+        .lo-val { color: #90caf9; }
+      }
+
+      .hero-left-body {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1.5rem;
+
+        .temp-col {
+          flex-shrink: 0;
+        }
+
+        .condition-col {
+          flex: 1;
+        }
+      }
+
+      .condition-row {
+        .condition-icon {
+          opacity: 0.95;
+          width: clamp(90px, 18vw, 140px);
+          height: clamp(90px, 18vw, 140px);
+
+          @media (min-width: 600px) {
+            width: clamp(100px, 12vw, 140px);
+            height: clamp(100px, 12vw, 140px);
+          }
+        }
+        .condition-label {
+          font-size: clamp(1rem, 3.5vw, 1.35rem);
+          font-weight: 500;
+          text-transform: capitalize;
+          opacity: 0.9;
+          letter-spacing: 0.01em;
+        }
+      }
+    }
+
+    .hero-right {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+
+      @media (min-width: 600px) {
+        margin-top: 0;
+        padding-top: 0;
+        padding-left: 2.5rem;
+        border-top: none;
+        border-left: 1px solid rgba(255, 255, 255, 0.15);
+      }
+
+      .stats-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        @media (min-width: 600px) {
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+      }
+
+      .stat-item {
+        .stat-label {
+          font-size: 0.62rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          opacity: 0.55;
+          font-weight: 700;
+          margin-bottom: 3px;
+        }
+
+        .stat-icon {
+          font-size: 1rem;
+          margin-right: 2px;
+
+          @media (min-width: 600px) {
+            font-size: 1.3rem;
+          }
+        }
+
+        .stat-value {
+          font-size: 1.15rem;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+
+          @media (min-width: 600px) {
+            font-size: 1.75rem;
+          }
+
+          .stat-unit {
+            font-size: 0.75rem;
+            font-weight: 300;
+            margin-left: 1px;
+            opacity: 0.75;
+
+            @media (min-width: 600px) {
+              font-size: 0.95rem;
+            }
           }
         }
       }
     }
+  }
+
+  .gauge-card {
+    height: 100%;
   }
 }
 </style>

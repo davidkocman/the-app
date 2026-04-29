@@ -23,5 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 .env
+<<<<<<< HEAD
 .claude
 .vercel
+=======
+.vercel
+>>>>>>> 4de29aa (weather page redesign)
