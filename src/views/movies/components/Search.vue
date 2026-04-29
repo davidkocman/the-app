@@ -30,7 +30,7 @@ const filterFn = (inputValue: string, doneFn: any, abortFn: any) => {
 </script>
 
 <template>
-  <div class="search q-my-sm">
+  <div class="search">
     <q-select
       v-model="selected"
       standout
