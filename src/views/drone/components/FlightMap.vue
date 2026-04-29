@@ -89,19 +89,19 @@ const mapData = computed(() => {
 
       <div class="row q-gutter-md q-mt-xs justify-center">
         <div class="row items-center q-gutter-xs">
-          <div class="legend-dot" style="background:#27ae60" />
+          <div class="legend-dot" style="background: #27ae60" />
           <span class="text-caption">Start</span>
         </div>
         <div class="row items-center q-gutter-xs">
-          <div class="legend-dot" style="background:#e74c3c" />
+          <div class="legend-dot" style="background: #e74c3c" />
           <span class="text-caption">End</span>
         </div>
         <div class="row items-center q-gutter-xs">
-          <div class="legend-dot" style="background:#f39c12" />
+          <div class="legend-dot" style="background: #f39c12" />
           <span class="text-caption">Home</span>
         </div>
         <div class="row items-center q-gutter-xs">
-          <div class="legend-dot" style="background:#1976d2" />
+          <div class="legend-dot" style="background: #1976d2" />
           <span class="text-caption">Path</span>
         </div>
       </div>

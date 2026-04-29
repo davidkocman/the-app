@@ -17,28 +17,31 @@ Hlavná stránka sekcie. Riadi rozloženie, meta tagy a inicializáciu dát.
 
 **Meta:** `useMeta` — dynamický title `Drone flight data | The App`.
 
+**Podmienené zobrazenie:** Ak `droneStore.activeRecordId` je `null`, pravá časť stránky zobrazí správu _"Select flight record"_. Po výbere záznamu sa obsah nahradí dátovými komponentmi.
+
 **Rozloženie (`q-page`):**
 
 ```
 row
-├── col-12 col-md-3       DroneFileUpload
-└── col-12 col-md-9
-    ├── col-12 col-sm-6   AircraftInfo
-    ├── col-12 col-sm-6   FlightSummary
-    ├── col-12            FlightMap
-    ├── col-12            AltitudeChart
-    ├── col-12 col-md-6   SpeedChart
-    ├── col-12 col-md-6   BatteryChart
-    ├── col-12 col-md-6   OrientationChart
-    ├── col-12 col-md-6   SignalChart
-    ├── col-12 col-md-6   GpsChart
-    ├── col-12 col-md-6   GimbalChart
-    ├── col-12 col-md-6   BatteryCells
-    ├── col-12 col-md-6   FlightEvents
-    └── col-12            CameraEvents
+├── col-12 col-md-2        DroneFileUpload
+└── col-12 col-md-10
+    ├── col-12 col-sm-6    AircraftInfo
+    ├── col-12 col-sm-6    FlightSummary
+    ├── col-12 col-md-6    [q-card] Telemetry data
+    │   ├── SpeedChart
+    │   ├── AltitudeChart
+    │   ├── BatteryChart
+    │   ├── BatteryDetailChart
+    │   ├── DistanceChart
+    │   ├── GpsChart
+    │   ├── SignalChart
+    │   ├── OrientationChart
+    │   ├── BatteryCells
+    │   ├── FlightEvents
+    │   └── CameraEvents
+    └── col-12 col-md-6    [q-card] Flight path
+        └── FlightMap
 ```
-
-> Pravý stĺpec (`col-md-9`) obsahuje všetky dátové komponenty — tie sú samostatne podmienené (`v-if`) a zobrazujú sa len po načítaní frames.
 
 ---
 
@@ -76,26 +79,13 @@ Statická karta so súhrnnými hodnotami celého letu.
 
 | Pole | Zdroj | Jednotka | Popis |
 |------|-------|----------|-------|
-| Fly time | `lastFrame.osd.flyTime` | mm:ss | Celkový čas letu |
+| Fly time | `lastFrame.osd.flyTime` | `Xm Ys` | Celkový čas letu |
 | Max height | `lastFrame.osd.heightMax` | m | Maximálna výška nad zemou dosiahnutá počas letu |
-| Max H speed | `max(xSpeedMax, ySpeedMax)` | m/s | Maximálna horizontálna rýchlosť |
-| Max V speed | `lastFrame.osd.zSpeedMax` | m/s | Maximálna vertikálna rýchlosť |
+| Max flight speed | `max(xSpeedMax, ySpeedMax)` | m/s + km/h | Maximálna horizontálna rýchlosť |
+| Max V speed | `lastFrame.osd.zSpeedMax` | m/s + km/h | Maximálna vertikálna rýchlosť |
 | Drone type | `firstFrame.osd.droneType` | — | Model dronu |
 
 > `*Max` hodnoty sú kumulatívne maximá ukladané priamo firmvérom do každého framu — posledný frame teda obsahuje celkové maximum za celý let.
-
----
-
-## FlightMap
-
-SVG vizualizácia trasy letu bez externých knižníc.
-
-- **Trasa** — polyline z `osd.latitude` + `osd.longitude`, vzorkovaný každý 5. frame
-- **Start** — zelený bod (prvá platná GPS pozícia)
-- **End** — červený bod (posledná platná GPS pozícia)
-- **Home** — oranžový bod z `frame.home.latitude/longitude` (ak je nastavený)
-- Súradnice s hodnotou `0` sú filtrované (GPS ešte nezachytilo signál)
-- Projekcia je lineárna (nie Mercator) — vhodná pre krátke lety; pre dlhé trasy môže dôjsť k miernemu skresleniu
 
 ---
 
@@ -135,7 +125,60 @@ ApexCharts **mixed** graf (area + line) s dvojitou Y-osou.
 | Charge | `battery.chargeLevel` (%) | area | ľavá (0–100 %) | zelená |
 | Voltage | `battery.voltage` (V) | line | pravá (V) | oranžová |
 
-> Vzorkovanie: každý 10. frame. Kombinácia ukazuje vzťah medzi poklesom napätia a vybitím kapacity.
+> Vzorkovanie: každý 10. frame.
+
+---
+
+## BatteryDetailChart
+
+ApexCharts **mixed** graf (area + line) s trojitou Y-osou — podrobný pohľad na stav batérie.
+
+| Séria | Zdroj | Typ | Os | Farba |
+|-------|-------|-----|----|-------|
+| Charge | `battery.chargeLevel` (%) | area | ľavá (0–100 %) | zelená |
+| Temperature | `battery.temperature` (°C) | line | pravá (°C) | červená |
+| Voltage | `battery.voltage` (V) | line | pravá (skrytá os) | oranžová |
+
+> Vzorkovanie: každý 10. frame. Os napätia je skrytá (`show: false`) — hodnota je viditeľná iba v tooltipe.
+
+---
+
+## DistanceChart
+
+ApexCharts **area** graf horizontálnej vzdialenosti dronu od home pointu v čase.
+
+| Os | Zdroj | Popis |
+|----|-------|-------|
+| X | `osd.flyTime` (mm:ss) | Čas od štartu letu |
+| Y | Haversine(`osd.lat/lon`, `home.lat/lon`) (m) | Priama horizontálna vzdialenosť od home pointu |
+
+> Vzorkovanie: každý 10. frame. Filtruje framy kde `home.isHomeRecord === false` — vylúči úvodné framy pred zaznamenaním home pointu (defaultná poloha `0,0` by inak generovala hodnoty v miliónoch metrov).
+
+---
+
+## GpsChart
+
+ApexCharts **stepline** graf počtu uzamknutých satelitov v čase.
+
+| Os | Zdroj | Popis |
+|----|-------|-------|
+| X | `osd.flyTime` (mm:ss) | Čas od štartu letu |
+| Y | `osd.gpsNum` | Počet satelitov |
+
+> Vzorkovanie: každý 10. frame. Typ `stepline` presne reprezentuje diskrétne (celočíselné) skoky v počte satelitov bez falošnej interpolácie.
+
+---
+
+## SignalChart
+
+ApexCharts **line** graf sily RC signálu v čase.
+
+| Séria | Zdroj | Farba | Popis |
+|-------|-------|-------|-------|
+| Downlink | `rc.downlinkSignal` (%) | modrá | Signál lietadlo → ovládač (telemetria, video) |
+| Uplink | `rc.uplinkSignal` (%) | oranžová | Signál ovládač → lietadlo (príkazy) |
+
+> Obe hodnoty sú **optional** — komponent sa zobrazí len ak ich log obsahuje. Vzorkovanie: každý 10. frame.
 
 ---
 
@@ -153,32 +196,6 @@ ApexCharts **line** graf postoja (attitude) lietadla v čase.
 
 ---
 
-## SignalChart
-
-ApexCharts **line** graf sily RC signálu v čase.
-
-| Séria | Zdroj | Farba | Popis |
-|-------|-------|-------|-------|
-| Downlink | `rc.downlinkSignal` (%) | modrá | Signál lietadlo → ovládač (telemetria, video) |
-| Uplink | `rc.uplinkSignal` (%) | oranžová | Signál ovládač → lietadlo (príkazy) |
-
-> Obe hodnoty sú **optional** — komponent sa zobrazí len ak ich log obsahuje. Vzorkovanie: každý 10. frame.
-
----
-
-## GpsChart
-
-ApexCharts **mixed** graf (bar + line) kvality GPS signálu v čase.
-
-| Séria | Zdroj | Typ | Os | Farba |
-|-------|-------|-----|----|-------|
-| Satellites | `osd.gpsNum` | bar | ľavá (count) | zelená |
-| GPS level | `osd.gpsLevel` (0–5) | line | pravá (0–5) | oranžová |
-
-> Vzorkovanie: každý 10. frame. Nízky počet satelitov alebo level < 3 môže spôsobovať nepresnosti polohy.
-
----
-
 ## BatteryCells
 
 Statická karta zobrazujúca stav jednotlivých článkov batérie z **posledného framu s platnými dátami**.
@@ -187,19 +204,6 @@ Statická karta zobrazujúca stav jednotlivých článkov batérie z **posledné
 - Farba: zelená > 50 %, oranžová 20–50 %, červená < 20 %
 - **Voltage deviation** — aktuálny rozdiel max–min napätia článkov (ideálne < 0.05 V)
 - **Temperature** — teplota batérie v °C
-
----
-
-## GimbalChart
-
-ApexCharts **line** graf pohybov gimbalu v čase.
-
-| Séria | Zdroj | Farba | Popis |
-|-------|-------|-------|-------|
-| Pitch | `gimbal.pitch` (°) | tyrkysová | Naklonenie kamery hore/dolu |
-| Yaw | `gimbal.yaw` (°) | fialová | Otočenie gimbalu do strán |
-
-> Vzorkovanie: každý 10. frame. Užitočné pri filmových letoch na analýzu plynulosti pohybov kamery.
 
 ---
 
@@ -228,3 +232,16 @@ Zoznam udalostí kamery — kedy bola spravená fotografia alebo spustené/zasta
 
 - Detekcia na základe **zmeny stavu** `camera.isPhoto` a `camera.isVideo` medzi framami
 - Komponent sa zobrazí len ak log obsahuje aspoň jednu kameru udalosť
+
+---
+
+## FlightMap
+
+SVG vizualizácia trasy letu bez externých knižníc.
+
+- **Trasa** — polyline z `osd.latitude` + `osd.longitude`, vzorkovaný každý 5. frame
+- **Start** — zelený bod (prvá platná GPS pozícia)
+- **End** — červený bod (posledná platná GPS pozícia)
+- **Home** — oranžový bod z `frame.home.latitude/longitude` (ak je nastavený)
+- Súradnice s hodnotou `0` sú filtrované (GPS ešte nezachytilo signál)
+- Projekcia je lineárna (nie Mercator) — vhodná pre krátke lety; pre dlhé trasy môže dôjsť k miernemu skresleniu

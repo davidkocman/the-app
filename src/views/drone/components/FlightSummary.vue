@@ -15,7 +15,7 @@ const summary = computed(() => {
   const s = Math.floor(flyTime % 60)
   const droneType = typeof first.droneType === 'string' ? first.droneType : '—'
   return {
-    flyTime: `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`,
+    flyTime: { m, s },
     maxHeight: last.heightMax.toFixed(1),
     maxHSpeed: Math.max(last.xSpeedMax, last.ySpeedMax).toFixed(1),
     maxHSpeedKmh: msToKmh(Math.max(last.xSpeedMax, last.ySpeedMax)),
@@ -39,7 +39,9 @@ const summary = computed(() => {
       <div class="row q-col-gutter-md">
         <div class="col-6 col-sm-4">
           <div class="field-label">Fly time</div>
-          <div class="field-value text-weight-medium">{{ summary.flyTime }}</div>
+          <div class="field-value text-weight-medium">
+            {{ summary.flyTime.m }}<span class="unit">m</span> {{ summary.flyTime.s }}<span class="unit">s</span>
+          </div>
         </div>
 
         <div class="col-6 col-sm-4">
@@ -48,13 +50,19 @@ const summary = computed(() => {
         </div>
 
         <div class="col-6 col-sm-4">
-          <div class="field-label">Max H speed</div>
-          <div class="field-value">{{ summary.maxHSpeed }} <span class="unit">m/s</span> <span class="unit">({{ summary.maxHSpeedKmh }} km/h)</span></div>
+          <div class="field-label">Max flight speed</div>
+          <div class="field-value">
+            {{ summary.maxHSpeed }} <span class="unit">m/s</span>
+            <span class="unit">&nbsp;({{ summary.maxHSpeedKmh }} km/h)</span>
+          </div>
         </div>
 
         <div class="col-6 col-sm-4">
           <div class="field-label">Max V speed</div>
-          <div class="field-value">{{ summary.maxVSpeed }} <span class="unit">m/s</span> <span class="unit">({{ summary.maxVSpeedKmh }} km/h)</span></div>
+          <div class="field-value">
+            {{ summary.maxVSpeed }} <span class="unit">m/s</span>
+            <span class="unit">&nbsp;({{ summary.maxVSpeedKmh }} km/h)</span>
+          </div>
         </div>
 
         <div class="col-6 col-sm-4">
