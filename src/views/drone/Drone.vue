@@ -9,11 +9,11 @@ import FlightMap from './components/FlightMap.vue'
 import AltitudeChart from './components/AltitudeChart.vue'
 import SpeedChart from './components/SpeedChart.vue'
 import BatteryChart from './components/BatteryChart.vue'
+import DistanceChart from './components/DistanceChart.vue'
 import FlightEvents from './components/FlightEvents.vue'
 import OrientationChart from './components/OrientationChart.vue'
 import SignalChart from './components/SignalChart.vue'
 import GpsChart from './components/GpsChart.vue'
-import GimbalChart from './components/GimbalChart.vue'
 import BatteryCells from './components/BatteryCells.vue'
 import CameraEvents from './components/CameraEvents.vue'
 
@@ -41,65 +41,80 @@ onMounted(() => droneStore.fetchFlightLogs())
     </div>
 
     <div class="row q-col-gutter-md">
-      <div class="col-12 col-md-3">
+      <div class="col-12 col-md-2">
         <DroneFileUpload />
       </div>
 
-      <div class="col-12 col-md-9">
-        <div class="row q-col-gutter-md">
-          <!-- Static info -->
+      <div class="col-12 col-md-10">
+        <div v-if="!droneStore.activeRecordId" class="row items-center justify-center" style="min-height: 300px">
+          <div class="text-h6 text-grey-5">Select flight record</div>
+        </div>
+
+        <div v-else class="row q-col-gutter-md">
+          <!-- Aircraft info + flight summary -->
           <div class="col-12 col-sm-6">
-            <AircraftInfo />
+            <AircraftInfo />   <!-- drone model, serial number, firmware -->
           </div>
           <div class="col-12 col-sm-6">
-            <FlightSummary />
+            <FlightSummary />  <!-- fly time, max height, max speeds, drone type -->
           </div>
 
-          <!-- Altitude -->
-          <div class="col-12">
-            <AltitudeChart />
+          <!-- Telemetry charts + flight map -->
+          <div class="col-12 col-md-6">
+            <q-card flat bordered>
+              <q-card-section>
+                <h2 class="text-h6 q-my-none">Telemetry data</h2>
+              </q-card-section>
+              <q-card-section>
+                <div class="row q-col-gutter-md">
+                  <div class="col-12">
+                    <SpeedChart />        <!-- X / Y / Z axis speed (m/s) over time -->
+                  </div>
+                  <div class="col-12">
+                    <AltitudeChart />     <!-- height above ground (m) over time -->
+                  </div>
+                  <div class="col-12">
+                    <BatteryChart />      <!-- charge level (%) and voltage (V) over time -->
+                  </div>
+                  <div class="col-12">
+                    <BatteryDetailChart /> <!-- charge (%), temperature (°C) and voltage (V) over time -->
+                  </div>
+                  <div class="col-12">
+                    <DistanceChart />     <!-- horizontal distance from home point (m) over time -->
+                  </div>
+                  <div class="col-12">
+                    <GpsChart />          <!-- number of locked satellites over time -->
+                  </div>
+                  <div class="col-12">
+                    <SignalChart />        <!-- RC uplink and downlink signal strength (%) over time -->
+                  </div>
+                  <div class="col-12">
+                    <OrientationChart />  <!-- pitch, roll and yaw angles (°) over time -->
+                  </div>
+                  <div class="col-12">
+                    <BatteryCells />      <!-- per-cell voltage snapshot -->
+                  </div>
+                  <div class="col-12">
+                    <div class="row q-col-gutter-md">
+                      <div class="col">
+                        <FlightEvents />  <!-- flight mode changes and system events timeline -->
+                      </div>
+                      <div class="col">
+                        <CameraEvents />  <!-- photo / video recording events timeline -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </q-card-section>
+            </q-card>
           </div>
 
-          <!-- Speed + Battery -->
           <div class="col-12 col-md-6">
-            <SpeedChart />
-          </div>
-          <div class="col-12 col-md-6">
-            <BatteryChart />
-          </div>
-
-          <!-- Orientation + Signal -->
-          <div class="col-12 col-md-6">
-            <OrientationChart />
-          </div>
-          <div class="col-12 col-md-6">
-            <SignalChart />
-          </div>
-
-          <!-- GPS + Gimbal -->
-          <div class="col-12 col-md-6">
-            <GpsChart />
-          </div>
-          <div class="col-12 col-md-6">
-            <GimbalChart />
-          </div>
-
-          <!-- Battery cells + Camera events -->
-          <div class="col-12 col-md-6">
-            <BatteryCells />
-          </div>
-          <div class="col-12 col-md-6">
-            <FlightEvents />
-          </div>
-
-          <!-- Flight events timeline -->
-          <div class="col-12">
-            <CameraEvents />
-          </div>
-
-          <!-- Flight path -->
-          <div class="col-12">
-            <FlightMap />
+            <q-card flat bordered>
+              <q-card-section>
+                <FlightMap />  <!-- GPS flight path rendered on an interactive map -->
+              </q-card-section>
+            </q-card>
           </div>
         </div>
       </div>
