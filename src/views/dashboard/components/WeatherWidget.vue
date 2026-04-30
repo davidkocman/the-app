@@ -162,10 +162,10 @@ onMounted(async () => {
       flex-shrink: 0;
 
       .big-temp {
-        font-size: clamp(3rem, 7vw, 4rem);
+        font-size: clamp(4.5rem, 10vw, 6rem);
         font-weight: 800;
         line-height: 1;
-        letter-spacing: -2px;
+        letter-spacing: -3px;
         color: rgba(255, 255, 255, 0.97);
       }
 
@@ -194,10 +194,10 @@ onMounted(async () => {
       }
 
       .condition-label {
-        font-size: 0.75rem;
-        font-weight: 500;
+        font-size: clamp(1rem, 2.5vw, 1.2rem);
+        font-weight: 600;
         text-transform: capitalize;
-        opacity: 0.85;
+        opacity: 0.95;
         letter-spacing: 0.01em;
         line-height: 1.3;
       }
@@ -206,37 +206,37 @@ onMounted(async () => {
 
   .widget-stats {
     margin-top: auto;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
     gap: 0;
 
     .stat-divider {
       width: 1px;
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.2);
       margin: 0.15rem 0;
       flex-shrink: 0;
     }
 
     .stat-item {
       .stat-label {
-        font-size: 0.6rem;
+        font-size: 0.65rem;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
-        opacity: 0.5;
-        font-weight: 700;
-        margin-bottom: 3px;
+        letter-spacing: 0.08em;
+        opacity: 0.65;
+        font-weight: 600;
+        margin-bottom: 4px;
       }
 
       .stat-value {
-        font-size: 0.9rem;
+        font-size: 1rem;
         font-weight: 700;
         display: flex;
         align-items: center;
         gap: 1px;
 
         .stat-unit {
-          font-size: 0.65rem;
-          font-weight: 300;
-          opacity: 0.75;
+          font-size: 0.7rem;
+          font-weight: 400;
+          opacity: 0.85;
         }
       }
     }
