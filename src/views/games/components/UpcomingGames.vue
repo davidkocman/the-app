@@ -11,12 +11,15 @@ import useGamesStore from '@/store/games'
 const $q = useQuasar()
 const gamesStore = useGamesStore()
 
-const currentYearMonth = ref(new Date().toISOString().slice(0, 7))
+const toYearMonth = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+
+const currentYearMonth = ref(toYearMonth(new Date()))
 
 const minYearMonth = computed(() => {
   const d = new Date()
   d.setMonth(d.getMonth() - 6)
-  return d.toISOString().slice(0, 7)
+  return toYearMonth(d)
 })
 
 const currentMonthUpcomingGames = computed(() => {
@@ -57,15 +60,13 @@ const isToday = (date: string | null) =>
   !!date && date === new Date().toISOString().slice(0, 10)
 
 const nextMonth = () => {
-  const now = new Date(currentYearMonth.value)
-  const nextMonth = new Date(now.setMonth(now.getMonth() + 1))
-  currentYearMonth.value = nextMonth.toISOString().slice(0, 7)
+  const [year, month] = currentYearMonth.value.split('-').map(Number)
+  currentYearMonth.value = toYearMonth(new Date(year, month))
   gamesStore.fetchUpcomingGames(currentYearMonth.value)
 }
 const prevMonth = () => {
-  const now = new Date(currentYearMonth.value)
-  const prevMonth = new Date(now.setMonth(now.getMonth() - 1))
-  currentYearMonth.value = prevMonth.toISOString().slice(0, 7)
+  const [year, month] = currentYearMonth.value.split('-').map(Number)
+  currentYearMonth.value = toYearMonth(new Date(year, month - 2))
   gamesStore.fetchUpcomingGames(currentYearMonth.value)
 }
 
