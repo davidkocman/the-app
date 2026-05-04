@@ -29,3 +29,6 @@ dist-ssr
 =======
 .vercel
 >>>>>>> 4de29aa (weather page redesign)
+
+.vercel
+.env*.local
