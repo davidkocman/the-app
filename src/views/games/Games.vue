@@ -21,7 +21,7 @@ useMeta(() => {
 </script>
 
 <template>
-  <q-page class="page-games q-py-md q-px-lg">
+  <q-page class="page-games q-py-md">
     <div class="row justify-between items-center q-mb-lg">
       <h1 class="text-h4 q-my-none">Games</h1>
     </div>
@@ -33,3 +33,15 @@ useMeta(() => {
     <GameDetail />
   </q-page>
 </template>
+
+<style lang="scss" scoped>
+.page-games {
+  padding-left: 12px;
+  padding-right: 12px;
+
+  @media (min-width: 768px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+</style>
