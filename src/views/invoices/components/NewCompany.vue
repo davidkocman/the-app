@@ -51,7 +51,7 @@ const clearForm = () => {
   <q-btn :label="buttonLabel('New company')" color="primary" icon="apartment" @click="dialog = true" />
 
   <q-dialog v-model="dialog" persistent>
-    <q-card style="min-width: 320px; width: 80vw">
+    <q-card flat style="min-width: 320px; width: 80vw">
       <q-card-section>
         <div class="text-h6">New company</div>
       </q-card-section>

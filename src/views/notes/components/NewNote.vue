@@ -60,7 +60,7 @@ const resetNote = () => {
       transition-hide="slide-down"
       data-cy="new-note-dialog"
     >
-      <q-card class="bg-dark-page">
+      <q-card flat class="bg-dark-page">
         <q-bar>
           <q-space />
           <q-btn dense flat icon="close" v-close-popup @click="resetNote">

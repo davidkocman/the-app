@@ -22,7 +22,7 @@ useMeta(() => {
 <template>
   <q-page class="page-profile q-py-md q-px-lg">
     <div class="row justify-between items-center q-mb-sm">
-      <h1 class="text-h4 q-my-none">Profile</h1>
+      <h1 class="text-h4 q-my-none flex items-center" style="gap: 10px"><q-icon name="person" />Profile</h1>
     </div>
     <div class="row">
       <div class="col-12 col-md-6">
@@ -35,6 +35,13 @@ useMeta(() => {
 
 <style lang="scss" scoped>
 .page-profile {
+  padding-left: 6px;
+  padding-right: 6px;
+
+  @media (min-width: 768px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
   .row {
     gap: 8px;
   }

@@ -27,7 +27,7 @@ onBeforeMount(() => {
 <template>
   <q-page class="page-notes q-py-md q-px-lg">
     <div class="row justify-between items-center q-mb-lg">
-      <h1 class="text-h4 q-my-none">Notes</h1>
+      <h1 class="text-h4 q-my-none flex items-center" style="gap: 10px"><q-icon name="notes" />Notes</h1>
       <NewNote />
     </div>
     <div class="row">
@@ -40,7 +40,7 @@ onBeforeMount(() => {
             header-class="text-weight-medium"
             data-cy="note-item"
           >
-            <q-card>
+            <q-card flat>
               <q-card-section class="q-px-lg">
                 <EditNote :note="note" />
                 <div v-html="toMarkDown(note.content)"></div>
@@ -52,3 +52,15 @@ onBeforeMount(() => {
     </div>
   </q-page>
 </template>
+
+<style lang="scss" scoped>
+.page-notes {
+  padding-left: 6px;
+  padding-right: 6px;
+
+  @media (min-width: 768px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+</style>

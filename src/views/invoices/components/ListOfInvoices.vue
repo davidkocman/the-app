@@ -137,7 +137,7 @@ const tableRows = computed(() => {
 
 <template>
   <template v-if="invoices.length">
-    <q-card class="invoices-list q-mb-md">
+    <q-card flat class="invoices-list q-mb-md">
       <q-card-section class="q-p-md">
         <div class="row q-gutter-sm items-center">
           <q-select
@@ -210,7 +210,7 @@ const tableRows = computed(() => {
     </q-card>
   </template>
   <template v-else>
-    <q-card class="invoices-list q-mb-md q-pa-sm shadow-2">
+    <q-card flat class="invoices-list q-mb-md q-pa-sm shadow-2">
       <q-card-section>
         <div class="row q-gutter-sm">
           <div class="col text-center">No items</div>

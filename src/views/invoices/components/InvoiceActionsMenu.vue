@@ -96,7 +96,7 @@ const removeDialog = ref(false)
   <EditInvoice v-model="editDialog" :invoice="invoice" />
 
   <q-dialog v-model="removeDialog" persistent>
-    <q-card style="min-width: 320px; width: 80vw">
+    <q-card flat style="min-width: 320px; width: 80vw">
       <q-card-section>
         <div class="text-h6">Remove Invoice</div>
       </q-card-section>

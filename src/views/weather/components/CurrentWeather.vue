@@ -20,27 +20,29 @@ const isAlreadySaved = computed(() => savedLocations.value.some((l) => l.name ==
 <template>
   <div v-if="currentWeatherData" class="current-weather">
     <!-- Hero card -->
-    <q-card class="hero-card q-mb-md overflow-hidden">
+    <q-card flat class="hero-card q-mb-md overflow-hidden">
       <div class="hero-bg">
+        <q-btn
+          v-if="!isAlreadySaved"
+          icon="bookmark_add"
+          flat
+          dense
+          round
+          size="sm"
+          class="save-btn absolute"
+          style="top: 12px; right: 12px; z-index: 1"
+          @click="saveLocation([coordinates.lat as number, coordinates.lon as number], activeLocation, activeRegion)"
+        >
+          <q-tooltip>Save location</q-tooltip>
+        </q-btn>
         <div class="row hero-inner">
           <!-- Left: temperature + location -->
           <div class="col-12 col-sm-7 hero-left">
-            <div class="flex items-center location-row q-mb-md">
-              <q-icon name="location_on" size="1.1rem" class="q-mr-xs location-pin" />
-              <span class="text-h6 text-weight-medium location-name">{{ activeLocation }}</span>
-              <span v-if="activeRegion" class="text-body2 q-ml-sm region-label gt-xs">{{ activeRegion }}</span>
-              <q-btn
-                v-if="!isAlreadySaved"
-                icon="bookmark_add"
-                flat
-                dense
-                round
-                size="sm"
-                class="q-ml-sm save-btn"
-                @click="saveLocation([coordinates.lat as number, coordinates.lon as number], activeLocation, activeRegion)"
-              >
-                <q-tooltip>Save location</q-tooltip>
-              </q-btn>
+            <div class="flex items-start location-row q-mb-md">
+              <div class="flex column">
+                <span class="text-h6 text-weight-medium location-name">{{ activeLocation }}</span>
+                <span v-if="activeRegion" class="text-body2 region-label gt-xs">{{ activeRegion }}</span>
+              </div>
             </div>
 
             <div class="hero-left-body">
@@ -111,17 +113,17 @@ const isAlreadySaved = computed(() => savedLocations.value.some((l) => l.name ==
     <!-- Gauges row -->
     <div class="row q-col-gutter-md">
       <div class="col-12 col-sm-6 col-md-4">
-        <q-card class="gauge-card q-pa-md">
+        <q-card flat class="gauge-card q-pa-md">
           <SunriseSunsetGauge />
         </q-card>
       </div>
       <div class="col-12 col-sm-6 col-md-4">
-        <q-card class="gauge-card q-pa-md">
+        <q-card flat class="gauge-card q-pa-md">
           <HumidityGauge />
         </q-card>
       </div>
       <div class="col-12 col-sm-12 col-md-4">
-        <q-card class="gauge-card q-pa-md">
+        <q-card flat class="gauge-card q-pa-md">
           <WindGauge />
         </q-card>
       </div>
@@ -147,9 +149,16 @@ const isAlreadySaved = computed(() => savedLocations.value.some((l) => l.name ==
     }
 
     .hero-left {
-      .location-pin { opacity: 0.7; }
-      .region-label { opacity: 0.6; }
-      .save-btn { opacity: 0.7; color: rgba(255, 255, 255, 0.85); }
+      .location-pin {
+        opacity: 0.7;
+      }
+      .region-label {
+        opacity: 0.6;
+      }
+      .save-btn {
+        opacity: 0.7;
+        color: rgba(255, 255, 255, 0.85);
+      }
 
       .location-name {
         white-space: nowrap;
@@ -182,8 +191,12 @@ const isAlreadySaved = computed(() => savedLocations.value.some((l) => l.name ==
       }
 
       .hi-lo {
-        .hi-val { color: #ffab76; }
-        .lo-val { color: #90caf9; }
+        .hi-val {
+          color: #ffab76;
+        }
+        .lo-val {
+          color: #90caf9;
+        }
       }
 
       .hero-left-body {

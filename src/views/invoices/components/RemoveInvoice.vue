@@ -20,7 +20,7 @@ const dialog = ref(false)
 <template>
   <q-btn label="" color="negative" icon="delete" flat @click="dialog = true" />
   <q-dialog v-model="dialog" persistent>
-    <q-card style="min-width: 320px; width: 80vw">
+    <q-card flat style="min-width: 320px; width: 80vw">
       <q-card-section>
         <div class="text-h6">Remove Invoice</div>
       </q-card-section>

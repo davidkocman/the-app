@@ -55,7 +55,7 @@ onBeforeMount(() => {
 <template>
   <q-page class="page-invoices q-py-md q-px-lg">
     <div class="row justify-between items-center q-mb-md">
-      <h1 class="text-h4 q-my-none">Invoices</h1>
+      <h1 class="text-h4 q-my-none flex items-center" style="gap: 10px"><q-icon name="description" />Invoices</h1>
       <div v-if="!pageLocked" class="row align-center justify-center q-gutter-sm">
         <q-btn flat round color="primary" icon="lock" @click="pageLocked = true" />
         <NewInvoice />
@@ -64,7 +64,7 @@ onBeforeMount(() => {
     </div>
     <template v-if="pageLocked">
       <q-dialog v-model="pageLocked" seamless>
-        <q-card style="min-width: 350px">
+        <q-card flat style="min-width: 350px">
           <q-card-section>
             <div class="text-h6">Page locked</div>
           </q-card-section>
@@ -91,7 +91,7 @@ onBeforeMount(() => {
         class="q-mb-lg"
       >
         <div class="column items-end q-gutter-xs">
-          <q-card class="shadow-1">
+          <q-card flat class="shadow-1">
             <q-card-section>
               <div v-if="totalInvoicesVatPrice !== totalPayedInvoicesVatPrice" class="q-pb-sm">
                 <h6 class="text-orange-5">Billed: {{ thousandSeparator(totalInvoicesVatPrice.toFixed(2)) }} €</h6>
@@ -112,7 +112,7 @@ onBeforeMount(() => {
       </div>
       <div class="row">
         <div class="col">
-          <q-card>
+          <q-card flat>
             <q-tabs
               v-model="activeTab"
               dense
@@ -143,3 +143,15 @@ onBeforeMount(() => {
     </template>
   </q-page>
 </template>
+
+<style lang="scss" scoped>
+.page-invoices {
+  padding-left: 6px;
+  padding-right: 6px;
+
+  @media (min-width: 768px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+</style>

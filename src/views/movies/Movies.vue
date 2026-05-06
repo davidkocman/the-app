@@ -22,7 +22,9 @@ const { searchFor, searchResult } = storeToRefs(moviesStore)
 
 const drawerOpen = computed({
   get: () => !!searchResult.value,
-  set: (val) => { if (!val) searchResult.value = null }
+  set: (val) => {
+    if (!val) searchResult.value = null
+  }
 })
 </script>
 
@@ -30,19 +32,19 @@ const drawerOpen = computed({
   <q-page class="page-movies">
     <div class="page-header q-px-md q-pt-md q-pb-sm">
       <div class="row items-center no-wrap q-gutter-sm">
-        <h1 class="text-h5 text-weight-bold q-my-none col-auto page-title">Movies</h1>
+        <h1 class="text-h5 text-weight-bold q-my-none col-auto page-title flex items-center" style="gap: 10px"><q-icon name="movie" />Movies</h1>
         <div class="col search-bar">
           <div class="type-toggle">
             <button
               class="type-toggle__btn"
               :class="{ 'is-active': searchFor === 'movie' }"
               @click="searchFor = 'movie'"
-            >Movie</button>
-            <button
-              class="type-toggle__btn"
-              :class="{ 'is-active': searchFor === 'tv' }"
-              @click="searchFor = 'tv'"
-            >TV</button>
+            >
+              Movie
+            </button>
+            <button class="type-toggle__btn" :class="{ 'is-active': searchFor === 'tv' }" @click="searchFor = 'tv'">
+              TV
+            </button>
           </div>
           <div class="search-bar__divider" />
           <div class="col min-w-0">
@@ -60,9 +62,7 @@ const drawerOpen = computed({
       </div>
     </q-dialog>
 
-    <footer class="q-pa-sm text-center text-caption footer-credit">
-      Data source: themoviedb.org
-    </footer>
+    <footer class="q-pa-sm text-center text-caption footer-credit">Data source: themoviedb.org</footer>
   </q-page>
 </template>
 
@@ -96,14 +96,18 @@ const drawerOpen = computed({
 
   /* inherit standout background from q-select so they look like one unit */
   background: rgba(255, 255, 255, 0.07);
-  .body--light & { background: rgba(0, 0, 0, 0.06); }
+  .body--light & {
+    background: rgba(0, 0, 0, 0.06);
+  }
 
   &__divider {
     width: 1px;
     height: 20px;
     background: rgba(255, 255, 255, 0.15);
     flex-shrink: 0;
-    .body--light & { background: rgba(0, 0, 0, 0.12); }
+    .body--light & {
+      background: rgba(0, 0, 0, 0.12);
+    }
   }
 
   /* neutralise q-select's own background so it blends in */
@@ -130,7 +134,9 @@ const drawerOpen = computed({
     font-weight: 500;
     cursor: pointer;
     color: var(--text-muted);
-    transition: background 0.18s, color 0.18s;
+    transition:
+      background 0.18s,
+      color 0.18s;
     white-space: nowrap;
     line-height: 1;
 
@@ -141,7 +147,9 @@ const drawerOpen = computed({
 
     &:not(.is-active):hover {
       background: rgba(255, 255, 255, 0.08);
-      .body--light & { background: rgba(0, 0, 0, 0.06); }
+      .body--light & {
+        background: rgba(0, 0, 0, 0.06);
+      }
     }
   }
 }
