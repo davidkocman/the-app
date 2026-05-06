@@ -9,7 +9,7 @@ const { currentWeatherData } = storeToRefs(weatherStore)
 </script>
 
 <template>
-  <q-card v-if="currentWeatherData" class="card q-mx-auto rounded-borders">
+  <q-card flat v-if="currentWeatherData" class="card q-mx-auto rounded-borders">
     <q-card-section>
       <h6 class="text-subtitle1 text-primary text-weight-bolder">Feels like</h6>
     </q-card-section>

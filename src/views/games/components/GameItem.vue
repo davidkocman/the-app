@@ -12,7 +12,7 @@ const gamesStore = useGamesStore()
 </script>
 
 <template>
-  <q-card :key="item.slug" class="game-item" @click="gamesStore.showGameDetail(item.id)">
+  <q-card flat :key="item.slug" class="game-item" @click="gamesStore.showGameDetail(item.id)">
     <q-img v-if="item.background_image" :src="item.background_image" :alt="item.slug" class="game-item__img">
       <div class="game-item__img__title absolute-bottom bg-opacity-50 text-white">
         <h2 class="text-overline text-uppercase">{{ item.name }}</h2>

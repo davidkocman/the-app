@@ -23,7 +23,7 @@ const dialog = ref(false)
 <template>
   <q-btn label="Edit" color="primary" @click="dialog = true" />
   <q-dialog v-model="dialog" persistent>
-    <q-card style="min-width: 320px; width: 80vw">
+    <q-card flat style="min-width: 320px; width: 80vw">
       <q-card-section>
         <div class="text-h6">Edit company</div>
       </q-card-section>

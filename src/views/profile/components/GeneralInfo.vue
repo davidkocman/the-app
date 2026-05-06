@@ -10,7 +10,7 @@ const { nameModel, saveName, removeAvatar, userAvatar } = useGeneralInfo()
 </script>
 
 <template>
-  <q-card class="user-card q-pa-sx">
+  <q-card flat class="user-card q-pa-sx">
     <q-card-section>
       <div class="wrapper">
         <div class="left">

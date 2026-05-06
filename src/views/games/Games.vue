@@ -23,7 +23,7 @@ useMeta(() => {
 <template>
   <q-page class="page-games q-py-md">
     <div class="row justify-between items-center q-mb-lg">
-      <h1 class="text-h4 q-my-none">Games</h1>
+      <h1 class="text-h4 q-my-none flex items-center" style="gap: 10px"><q-icon name="sports_esports" />Games</h1>
     </div>
     <div class="row">
       <div class="col">
@@ -36,8 +36,8 @@ useMeta(() => {
 
 <style lang="scss" scoped>
 .page-games {
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 6px;
+  padding-right: 6px;
 
   @media (min-width: 768px) {
     padding-left: 24px;

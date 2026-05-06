@@ -37,7 +37,7 @@ onMounted(() => droneStore.fetchFlightLogs())
 <template>
   <q-page class="page-drone q-py-md q-px-lg">
     <div class="row q-mb-lg items-center">
-      <h1 class="text-h4 q-my-none">Flight log</h1>
+      <h1 class="text-h4 q-my-none flex items-center" style="gap: 10px"><q-icon name="mdi-quadcopter" />Flight log</h1>
     </div>
 
     <div class="row q-col-gutter-md">
@@ -53,10 +53,12 @@ onMounted(() => droneStore.fetchFlightLogs())
         <div v-else class="row q-col-gutter-md">
           <!-- Aircraft info + flight summary -->
           <div class="col-12 col-sm-6">
-            <AircraftInfo />   <!-- drone model, serial number, firmware -->
+            <AircraftInfo />
+            <!-- drone model, serial number, firmware -->
           </div>
           <div class="col-12 col-sm-6">
-            <FlightSummary />  <!-- fly time, max height, max speeds, drone type -->
+            <FlightSummary />
+            <!-- fly time, max height, max speeds, drone type -->
           </div>
 
           <!-- Telemetry charts + flight map -->
@@ -68,39 +70,50 @@ onMounted(() => droneStore.fetchFlightLogs())
               <q-card-section>
                 <div class="row q-col-gutter-md">
                   <div class="col-12">
-                    <SpeedChart />        <!-- X / Y / Z axis speed (m/s) over time -->
+                    <SpeedChart />
+                    <!-- X / Y / Z axis speed (m/s) over time -->
                   </div>
                   <div class="col-12">
-                    <AltitudeChart />     <!-- height above ground (m) over time -->
+                    <AltitudeChart />
+                    <!-- height above ground (m) over time -->
                   </div>
                   <div class="col-12">
-                    <BatteryChart />      <!-- charge level (%) and voltage (V) over time -->
+                    <BatteryChart />
+                    <!-- charge level (%) and voltage (V) over time -->
                   </div>
                   <div class="col-12">
-                    <BatteryDetailChart /> <!-- charge (%), temperature (°C) and voltage (V) over time -->
+                    <BatteryDetailChart />
+                    <!-- charge (%), temperature (°C) and voltage (V) over time -->
                   </div>
                   <div class="col-12">
-                    <DistanceChart />     <!-- horizontal distance from home point (m) over time -->
+                    <DistanceChart />
+                    <!-- horizontal distance from home point (m) over time -->
                   </div>
                   <div class="col-12">
-                    <GpsChart />          <!-- number of locked satellites over time -->
+                    <GpsChart />
+                    <!-- number of locked satellites over time -->
                   </div>
                   <div class="col-12">
-                    <SignalChart />        <!-- RC uplink and downlink signal strength (%) over time -->
+                    <SignalChart />
+                    <!-- RC uplink and downlink signal strength (%) over time -->
                   </div>
                   <div class="col-12">
-                    <OrientationChart />  <!-- pitch, roll and yaw angles (°) over time -->
+                    <OrientationChart />
+                    <!-- pitch, roll and yaw angles (°) over time -->
                   </div>
                   <div class="col-12">
-                    <BatteryCells />      <!-- per-cell voltage snapshot -->
+                    <BatteryCells />
+                    <!-- per-cell voltage snapshot -->
                   </div>
                   <div class="col-12">
                     <div class="row q-col-gutter-md">
                       <div class="col">
-                        <FlightEvents />  <!-- flight mode changes and system events timeline -->
+                        <FlightEvents />
+                        <!-- flight mode changes and system events timeline -->
                       </div>
                       <div class="col">
-                        <CameraEvents />  <!-- photo / video recording events timeline -->
+                        <CameraEvents />
+                        <!-- photo / video recording events timeline -->
                       </div>
                     </div>
                   </div>
@@ -112,7 +125,8 @@ onMounted(() => droneStore.fetchFlightLogs())
           <div class="col-12 col-md-6">
             <q-card flat bordered>
               <q-card-section>
-                <FlightMap />  <!-- GPS flight path rendered on an interactive map -->
+                <FlightMap />
+                <!-- GPS flight path rendered on an interactive map -->
               </q-card-section>
             </q-card>
           </div>
@@ -121,3 +135,15 @@ onMounted(() => droneStore.fetchFlightLogs())
     </div>
   </q-page>
 </template>
+
+<style lang="scss" scoped>
+.page-drone {
+  padding-left: 6px;
+  padding-right: 6px;
+
+  @media (min-width: 768px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+</style>

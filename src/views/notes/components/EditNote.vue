@@ -84,7 +84,7 @@ const hasNameAndContent = computed(() => {
       transition-hide="slide-down"
       data-cy="note-edit-dialog"
     >
-      <q-card class="bg-dark-page">
+      <q-card flat class="bg-dark-page">
         <q-bar>
           <q-space />
           <q-btn dense flat icon="close" v-close-popup>
@@ -132,7 +132,7 @@ const hasNameAndContent = computed(() => {
       </q-card>
     </q-dialog>
     <q-dialog v-model="removePrompt" data-cy="remove-note-prompt">
-      <q-card style="min-width: 350px">
+      <q-card flat style="min-width: 350px">
         <q-card-section>
           <div class="text-h6">Remove note {{ name }}?</div>
         </q-card-section>

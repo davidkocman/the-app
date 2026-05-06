@@ -22,7 +22,7 @@ useMeta(() => {
 <template>
   <q-page class="page-dashboard q-py-md q-px-lg">
     <div class="row justify-between items-center q-mb-lg">
-      <h1 class="text-h4 q-my-none">Dashboard</h1>
+      <h1 class="text-h4 q-my-none flex items-center" style="gap: 10px"><q-icon name="dashboard" />Dashboard</h1>
     </div>
 
     <div class="row q-col-gutter-md">
@@ -37,3 +37,15 @@ useMeta(() => {
     <GameDetail />
   </q-page>
 </template>
+
+<style lang="scss" scoped>
+.page-dashboard {
+  padding-left: 6px;
+  padding-right: 6px;
+
+  @media (min-width: 768px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+</style>

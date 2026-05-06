@@ -31,7 +31,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <q-card class="weather-widget overflow-hidden">
+  <q-card flat class="weather-widget overflow-hidden">
     <div class="widget-bg flex column">
       <!-- Empty state -->
       <div v-if="!savedLocations.length && !loading" class="flex flex-center column flex-1 q-pa-lg text-center">

@@ -16,7 +16,7 @@ const resolveAvatarPath = (path: string) => {
 
 <template>
   <div v-if="reviews?.results?.length" class="tv-show__reviews q-py-lg q-px-md q-mx-auto">
-    <q-card v-for="review in reviews.results" :key="review.id" class="review q-mb-md" bordered>
+    <q-card flat v-for="review in reviews.results" :key="review.id" class="review q-mb-md" bordered>
       <q-item>
         <q-item-section avatar>
           <q-avatar>

@@ -184,7 +184,7 @@ watch(dialog, (val) => {
             <div v-if="getGameDetail?.genres?.length" class="game-data__section q-mt-md">
               <div class="section-label text-caption q-mb-xs">Genres</div>
               <div class="flex" style="gap: 6px; flex-wrap: wrap">
-                <q-chip v-for="g in getGameDetail.genres" :key="g.id" dense outline color="primary" text-color="white">
+                <q-chip v-for="g in getGameDetail.genres" :key="g.id" dense outline color="primary" :text-color="isDarkMode ? 'white' : 'primary'">
                   {{ g.name }}
                 </q-chip>
               </div>
@@ -194,14 +194,12 @@ watch(dialog, (val) => {
             <div v-if="getGameDetail?.tags?.length" class="game-data__section q-mt-md">
               <div class="section-label text-caption q-mb-xs">Tags</div>
               <div class="flex" style="gap: 6px; flex-wrap: wrap">
-                <q-badge
+                <span
                   v-for="tag in getGameDetail.tags.filter((t) => t.language === Language.Eng)"
                   :key="tag.id"
-                  outline
-                  color="secondary"
-                >
-                  {{ tag.name }}
-                </q-badge>
+                  class="tag-item"
+                  :class="{ 'tag-item--dark': isDarkMode }"
+                >{{ tag.name }}</span>
               </div>
             </div>
 
@@ -360,8 +358,7 @@ watch(dialog, (val) => {
         height: 200px;
         left: 0;
         bottom: 0;
-        background: #000000;
-        background: linear-gradient(0deg, $dark 0%, $dark 15%, rgba(255, 255, 255, 0) 100%);
+        background: linear-gradient(0deg, var(--bg-base) 0%, var(--bg-base) 15%, transparent 100%);
       }
     }
   }
@@ -406,6 +403,40 @@ watch(dialog, (val) => {
         letter-spacing: 0.08em;
         color: var(--text-muted);
       }
+    }
+  }
+
+  .tag-item {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    color: rgba(0, 0, 0, 0.55);
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    cursor: default;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.09);
+      border-color: rgba(0, 0, 0, 0.25);
+      color: rgba(0, 0, 0, 0.85);
+    }
+  }
+
+  .tag-item--dark {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.13);
+    color: rgba(255, 255, 255, 0.6);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.11);
+      border-color: rgba(255, 255, 255, 0.22);
+      color: rgba(255, 255, 255, 0.9);
     }
   }
 

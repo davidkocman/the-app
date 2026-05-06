@@ -39,56 +39,71 @@ const closestDate = computed(() => {
 </script>
 
 <template>
-  <q-card class="games-widget full-height">
-    <q-card-section class="q-pb-xs">
-      <div class="row items-center justify-between no-wrap">
-        <div class="text-h6 text-weight-bold">Upcoming games</div>
-        <q-btn flat dense round icon="open_in_new" color="primary" size="sm" @click="router.push('/games')">
-          <q-tooltip>View all games</q-tooltip>
-        </q-btn>
+  <q-card flat class="games-widget overflow-hidden">
+    <!-- Games row — full coverage -->
+    <div v-if="!loading && closestGames.length" class="games-widget__row">
+      <div v-for="game in closestGames" :key="game.slug" class="games-widget__item">
+        <GameItem :item="game" />
       </div>
-    </q-card-section>
+    </div>
 
-    <q-card-section v-if="loading" class="flex flex-center" style="min-height: 120px">
+    <!-- Header overlay -->
+    <div class="widget-header flex items-start justify-between no-wrap q-px-md q-pt-md q-pb-sm">
+      <div>
+        <div class="text-body1 text-weight-bold">Upcoming games</div>
+        <div class="text-caption" style="opacity: 0.75">
+          Closest release:
+          <span v-if="closestDate" class="text-weight-medium">{{ closestDate }}</span>
+          <span v-else>—</span>
+        </div>
+      </div>
+      <q-btn flat dense round icon="open_in_new" size="sm" class="nav-btn q-ml-xs" style="flex-shrink: 0" @click="router.push('/games')">
+        <q-tooltip>View all games</q-tooltip>
+      </q-btn>
+    </div>
+
+    <!-- Loading -->
+    <div v-if="loading" class="absolute-full flex flex-center">
       <q-spinner-dots color="primary" size="40px" />
-    </q-card-section>
+    </div>
 
-    <q-card-section v-else-if="!closestGames.length" class="text-center text-grey-6">
-      <q-icon name="sports_esports" size="32px" class="q-mb-sm" />
-      <div class="text-body2">No games data available.</div>
-    </q-card-section>
-
-    <template v-else>
-      <q-card-section class="q-pt-none q-pb-xs">
-        <div class="text-caption text-grey-6">
-          Closest release: <span class="text-weight-medium">{{ closestDate }}</span>
-        </div>
-      </q-card-section>
-      <div class="games-widget__row">
-        <div v-for="game in closestGames" :key="game.slug" class="games-widget__item">
-          <GameItem :item="game" />
-        </div>
-      </div>
-    </template>
+    <!-- Empty -->
+    <div v-else-if="!closestGames.length" class="absolute-full flex flex-center column text-center q-pa-md">
+      <q-icon name="sports_esports" size="32px" class="q-mb-sm" style="opacity: 0.4" />
+      <div class="text-body2" style="opacity: 0.6">No games data available.</div>
+    </div>
   </q-card>
 </template>
 
 <style lang="scss" scoped>
 .games-widget {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  height: 320px;
+  position: relative;
+
+  .widget-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 0%, transparent 100%);
+    color: #fff;
+
+    .nav-btn {
+      opacity: 0.7;
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
 
   &__row {
+    position: absolute;
+    inset: 0;
     display: flex;
-    flex: 1;
-    padding: 0 16px 16px;
-    gap: 8px;
+    gap: 0;
   }
 
   &__item {
     flex: 1;
-    min-height: 150px;
 
     :deep(.game-item),
     :deep(.game-item__img) {

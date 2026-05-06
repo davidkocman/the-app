@@ -18,7 +18,7 @@ const sortedCompanies = computed(() =>
   <div class="companies-list">
     <div class="row q-col-gutter-md">
     <div v-for="item in sortedCompanies" v-bind:key="item.id" class="col-12 col-sm-6 col-lg-4">
-    <q-card class="companies-list__item q-pa-sm shadow-0 full-height">
+    <q-card flat class="companies-list__item q-pa-sm shadow-0 full-height">
       <q-card-section>
         <div class="text-h6 q-mb-sm">{{ item.name }}</div>
         <div class="text-subtitle2">IČO: {{ item.companyId }}</div>

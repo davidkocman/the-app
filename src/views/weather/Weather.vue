@@ -46,7 +46,7 @@ onMounted(() => {
 <template>
   <q-page class="page-weather q-py-md q-px-lg">
     <div class="row q-mb-lg items-center justify-between">
-      <h1 class="text-h4 q-my-none">Weather</h1>
+      <h1 class="text-h4 q-my-none flex items-center" style="gap: 10px"><q-icon name="thermostat" />Weather</h1>
       <div class="flex justify-end items-center">
         <SavedLocations v-if="hasSavedLocations" />
         <SearchLocation />
@@ -57,25 +57,37 @@ onMounted(() => {
 
     <div v-if="currentWeatherData" class="row q-col-gutter-md">
       <div class="col-12 col-sm-6">
-        <q-card class="q-pa-sm">
+        <q-card flat class="q-pa-sm">
           <TemperatureChart />
         </q-card>
       </div>
       <div class="col-12 col-sm-6">
-        <q-card class="q-pa-sm">
+        <q-card flat class="q-pa-sm">
           <Rain />
         </q-card>
       </div>
       <div class="col-12 col-sm-6">
-        <q-card class="q-pa-sm">
+        <q-card flat class="q-pa-sm">
           <WindChart />
         </q-card>
       </div>
       <div class="col-12 col-sm-6">
-        <q-card class="q-pa-sm">
+        <q-card flat class="q-pa-sm">
           <Clouds />
         </q-card>
       </div>
     </div>
   </q-page>
 </template>
+
+<style lang="scss" scoped>
+.page-weather {
+  padding-left: 6px;
+  padding-right: 6px;
+
+  @media (min-width: 768px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+</style>
