@@ -54,81 +54,48 @@ onMounted(() => droneStore.fetchFlightLogs())
           <!-- Aircraft info + flight summary -->
           <div class="col-12 col-sm-6">
             <AircraftInfo />
-            <!-- drone model, serial number, firmware -->
           </div>
           <div class="col-12 col-sm-6">
             <FlightSummary />
-            <!-- fly time, max height, max speeds, drone type -->
           </div>
 
-          <!-- Telemetry charts + flight map -->
-          <div class="col-12 col-md-6">
-            <q-card flat bordered>
-              <q-card-section>
-                <h2 class="text-h6 q-my-none">Telemetry data</h2>
-              </q-card-section>
-              <q-card-section>
-                <div class="row q-col-gutter-md">
-                  <div class="col-12">
-                    <SpeedChart />
-                    <!-- X / Y / Z axis speed (m/s) over time -->
-                  </div>
-                  <div class="col-12">
-                    <AltitudeChart />
-                    <!-- height above ground (m) over time -->
-                  </div>
-                  <div class="col-12">
-                    <BatteryChart />
-                    <!-- charge level (%) and voltage (V) over time -->
-                  </div>
-                  <div class="col-12">
-                    <BatteryDetailChart />
-                    <!-- charge (%), temperature (°C) and voltage (V) over time -->
-                  </div>
-                  <div class="col-12">
-                    <DistanceChart />
-                    <!-- horizontal distance from home point (m) over time -->
-                  </div>
-                  <div class="col-12">
-                    <GpsChart />
-                    <!-- number of locked satellites over time -->
-                  </div>
-                  <div class="col-12">
-                    <SignalChart />
-                    <!-- RC uplink and downlink signal strength (%) over time -->
-                  </div>
-                  <div class="col-12">
-                    <OrientationChart />
-                    <!-- pitch, roll and yaw angles (°) over time -->
-                  </div>
-                  <div class="col-12">
-                    <BatteryCells />
-                    <!-- per-cell voltage snapshot -->
-                  </div>
-                  <div class="col-12">
-                    <div class="row q-col-gutter-md">
-                      <div class="col">
-                        <FlightEvents />
-                        <!-- flight mode changes and system events timeline -->
-                      </div>
-                      <div class="col">
-                        <CameraEvents />
-                        <!-- photo / video recording events timeline -->
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </q-card-section>
-            </q-card>
+          <!-- Flight map — full width -->
+          <div class="col-12">
+            <FlightMap />
           </div>
 
+          <!-- Telemetry charts — 2-column grid -->
           <div class="col-12 col-md-6">
-            <q-card flat bordered>
-              <q-card-section>
-                <FlightMap />
-                <!-- GPS flight path rendered on an interactive map -->
-              </q-card-section>
-            </q-card>
+            <SpeedChart />
+          </div>
+          <div class="col-12 col-md-6">
+            <AltitudeChart />
+          </div>
+          <div class="col-12 col-md-6">
+            <BatteryChart />
+          </div>
+          <div class="col-12 col-md-6">
+            <DistanceChart />
+          </div>
+          <div class="col-12 col-md-6">
+            <OrientationChart />
+          </div>
+          <div class="col-12 col-md-6">
+            <GpsChart />
+          </div>
+          <div class="col-12 col-md-6">
+            <SignalChart />
+          </div>
+
+          <!-- Compact cards — 3 columns -->
+          <div class="col-12 col-md-4">
+            <BatteryCells />
+          </div>
+          <div class="col-12 col-md-4">
+            <FlightEvents />
+          </div>
+          <div class="col-12 col-md-4">
+            <CameraEvents />
           </div>
         </div>
       </div>

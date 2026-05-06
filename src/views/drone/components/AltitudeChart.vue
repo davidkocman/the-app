@@ -127,3 +127,9 @@ const options = computed<ApexOptions | null>(() => {
     <VueApexCharts :series="series" :options="options" height="280" />
   </q-card>
 </template>
+
+<style scoped>
+:deep(.apexcharts-legend-group) {
+  flex-direction: row !important;
+}
+</style>

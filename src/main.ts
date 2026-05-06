@@ -12,6 +12,7 @@ import '@quasar/extras/mdi-v7/mdi-v7.css'
 // Import Quasar css
 import 'quasar/src/css/index.sass'
 
+
 const myApp = createApp(App)
 
 myApp.use(createPinia())

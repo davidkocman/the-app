@@ -27,20 +27,18 @@ row
 └── col-12 col-md-10
     ├── col-12 col-sm-6    AircraftInfo
     ├── col-12 col-sm-6    FlightSummary
-    ├── col-12 col-md-6    [q-card] Telemetry data
-    │   ├── SpeedChart
-    │   ├── AltitudeChart
-    │   ├── BatteryChart
-    │   ├── BatteryDetailChart
-    │   ├── DistanceChart
-    │   ├── GpsChart
-    │   ├── SignalChart
-    │   ├── OrientationChart
-    │   ├── BatteryCells
-    │   ├── FlightEvents
-    │   └── CameraEvents
-    └── col-12 col-md-6    [q-card] Flight path
-        └── FlightMap
+    ├── col-12             FlightMap            (500px, celá šírka)
+    ├── col-12 col-md-6    SpeedChart
+    ├── col-12 col-md-6    AltitudeChart
+    ├── col-12 col-md-6    BatteryChart
+    ├── col-12 col-md-6    BatteryDetailChart
+    ├── col-12 col-md-6    DistanceChart
+    ├── col-12 col-md-6    OrientationChart
+    ├── col-12 col-md-6    GpsChart
+    ├── col-12 col-md-6    SignalChart
+    ├── col-12 col-md-4    BatteryCells
+    ├── col-12 col-md-4    FlightEvents
+    └── col-12 col-md-4    CameraEvents
 ```
 
 ---
@@ -237,11 +235,16 @@ Zoznam udalostí kamery — kedy bola spravená fotografia alebo spustené/zasta
 
 ## FlightMap
 
-SVG vizualizácia trasy letu bez externých knižníc.
+Interaktívna mapa trasy letu postavená na **MapLibre GL JS** s vektorovými dlaždicami z OpenFreeMap (bez API kľúča).
 
-- **Trasa** — polyline z `osd.latitude` + `osd.longitude`, vzorkovaný každý 5. frame
-- **Start** — zelený bod (prvá platná GPS pozícia)
-- **End** — červený bod (posledná platná GPS pozícia)
-- **Home** — oranžový bod z `frame.home.latitude/longitude` (ak je nastavený)
+- **Knižnica:** `maplibre-gl` — CSS importovaný priamo v komponente
+- **Tiles:** `https://tiles.openfreemap.org/styles/liberty`
+- **Trasa** — GeoJSON LineString z `osd.latitude` + `osd.longitude`, vzorkovaný každý 5. frame; modrá línia (`#1976d2`)
+- **Start** — zelený DOM marker (prvá platná GPS pozícia), hover tooltip „Start"
+- **End** — červený DOM marker (posledná platná GPS pozícia), hover tooltip „End"
+- **Home** — oranžový DOM marker z `frame.home.latitude/longitude`, zobrazí sa len ak je home point nastavený
 - Súradnice s hodnotou `0` sú filtrované (GPS ešte nezachytilo signál)
-- Projekcia je lineárna (nie Mercator) — vhodná pre krátke lety; pre dlhé trasy môže dôjsť k miernemu skresleniu
+- Výška kontajnera: **500px**, umiestnená na celú šírku stránky (`col-12`)
+- `fitBounds()` automaticky priblíži mapu na rozsah letu s paddingom 60 px
+- Mapa reaguje na zmenu `store.frames` (prepnutie záznamu) cez `watch(mapData)` — aktualizuje GeoJSON source a re-fituje bounds bez reloadu
+- **Životný cyklus:** `onMounted` inicializuje mapu, `onUnmounted` ju vyčistí (`map.remove()`) aby nedošlo k memory leaku WebGL kontextu

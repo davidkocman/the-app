@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
+import 'maplibre-gl/dist/maplibre-gl.css'
+import * as maplibregl from 'maplibre-gl'
 import useDroneStore from '@/store/drone'
 
 const droneStore = useDroneStore()
-
-const W = 600
-const H = 400
-const PADDING = 40
+const mapContainer = ref<HTMLElement | null>(null)
+let map: maplibregl.Map | null = null
+let markers: maplibregl.Marker[] = []
 
 const sampled = computed(() => droneStore.getFrames.filter((_, i) => i % 5 === 0))
 
@@ -14,41 +15,100 @@ const mapData = computed(() => {
   const frames = sampled.value
   if (!frames.length) return null
 
-  const lats = frames.map((f) => f.osd.latitude).filter((v) => v !== 0)
-  const lons = frames.map((f) => f.osd.longitude).filter((v) => v !== 0)
-  if (!lats.length) return null
+  const validFrames = frames.filter((f) => f.osd.latitude !== 0 && f.osd.longitude !== 0)
+  if (!validFrames.length) return null
 
-  const PAD = 0.00005
-  const minLat = Math.min(...lats) - PAD
-  const maxLat = Math.max(...lats) + PAD
-  const minLon = Math.min(...lons) - PAD
-  const maxLon = Math.max(...lons) + PAD
+  // GeoJSON / MapLibre uses [lon, lat] order
+  const coordinates = validFrames.map((f): [number, number] => [f.osd.longitude, f.osd.latitude])
 
-  const innerW = W - PADDING * 2
-  const innerH = H - PADDING * 2
+  const lons = coordinates.map(([lon]) => lon)
+  const lats = coordinates.map(([, lat]) => lat)
+  const bounds: maplibregl.LngLatBoundsLike = [
+    [Math.min(...lons), Math.min(...lats)],
+    [Math.max(...lons), Math.max(...lats)]
+  ]
 
-  const toX = (lon: number) => PADDING + ((lon - minLon) / (maxLon - minLon)) * innerW
-  const toY = (lat: number) => PADDING + ((maxLat - lat) / (maxLat - minLat)) * innerH
-
-  const points = frames
-    .filter((f) => f.osd.latitude !== 0 && f.osd.longitude !== 0)
-    .map((f) => ({ x: toX(f.osd.longitude), y: toY(f.osd.latitude) }))
-
-  const polyline = points.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')
-
-  const allFrames = droneStore.getFrames
-  const home = allFrames[0]?.home
-  let homePoint = null
-  if (home && home.latitude !== 0 && home.longitude !== 0) {
-    homePoint = { x: toX(home.longitude), y: toY(home.latitude) }
-  }
+  const firstFrame = droneStore.getFrames[0]
+  const home =
+    firstFrame?.home && firstFrame.home.latitude !== 0 && firstFrame.home.longitude !== 0
+      ? ([firstFrame.home.longitude, firstFrame.home.latitude] as [number, number])
+      : null
 
   return {
-    polyline,
-    start: points[0],
-    end: points[points.length - 1],
-    homePoint
+    coordinates,
+    start: coordinates[0],
+    end: coordinates[coordinates.length - 1],
+    home,
+    bounds
   }
+})
+
+function makeMarkerEl(color: string, label: string): HTMLElement {
+  const el = document.createElement('div')
+  el.style.cssText = `width:14px;height:14px;border-radius:50%;background:${color};border:2px solid #fff;cursor:default;`
+  el.title = label
+  return el
+}
+
+function clearMarkers() {
+  markers.forEach((m) => m.remove())
+  markers = []
+}
+
+function updateMap() {
+  if (!map || !mapData.value) return
+  const { coordinates, start, end, home, bounds } = mapData.value
+
+  const geojson: GeoJSON.FeatureCollection = {
+    type: 'FeatureCollection',
+    features: [{ type: 'Feature', geometry: { type: 'LineString', coordinates }, properties: {} }]
+  }
+
+  const src = map.getSource('flight-path') as maplibregl.GeoJSONSource | undefined
+  if (src) {
+    src.setData(geojson)
+  } else {
+    map.addSource('flight-path', { type: 'geojson', data: geojson })
+    map.addLayer({
+      id: 'flight-path-line',
+      type: 'line',
+      source: 'flight-path',
+      paint: { 'line-color': '#1976d2', 'line-width': 2, 'line-opacity': 0.9 }
+    })
+  }
+
+  clearMarkers()
+  markers.push(new maplibregl.Marker({ element: makeMarkerEl('#27ae60', 'Start') }).setLngLat(start).addTo(map))
+  markers.push(new maplibregl.Marker({ element: makeMarkerEl('#e74c3c', 'End') }).setLngLat(end).addTo(map))
+  if (home) {
+    markers.push(new maplibregl.Marker({ element: makeMarkerEl('#f39c12', 'Home') }).setLngLat(home).addTo(map))
+  }
+
+  map.fitBounds(bounds, { padding: 60, maxZoom: 17 })
+}
+
+onMounted(() => {
+  if (!mapContainer.value) return
+
+  map = new maplibregl.Map({
+    container: mapContainer.value,
+    style: 'https://tiles.openfreemap.org/styles/liberty',
+    zoom: 13
+  })
+
+  map.on('load', () => {
+    if (mapData.value) updateMap()
+  })
+})
+
+onUnmounted(() => {
+  clearMarkers()
+  map?.remove()
+  map = null
+})
+
+watch(mapData, () => {
+  if (map?.loaded()) updateMap()
 })
 </script>
 
@@ -61,33 +121,10 @@ const mapData = computed(() => {
 
     <q-separator />
 
-    <q-card-section class="q-pt-sm q-pb-sm">
-      <svg :viewBox="`0 0 ${W} ${H}`" class="flight-map" preserveAspectRatio="xMidYMid meet">
-        <polyline
-          :points="mapData.polyline"
-          fill="none"
-          stroke="#1976d2"
-          stroke-width="2"
-          stroke-linejoin="round"
-          stroke-linecap="round"
-        />
+    <q-card-section class="q-pa-none">
+      <div ref="mapContainer" class="flight-map-container" />
 
-        <!-- Home point -->
-        <g v-if="mapData.homePoint">
-          <circle :cx="mapData.homePoint.x" :cy="mapData.homePoint.y" r="7" fill="#f39c12" opacity="0.9" />
-          <text :x="mapData.homePoint.x" :y="mapData.homePoint.y - 11" text-anchor="middle" class="map-label">H</text>
-        </g>
-
-        <!-- Start -->
-        <circle :cx="mapData.start.x" :cy="mapData.start.y" r="6" fill="#27ae60" />
-        <text :x="mapData.start.x" :y="mapData.start.y - 10" text-anchor="middle" class="map-label">Start</text>
-
-        <!-- End -->
-        <circle :cx="mapData.end.x" :cy="mapData.end.y" r="6" fill="#e74c3c" />
-        <text :x="mapData.end.x" :y="mapData.end.y - 10" text-anchor="middle" class="map-label">End</text>
-      </svg>
-
-      <div class="row q-gutter-md q-mt-xs justify-center">
+      <div class="row q-gutter-md q-pa-sm justify-center">
         <div class="row items-center q-gutter-xs">
           <div class="legend-dot" style="background: #27ae60" />
           <span class="text-caption">Start</span>
@@ -110,16 +147,11 @@ const mapData = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.flight-map {
+.flight-map-container {
+  height: 500px;
   width: 100%;
-  height: auto;
-  display: block;
-}
-
-.map-label {
-  font-size: 11px;
-  fill: currentColor;
-  opacity: 0.7;
+  position: relative;
+  z-index: 0;
 }
 
 .legend-dot {

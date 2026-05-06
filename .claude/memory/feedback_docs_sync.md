@@ -21,7 +21,7 @@ Súbor: `src/views/drone/docs.md`
 | `DroneFileUpload.vue` | Upload + zoznam | store.records |
 | `AircraftInfo.vue` | Statická karta | frame.recover.* |
 | `FlightSummary.vue` | Statická karta | frame.osd.*Max, flyTime, droneType |
-| `FlightMap.vue` | SVG mapa | osd.latitude/longitude, home.lat/lon |
+| `FlightMap.vue` | MapLibre GL JS mapa | osd.latitude/longitude, home.lat/lon |
 | `AltitudeChart.vue` | Area chart | osd.height / osd.flyTime |
 | `SpeedChart.vue` | Line chart (3 série) | osd.xSpeed, ySpeed, zSpeed |
 | `BatteryChart.vue` | Mixed chart, dual Y | battery.chargeLevel, battery.voltage |
