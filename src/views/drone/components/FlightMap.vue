@@ -3,11 +3,19 @@ import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import * as maplibregl from 'maplibre-gl'
 import useDroneStore from '@/store/drone'
+import useAppStore from '@/store/app'
 
 const droneStore = useDroneStore()
+const appStore = useAppStore()
 const mapContainer = ref<HTMLElement | null>(null)
 let map: maplibregl.Map | null = null
 let markers: maplibregl.Marker[] = []
+
+const mapStyle = computed(() =>
+  appStore.isDarkMode
+    ? 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
+    : 'https://tiles.openfreemap.org/styles/liberty'
+)
 
 const sampled = computed(() => droneStore.getFrames.filter((_, i) => i % 5 === 0))
 
@@ -92,7 +100,7 @@ onMounted(() => {
 
   map = new maplibregl.Map({
     container: mapContainer.value,
-    style: 'https://tiles.openfreemap.org/styles/liberty',
+    style: mapStyle.value,
     zoom: 13
   })
 
@@ -109,6 +117,14 @@ onUnmounted(() => {
 
 watch(mapData, () => {
   if (map?.loaded()) updateMap()
+})
+
+watch(() => appStore.isDarkMode, () => {
+  if (!map) return
+  map.setStyle(mapStyle.value)
+  map.once('style.load', () => {
+    if (mapData.value) updateMap()
+  })
 })
 </script>
 

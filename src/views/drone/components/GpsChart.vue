@@ -28,7 +28,7 @@ const axisColor  = computed(() => appStore.isDarkMode ? '#a8a8a8' : '#616161')
 const options = computed<ApexOptions | null>(() => {
   if (!sampled.value.length) return null
   return {
-    chart: { type: 'line', height: 280, id: 'gps-chart', toolbar: { show: false }, animations: { enabled: false } },
+    chart: { type: 'line', height: 280, id: 'gps-chart', toolbar: { show: false }, animations: { enabled: false }, redrawOnWindowResize: false },
     colors: ['#1abc9c'],
     stroke: { curve: 'stepline', width: 2 },
     markers: { size: 0 },

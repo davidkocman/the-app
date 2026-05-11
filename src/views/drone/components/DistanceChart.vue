@@ -49,7 +49,8 @@ const options = computed<ApexOptions | null>(() => {
       height: 280,
       id: 'distance-chart',
       toolbar: { show: false },
-      animations: { enabled: false }
+      animations: { enabled: false },
+      redrawOnWindowResize: false
     },
     colors: ['#9c27b0'],
     stroke: { curve: 'smooth', width: 2 },
