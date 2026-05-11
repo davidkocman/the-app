@@ -35,7 +35,7 @@ const axisColor  = computed(() => appStore.isDarkMode ? '#a8a8a8' : '#616161')
 const options = computed<ApexOptions | null>(() => {
   if (!sampled.value.length) return null
   return {
-    chart: { type: 'line', height: 280, id: 'signal-chart', toolbar: { show: false }, animations: { enabled: false } },
+    chart: { type: 'line', height: 280, id: 'signal-chart', toolbar: { show: false }, animations: { enabled: false }, redrawOnWindowResize: false },
     colors: ['#3498db', '#e67e22'],
     stroke: { curve: 'smooth', width: 2 },
     markers: { size: 0 },

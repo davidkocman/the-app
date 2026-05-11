@@ -53,7 +53,8 @@ const options = computed<ApexOptions | null>(() => {
       height: 280,
       id: 'height-speed-chart',
       toolbar: { show: false },
-      animations: { enabled: false }
+      animations: { enabled: false },
+      redrawOnWindowResize: false
     },
     colors: ['#1976d2', '#00bcd4', '#e67e22'],
     stroke: { curve: 'smooth', width: [2, 2, 2] },

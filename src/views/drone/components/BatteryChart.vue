@@ -49,7 +49,8 @@ const options = computed<ApexOptions | null>(() => {
       height: 280,
       id: 'battery-detail-chart',
       toolbar: { show: false },
-      animations: { enabled: false }
+      animations: { enabled: false },
+      redrawOnWindowResize: false
     },
     colors: ['#27ae60', '#e74c3c', '#f39c12'],
     stroke: { curve: 'smooth', width: [2, 2, 2] },
