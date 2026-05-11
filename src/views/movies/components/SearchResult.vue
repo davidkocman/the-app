@@ -11,6 +11,33 @@ const IMAGE_URL = import.meta.env.VITE_APP_TMDB_POSTER_URL
 const moviesStore = useMoviesStore()
 const { searchResult, searchResultType } = storeToRefs(moviesStore)
 
+const castScrollRef = ref<HTMLElement | null>(null)
+const isDragging = ref(false)
+const dragStartX = ref(0)
+const dragScrollLeft = ref(0)
+const hasDragged = ref(false)
+
+function onDragStart(e: MouseEvent) {
+  if (!castScrollRef.value) return
+  isDragging.value = true
+  hasDragged.value = false
+  dragStartX.value = e.pageX - castScrollRef.value.offsetLeft
+  dragScrollLeft.value = castScrollRef.value.scrollLeft
+}
+
+function onDragMove(e: MouseEvent) {
+  if (!isDragging.value || !castScrollRef.value) return
+  e.preventDefault()
+  const x = e.pageX - castScrollRef.value.offsetLeft
+  const walk = x - dragStartX.value
+  if (Math.abs(walk) > 5) hasDragged.value = true
+  castScrollRef.value.scrollLeft = dragScrollLeft.value - walk
+}
+
+function onDragEnd() {
+  isDragging.value = false
+}
+
 const tabs = ref<'seasons' | 'reviews'>('seasons')
 
 const userRating = computed(() =>
@@ -169,7 +196,15 @@ const searchResultTitle = computed(() => {
     <!-- Cast horizontal scroll -->
     <div class="cast-section q-px-lg q-py-md">
       <div class="text-subtitle2 text-weight-bold q-mb-sm">Cast</div>
-      <div class="cast-scroll">
+      <div
+        ref="castScrollRef"
+        class="cast-scroll"
+        :class="{ 'is-dragging': isDragging }"
+        @mousedown="onDragStart"
+        @mousemove="onDragMove"
+        @mouseup="onDragEnd"
+        @mouseleave="onDragEnd"
+      >
         <div
           v-for="cast in searchResult.credits.cast.slice(0, 10)"
           :key="cast.id"
@@ -335,6 +370,10 @@ const searchResultTitle = computed(() => {
   padding-bottom: 6px;
   scrollbar-width: thin;
   scrollbar-color: rgba(128, 128, 128, 0.2) transparent;
+  cursor: grab;
+  user-select: none;
+
+  &.is-dragging { cursor: grabbing; }
 
   &::-webkit-scrollbar { height: 3px; }
   &::-webkit-scrollbar-thumb {

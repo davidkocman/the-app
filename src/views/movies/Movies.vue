@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMeta } from 'quasar'
 import useMoviesStore from '@/store/movies'
-import SearchResult from '@/views/movies/components/SearchResult.vue'
-import BaseContent from '@/views/movies/components/BaseContent.vue'
 import Search from '@/views/movies/components/Search.vue'
+import HeroSection from '@/views/movies/components/HeroSection.vue'
+import TrendingSection from '@/views/movies/components/TrendingSection.vue'
+import Upcoming from '@/views/movies/components/Upcoming.vue'
+import MovieDetailDialog from '@/views/movies/components/MovieDetailDialog.vue'
 
 const pageTitle = ref('Movies | The App')
 useMeta(() => ({
@@ -18,13 +20,11 @@ useMeta(() => ({
 }))
 
 const moviesStore = useMoviesStore()
-const { searchFor, searchResult } = storeToRefs(moviesStore)
+const { searchFor } = storeToRefs(moviesStore)
 
-const drawerOpen = computed({
-  get: () => !!searchResult.value,
-  set: (val) => {
-    if (!val) searchResult.value = null
-  }
+onBeforeMount(async () => {
+  if (!moviesStore.trending) await moviesStore.getTrending()
+  if (!moviesStore.upcoming) moviesStore.getUpcoming()
 })
 </script>
 
@@ -54,23 +54,19 @@ const drawerOpen = computed({
       </div>
     </div>
 
-    <BaseContent />
+    <HeroSection />
+    <TrendingSection />
 
-    <q-dialog v-model="drawerOpen" position="right" full-height class="result-dialog">
-      <div class="result-panel">
-        <SearchResult v-if="searchResult" />
-      </div>
-    </q-dialog>
+    <section class="scroll-section q-px-md q-mt-xl q-mb-xl">
+      <h2 class="section-label text-subtitle1 text-weight-bold q-mb-md">Coming Soon</h2>
+      <Upcoming />
+    </section>
+
+    <MovieDetailDialog />
 
     <footer class="q-pa-sm text-center text-caption footer-credit">Data source: themoviedb.org</footer>
   </q-page>
 </template>
-
-<style lang="scss">
-.result-dialog .q-dialog__inner {
-  padding: 0;
-}
-</style>
 
 <style lang="scss" scoped>
 .page-movies {
@@ -86,6 +82,10 @@ const drawerOpen = computed({
   }
 }
 
+.section-label {
+  letter-spacing: 0.01em;
+}
+
 /* ── Unified search bar ───────────────────────────────── */
 .search-bar {
   display: flex;
@@ -94,7 +94,6 @@ const drawerOpen = computed({
   overflow: hidden;
   min-width: 0;
 
-  /* inherit standout background from q-select so they look like one unit */
   background: rgba(255, 255, 255, 0.07);
   .body--light & {
     background: rgba(0, 0, 0, 0.06);
@@ -110,7 +109,6 @@ const drawerOpen = computed({
     }
   }
 
-  /* neutralise q-select's own background so it blends in */
   :deep(.q-field--standout .q-field__control) {
     background: transparent !important;
     box-shadow: none !important;
@@ -152,13 +150,5 @@ const drawerOpen = computed({
       }
     }
   }
-}
-
-.result-panel {
-  width: 780px;
-  max-width: 100vw;
-  height: 100%;
-  overflow-y: auto;
-  background: var(--bg-base);
 }
 </style>
