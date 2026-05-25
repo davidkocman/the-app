@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onUnmounted } from 'vue'
 import useNotesStore from '@/store/notes'
 import useAppStore from '@/store/app'
 import toMarkDown from '@/utils/toMarkdown'
@@ -35,6 +35,29 @@ const resetNote = () => {
   content.value = ''
   name.value = ''
 }
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === 'Escape') {
+    dialog.value = false
+    resetNote()
+  }
+  if (e.ctrlKey && e.key === 's') {
+    e.preventDefault()
+    save()
+  }
+}
+
+watch(dialog, (isOpen) => {
+  if (isOpen) {
+    document.addEventListener('keydown', handleKeydown)
+  } else {
+    document.removeEventListener('keydown', handleKeydown)
+  }
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown)
+})
 </script>
 
 <template>
