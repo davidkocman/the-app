@@ -3,6 +3,6 @@ import type { Getters, NotesStore } from './types'
 
 export const getters: PiniaGetterAdaptor<Getters, NotesStore> = {
   savedNotes() {
-    return this.notes
+    return [...this.notes].sort((a, b) => a.name.localeCompare(b.name))
   }
 }
