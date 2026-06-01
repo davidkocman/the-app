@@ -31,6 +31,10 @@ const hasValues = computed(() => {
   return name.value !== '' && content.value !== '' ? true : false
 })
 
+const isDirty = computed(() => {
+  return name.value !== '' || content.value !== ''
+})
+
 const resetNote = () => {
   content.value = ''
   name.value = ''
@@ -94,19 +98,27 @@ onUnmounted(() => {
         <q-card-section>
           <div class="row justify-between items-center">
             <h6 class="text-h6">New note</h6>
-            <q-btn
-              color="primary"
-              icon="save"
-              size="16px"
-              class="q-pa-none"
-              flat
-              dense
-              :disable="!hasValues || appStore.loading"
-              @click="save"
-              data-cy="new-note-save-button"
-            >
-              <q-tooltip>Save note</q-tooltip>
-            </q-btn>
+            <div class="flex items-center" style="gap: 12px">
+              <transition name="fade">
+                <span v-if="isDirty" class="text-caption text-warning flex items-center" style="gap: 4px">
+                  <q-icon name="circle" size="8px" />
+                  Unsaved changes
+                </span>
+              </transition>
+              <q-btn
+                color="primary"
+                icon="save"
+                size="16px"
+                class="q-pa-none"
+                flat
+                dense
+                :disable="!hasValues || appStore.loading"
+                @click="save"
+                data-cy="new-note-save-button"
+              >
+                <q-tooltip>Save note (Ctrl+S)</q-tooltip>
+              </q-btn>
+            </div>
           </div>
         </q-card-section>
 
@@ -132,3 +144,14 @@ onUnmounted(() => {
     </q-dialog>
   </div>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
