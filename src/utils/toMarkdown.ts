@@ -1,5 +1,6 @@
 import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 
 export default (content: string) => {
-  return marked(content)
+  return DOMPurify.sanitize(marked(content) as string)
 }
