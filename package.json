@@ -20,7 +20,6 @@
     "dayjs": "^1.11.13",
     "dji-log-parser-js": "^0.5.7",
     "dompurify": "^3.4.5",
-    "firebase": "^11.0.2",
     "maplibre-gl": "^5.24.0",
     "marked": "^15.0.3",
     "pinia": "^2.2.8",

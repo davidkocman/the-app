@@ -1,5 +1,5 @@
 import { supabase } from '@/supabaseConfig'
-import { auth } from '@/firebaseConfig'
+import getUserId from '@/utils/getUserId'
 import useAppStore from '@/store/app'
 import getErrorMessage from '@/utils/handleCatchErrors'
 
@@ -26,7 +26,7 @@ export const actions: PiniaActionAdaptor<Actions, DroneStore> = {
     this.records = this.records.filter((r) => r.id !== id)
   },
   async clearFlightLogs() {
-    const uid = auth.currentUser?.uid
+    const uid = await getUserId()
     if (!uid) return
 
     const { data } = await supabase
@@ -44,7 +44,7 @@ export const actions: PiniaActionAdaptor<Actions, DroneStore> = {
   },
   async saveFlightLog(record, frames) {
     const appStore = useAppStore()
-    const uid = auth.currentUser?.uid
+    const uid = await getUserId()
     if (!uid) return
 
     appStore.loading = true
@@ -103,7 +103,7 @@ export const actions: PiniaActionAdaptor<Actions, DroneStore> = {
   },
   async fetchFlightLogs() {
     const appStore = useAppStore()
-    const uid = auth.currentUser?.uid
+    const uid = await getUserId()
     if (!uid) return
 
     appStore.loading = true
