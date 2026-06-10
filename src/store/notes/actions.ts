@@ -1,21 +1,32 @@
-import { addDoc, doc, collection, getDocs, query, where, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
-import { auth, db } from '@/firebaseConfig'
+import { supabase } from '@/supabaseConfig'
+import getUserId from '@/utils/getUserId'
 import useAppStore from '@/store/app'
 import getErrorMessage from '@/utils/handleCatchErrors'
 
 import type { PiniaActionAdaptor } from '@/types/store'
 import type { Actions, NotesStore } from './types'
-import type { SavedNote, Note } from '@/types/notes'
+import type { NoteRow, SavedNote } from '@/types/notes'
+
+const toSavedNote = (row: NoteRow): SavedNote => ({
+  id: row.id,
+  name: row.name,
+  content: row.content
+})
 
 export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
   async saveNewNote(payload) {
     const appStore = useAppStore()
     appStore.loading = true
     try {
-      payload.user = auth.currentUser?.uid
-      const q = collection(db, 'notes')
-      const docRef = await addDoc(q, payload)
-      this.notes.push({ id: docRef.id, ...payload })
+      const uid = await getUserId()
+      if (!uid) return
+      const { data, error } = await supabase
+        .from('notes')
+        .insert({ user_id: uid, name: payload.name, content: payload.content })
+        .select('id, name, content')
+        .single()
+      if (error) throw error
+      this.notes.push(toSavedNote(data as NoteRow))
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {
@@ -26,25 +37,13 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
     const appStore = useAppStore()
     appStore.loading = true
     try {
-      const docRef = doc(db, 'notes', id)
-      const docSnap = await getDoc(docRef)
-
-      if (!docSnap.exists()) {
-        throw new Error('There is no such note in DB!')
-      }
-
-      if (docSnap.data().user === auth.currentUser?.uid) {
-        await updateDoc(docRef, {
-          name: note.name,
-          content: note.content
-        })
-
-        this.notes = this.notes.map((item: SavedNote) => {
-          return item.id === id ? { ...item, ...note } : item
-        })
-      } else {
-        throw new Error('You are not a creator of this note!')
-      }
+      // Ownership is enforced by RLS (auth.uid() = user_id).
+      const { error } = await supabase
+        .from('notes')
+        .update({ name: note.name, content: note.content, updated_at: new Date().toISOString() })
+        .eq('id', id)
+      if (error) throw error
+      this.notes = this.notes.map((item: SavedNote) => (item.id === id ? { ...item, ...note } : item))
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {
@@ -55,18 +54,9 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
     const appStore = useAppStore()
     appStore.loading = true
     try {
-      const docRef = doc(db, 'notes', id)
-      const docSnap = await getDoc(docRef)
-
-      if (!docSnap.exists()) {
-        throw new Error('There is no such note in DB!')
-      }
-      if (docSnap.data().user === auth.currentUser?.uid) {
-        await deleteDoc(docRef)
-        this.notes = this.notes.filter((item: SavedNote) => item.id !== id)
-      } else {
-        throw new Error('You are not a creator of this note!')
-      }
+      const { error } = await supabase.from('notes').delete().eq('id', id)
+      if (error) throw error
+      this.notes = this.notes.filter((item: SavedNote) => item.id !== id)
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {
@@ -79,16 +69,16 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
     }
     const appStore = useAppStore()
     appStore.loading = true
-    this.notes = []
-    const q = query(collection(db, 'notes'), where('user', '==', auth.currentUser?.uid))
     try {
-      const querySnapshot = await getDocs(q)
-      querySnapshot.forEach((note) => {
-        this.notes.push({
-          id: note.id,
-          ...(note.data() as Note)
-        })
-      })
+      const uid = await getUserId()
+      if (!uid) return
+      const { data, error } = await supabase
+        .from('notes')
+        .select('id, name, content')
+        .eq('user_id', uid)
+        .order('name')
+      if (error) throw error
+      this.notes = (data as NoteRow[]).map(toSavedNote)
     } catch (e) {
       appStore.reportError({ message: getErrorMessage(e) })
     } finally {

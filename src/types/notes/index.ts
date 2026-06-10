@@ -8,4 +8,11 @@ interface SavedNote extends Note {
   id: string
 }
 
-export type { SavedNote, Note }
+// Row shape as stored in Supabase (snake_case)
+type NoteRow = {
+  id: string
+  name: string
+  content: string
+}
+
+export type { SavedNote, Note, NoteRow }

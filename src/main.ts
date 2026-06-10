@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import { Quasar, Loading, Notify, Dialog, QuasarPluginOptions, QSpinner } from 'quasar'
 import App from './App.vue'
+import useUserStore from '@/store/user'
 
 // Import icon libraries
 import '@quasar/extras/material-icons/material-icons.css'
@@ -31,5 +32,8 @@ const quasarOptions: QuasarPluginOptions = {
 }
 
 myApp.use(Quasar, quasarOptions)
+
+// Keep the user store in sync with the Supabase auth session.
+useUserStore().subscribeAuth()
 
 myApp.mount('#app')

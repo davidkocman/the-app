@@ -1,8 +1,16 @@
 import { onBeforeMount, ref, computed, watch } from 'vue'
-import { storage } from '@/firebaseConfig'
 import useUserStore from '@/store/user'
 import useFileUpload from '@/composables/useFileUpload'
 import useFileInput from '@/composables/useFileInput'
+
+const AVATARS_PATH_MARKER = '/avatars/'
+
+/** Extracts the in-bucket storage path (`${uid}/${file}`) from a public avatar URL. */
+const storagePathFromUrl = (url: string): string | null => {
+  const withoutQuery = url.split('?')[0]
+  const idx = withoutQuery.indexOf(AVATARS_PATH_MARKER)
+  return idx >= 0 ? decodeURIComponent(withoutQuery.slice(idx + AVATARS_PATH_MARKER.length)) : null
+}
 
 export default function useGeneralInfo() {
   const userStore = useUserStore()
@@ -39,16 +47,18 @@ export default function useGeneralInfo() {
   })
 
   const updateAvatar = async (value: File) => {
+    const uid = userStore.userData?.uid
+    if (!uid) return
     await uploadFile({
-      storage,
-      path: value.name,
-      data: value as Blob
+      path: `${uid}/${value.name}`,
+      data: value
     })
   }
 
   const removeAvatar = async () => {
     if (userStore.userData?.photoUrl) {
-      deleteFile(userStore.userData?.photoUrl)
+      const path = storagePathFromUrl(userStore.userData.photoUrl)
+      if (path) await deleteFile(path)
       userStore.updateUserAvatar('')
     }
   }

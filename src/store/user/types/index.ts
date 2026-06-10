@@ -15,10 +15,11 @@ type Actions = {
   registerUser: (email: string, password: string) => Promise<void>
   loginUser: (email: string, password: string) => Promise<void>
   logoutUser: () => Promise<void>
-  currentUser: () => UserData | null | unknown
+  currentUser: () => Promise<UserData | null>
   updateUserName: (name: string) => Promise<void>
   updateUserAvatar: (path: string) => Promise<void>
   resetStores: () => void
+  subscribeAuth: () => void
 }
 
 type UserStore = Store<'user', State, Getters, Actions>
