@@ -3,6 +3,7 @@ import { ref, computed, watch, onUnmounted, PropType, toRefs } from 'vue'
 import useNotesStore from '@/store/notes'
 import useAppStore from '@/store/app'
 import toMarkDown from '@/utils/toMarkdown'
+import NoteColorPicker from './NoteColorPicker.vue'
 
 import type { SavedNote, Note } from '@/types/notes'
 
@@ -23,12 +24,14 @@ const removePrompt = ref(false)
 const id = ref(note.value.id)
 const name = ref(note.value.name)
 const content = ref(note.value.content)
+const color = ref<string | null>(note.value.color ?? null)
 
 const save = async () => {
   if (name.value !== '' && content.value !== '') {
     const note: Note = {
       name: name.value,
-      content: content.value
+      content: content.value,
+      color: color.value
     }
     await notesStore.editNote(id.value, note)
     dialog.value = false
@@ -49,7 +52,11 @@ const hasNameAndContent = computed(() => {
 })
 
 const isDirty = computed(() => {
-  return name.value !== note.value.name || content.value !== note.value.content
+  return (
+    name.value !== note.value.name ||
+    content.value !== note.value.content ||
+    color.value !== (note.value.color ?? null)
+  )
 })
 
 const handleKeydown = (e: KeyboardEvent) => {
@@ -69,6 +76,7 @@ watch(dialog, (isOpen) => {
     document.removeEventListener('keydown', handleKeydown)
     name.value = note.value.name
     content.value = note.value.content
+    color.value = note.value.color ?? null
   }
 })
 
@@ -151,6 +159,7 @@ onUnmounted(() => {
           <div class="row">
             <div class="col-12 col-md-6 editor">
               <q-input dense v-model="name" label="Note name" type="text" data-cy="note-edit-title" />
+              <NoteColorPicker v-model="color" class="q-mt-md q-mb-sm" />
               <q-input
                 type="textarea"
                 dense
