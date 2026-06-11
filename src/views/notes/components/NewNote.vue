@@ -3,6 +3,7 @@ import { ref, computed, watch, onUnmounted } from 'vue'
 import useNotesStore from '@/store/notes'
 import useAppStore from '@/store/app'
 import toMarkDown from '@/utils/toMarkdown'
+import NoteColorPicker from './NoteColorPicker.vue'
 
 import type { Note } from '@/types/notes/index'
 
@@ -11,12 +12,14 @@ const appStore = useAppStore()
 const dialog = ref(false)
 const name = ref('')
 const content = ref('')
+const color = ref<string | null>(null)
 
 const save = async () => {
   if (name.value !== '' && content.value !== '') {
     const newNote: Note = {
       name: name.value,
-      content: content.value
+      content: content.value,
+      color: color.value
     }
     await notesStore.saveNewNote(newNote)
     dialog.value = false
@@ -32,12 +35,13 @@ const hasValues = computed(() => {
 })
 
 const isDirty = computed(() => {
-  return name.value !== '' || content.value !== ''
+  return name.value !== '' || content.value !== '' || color.value !== null
 })
 
 const resetNote = () => {
   content.value = ''
   name.value = ''
+  color.value = null
 }
 
 const handleKeydown = (e: KeyboardEvent) => {
@@ -126,6 +130,7 @@ onUnmounted(() => {
           <div class="row">
             <div class="col q-pr-sm q-pb-sm">
               <q-input dense v-model="name" label="Note name" type="text" data-cy="new-note-title" />
+              <NoteColorPicker v-model="color" class="q-mt-md q-mb-sm" />
               <q-input
                 type="textarea"
                 dense

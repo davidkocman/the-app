@@ -66,9 +66,13 @@ create table if not exists public.notes (
   user_id uuid not null references auth.users (id) on delete cascade,
   name text not null,
   content text not null default '',
+  color text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Color label (idempotent for installs created before this column existed).
+alter table public.notes add column if not exists color text;
 
 create index if not exists notes_user_id_idx on public.notes (user_id);
 

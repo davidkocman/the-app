@@ -10,7 +10,8 @@ import type { NoteRow, SavedNote } from '@/types/notes'
 const toSavedNote = (row: NoteRow): SavedNote => ({
   id: row.id,
   name: row.name,
-  content: row.content
+  content: row.content,
+  color: row.color
 })
 
 export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
@@ -22,8 +23,8 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
       if (!uid) return
       const { data, error } = await supabase
         .from('notes')
-        .insert({ user_id: uid, name: payload.name, content: payload.content })
-        .select('id, name, content')
+        .insert({ user_id: uid, name: payload.name, content: payload.content, color: payload.color ?? null })
+        .select('id, name, content, color')
         .single()
       if (error) throw error
       this.notes.push(toSavedNote(data as NoteRow))
@@ -40,7 +41,7 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
       // Ownership is enforced by RLS (auth.uid() = user_id).
       const { error } = await supabase
         .from('notes')
-        .update({ name: note.name, content: note.content, updated_at: new Date().toISOString() })
+        .update({ name: note.name, content: note.content, color: note.color ?? null, updated_at: new Date().toISOString() })
         .eq('id', id)
       if (error) throw error
       this.notes = this.notes.map((item: SavedNote) => (item.id === id ? { ...item, ...note } : item))
@@ -74,7 +75,7 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
       if (!uid) return
       const { data, error } = await supabase
         .from('notes')
-        .select('id, name, content')
+        .select('id, name, content, color')
         .eq('user_id', uid)
         .order('name')
       if (error) throw error

@@ -1,6 +1,7 @@
 type Note = {
   name: string
   content: string
+  color?: string | null
   user?: string
 }
 
@@ -13,6 +14,7 @@ type NoteRow = {
   id: string
   name: string
   content: string
+  color: string | null
 }
 
 export type { SavedNote, Note, NoteRow }
