@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch, onBeforeMount, toRefs, WatchOptions } from 'vue'
-import { useMeta } from 'quasar'
+import { ref, computed, watch, onBeforeMount, toRefs, WatchOptions } from 'vue'
+import { useMeta, useQuasar } from 'quasar'
 
 // store
 import useInvoicesStore from '@/store/invoices'
@@ -14,9 +14,21 @@ import ListOfInvoices from './components/ListOfInvoices.vue'
 // utils
 import { thousandSeparator } from '@/utils/helpers'
 
+const $q = useQuasar()
 const invoicesStore = useInvoicesStore()
 const { pageLocked, totalInvoicesVatPrice, totalInvoicesPrice, totalPayedInvoicesVatPrice, totalPayedInvoicesPrice } =
   toRefs(invoicesStore)
+
+// Outstanding = billed − paid (the still-unpaid amount), with and without VAT.
+const hasSummary = computed(
+  () =>
+    totalInvoicesVatPrice.value !== null &&
+    totalInvoicesPrice.value !== null &&
+    totalPayedInvoicesVatPrice.value !== null &&
+    totalPayedInvoicesPrice.value !== null
+)
+const outstandingVatPrice = computed(() => (totalInvoicesVatPrice.value ?? 0) - (totalPayedInvoicesVatPrice.value ?? 0))
+const outstandingPrice = computed(() => (totalInvoicesPrice.value ?? 0) - (totalPayedInvoicesPrice.value ?? 0))
 
 const pageTitle = ref('Invoices | The App')
 const activeTab = ref('listOfInvoices')
@@ -86,28 +98,37 @@ onBeforeMount(() => {
       </q-dialog>
     </template>
     <template v-else>
-      <div
-        v-if="totalInvoicesVatPrice && totalInvoicesPrice && totalPayedInvoicesVatPrice && totalPayedInvoicesPrice"
-        class="q-mb-lg"
-      >
-        <div class="column items-end q-gutter-xs">
-          <q-card flat class="shadow-1">
-            <q-card-section>
-              <div v-if="totalInvoicesVatPrice !== totalPayedInvoicesVatPrice" class="q-pb-sm">
-                <h6 class="text-orange-5">Billed: {{ thousandSeparator(totalInvoicesVatPrice.toFixed(2)) }} €</h6>
-                <span class="text-caption text-orange-5">
-                  {{ thousandSeparator(totalInvoicesPrice.toFixed(2)) }} € without VAT</span
-                >
-              </div>
-              <q-separator v-if="totalInvoicesVatPrice !== totalPayedInvoicesVatPrice" />
-              <div>
-                <h6 class="text-primary">Payed: {{ thousandSeparator(totalPayedInvoicesVatPrice.toFixed(2)) }} €</h6>
-                <span class="text-caption text-primary"
-                  >{{ thousandSeparator(totalPayedInvoicesPrice.toFixed(2)) }} € without VAT</span
-                >
-              </div>
-            </q-card-section>
-          </q-card>
+      <div v-if="hasSummary" class="invoices-summary row items-center justify-end q-mb-md q-px-xs">
+        <div class="summary-metric column">
+          <span class="summary-label text-grey-7">Billed</span>
+          <div class="summary-amounts row items-baseline">
+            <span class="summary-value">{{ thousandSeparator(totalInvoicesVatPrice!.toFixed(2)) }} €</span>
+            <span class="summary-net text-grey-6"
+              >{{ thousandSeparator(totalInvoicesPrice!.toFixed(2)) }} € without VAT</span
+            >
+          </div>
+        </div>
+        <q-separator :vertical="$q.screen.gt.xs" />
+        <div class="summary-metric column">
+          <span class="summary-label text-grey-7">Paid</span>
+          <div class="summary-amounts row items-baseline">
+            <span class="summary-value text-primary"
+              >{{ thousandSeparator(totalPayedInvoicesVatPrice!.toFixed(2)) }} €</span
+            >
+            <span class="summary-net text-grey-6"
+              >{{ thousandSeparator(totalPayedInvoicesPrice!.toFixed(2)) }} € without VAT</span
+            >
+          </div>
+        </div>
+        <q-separator :vertical="$q.screen.gt.xs" />
+        <div class="summary-metric column">
+          <span class="summary-label text-grey-7">Outstanding</span>
+          <div class="summary-amounts row items-baseline">
+            <span class="summary-value" :class="outstandingVatPrice > 0 ? 'text-orange-7' : 'text-positive'"
+              >{{ thousandSeparator(outstandingVatPrice.toFixed(2)) }} €</span
+            >
+            <span class="summary-net text-grey-6">{{ thousandSeparator(outstandingPrice.toFixed(2)) }} € without VAT</span>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -152,6 +173,58 @@ onBeforeMount(() => {
   @media (min-width: 768px) {
     padding-left: 24px;
     padding-right: 24px;
+  }
+}
+
+.invoices-summary {
+  gap: 8px 24px;
+
+  .summary-metric {
+    line-height: 1.25;
+  }
+
+  .summary-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .summary-amounts {
+    column-gap: 6px;
+  }
+
+  .summary-value {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .summary-net {
+    font-size: 0.75rem;
+  }
+
+  .q-separator--vertical {
+    align-self: stretch;
+    height: auto;
+  }
+
+  // Mobile (Quasar xs): stack metrics as a full-width list —
+  // label on the left, amounts right-aligned, with horizontal dividers.
+  @media (max-width: 599px) {
+    align-items: stretch;
+
+    .summary-metric {
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .summary-amounts {
+      flex-direction: column;
+      align-items: flex-end;
+      column-gap: 0;
+      text-align: right;
+    }
   }
 }
 </style>
