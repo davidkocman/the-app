@@ -5,6 +5,7 @@ import { useMeta } from 'quasar'
 import WeatherWidget from './components/WeatherWidget.vue'
 import GamesWidget from './components/GamesWidget.vue'
 import MoviesWidget from './components/MoviesWidget.vue'
+import NotesWidget from './components/NotesWidget.vue'
 import GameDetail from '@/views/games/components/GameDetail.vue'
 import MovieDetailDialog from '@/views/movies/components/MovieDetailDialog.vue'
 
@@ -36,6 +37,9 @@ useMeta(() => {
       </div>
       <div class="col-12 col-sm-6 col-md-4 col-lg-3">
         <MoviesWidget />
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <NotesWidget />
       </div>
     </div>
 
