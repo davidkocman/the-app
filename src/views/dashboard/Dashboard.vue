@@ -33,13 +33,13 @@ useMeta(() => {
         <WeatherWidget />
       </div>
       <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <NotesWidget />
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
         <GamesWidget />
       </div>
       <div class="col-12 col-sm-6 col-md-4 col-lg-3">
         <MoviesWidget />
-      </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <NotesWidget />
       </div>
     </div>
 
