@@ -2,10 +2,9 @@
 import { ref, computed, onBeforeMount } from 'vue'
 import { useMeta } from 'quasar'
 import useNotesStore from '@/store/notes'
-import toMarkDown from '@/utils/toMarkdown'
-import { NOTE_COLORS, noteColorValue } from '@/utils/noteColors'
+import { NOTE_COLORS } from '@/utils/noteColors'
 import NewNote from './components/NewNote.vue'
-import EditNote from './components/EditNote.vue'
+import NoteListItem from './components/NoteListItem.vue'
 
 const pageTitle = ref('Notes | The App')
 useMeta(() => {
@@ -45,6 +44,10 @@ const filteredNotes = computed(() => {
     return matchesQuery && matchesColor
   })
 })
+
+// Split into separate groups so each renders in its own list.
+const pinnedNotes = computed(() => filteredNotes.value.filter((note) => note.pinned))
+const unpinnedNotes = computed(() => filteredNotes.value.filter((note) => !note.pinned))
 </script>
 
 <template>
@@ -91,33 +94,31 @@ const filteredNotes = computed(() => {
     </div>
     <div class="row">
       <template v-if="notesStore.savedNotes.length">
-        <q-list bordered separator class="col col-12">
-          <q-expansion-item
-            v-for="(note, index) in filteredNotes"
-            :key="index"
-            data-cy="note-item"
-            :style="
-              noteColorValue(note.color) ? { borderLeft: `4px solid ${noteColorValue(note.color)}` } : undefined
-            "
-          >
-            <template #header>
-              <q-item-section avatar style="min-width: auto" class="q-pr-sm">
-                <span
-                  class="note-dot"
-                  :class="{ 'note-dot--empty': !noteColorValue(note.color) }"
-                  :style="noteColorValue(note.color) ? { backgroundColor: noteColorValue(note.color) } : undefined"
-                />
-              </q-item-section>
-              <q-item-section class="text-weight-medium">{{ note.name }}</q-item-section>
-            </template>
-            <q-card flat>
-              <q-card-section class="q-px-lg">
-                <EditNote :note="note" />
-                <div v-html="toMarkDown(note.content)"></div>
-              </q-card-section>
-            </q-card>
-          </q-expansion-item>
-        </q-list>
+        <div class="col col-12">
+          <template v-if="pinnedNotes.length">
+            <div class="section-label text-caption text-grey-5 flex items-center q-mb-sm" style="gap: 6px">
+              <q-icon name="push_pin" size="14px" />
+              Pinned
+            </div>
+            <q-list bordered separator class="q-mb-lg">
+              <NoteListItem v-for="note in pinnedNotes" :key="note.id" :note="note" />
+            </q-list>
+          </template>
+
+          <template v-if="unpinnedNotes.length">
+            <div
+              v-if="pinnedNotes.length"
+              class="section-label text-caption text-grey-5 flex items-center q-mb-sm"
+              style="gap: 6px"
+            >
+              <q-icon name="notes" size="14px" />
+              Other
+            </div>
+            <q-list bordered separator>
+              <NoteListItem v-for="note in unpinnedNotes" :key="note.id" :note="note" />
+            </q-list>
+          </template>
+        </div>
         <p v-if="filteredNotes.length === 0" class="text-grey q-mt-md">No notes found for "{{ searchQuery }}".</p>
       </template>
     </div>
@@ -135,15 +136,10 @@ const filteredNotes = computed(() => {
   }
 }
 
-.note-dot {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-
-  &--empty {
-    border: 1.5px solid rgba(127, 127, 127, 0.4);
-  }
+.section-label {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
 }
 
 .filter-chip {
