@@ -11,7 +11,8 @@ const toSavedNote = (row: NoteRow): SavedNote => ({
   id: row.id,
   name: row.name,
   content: row.content,
-  color: row.color
+  color: row.color,
+  pinned: row.pinned
 })
 
 export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
@@ -24,7 +25,7 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
       const { data, error } = await supabase
         .from('notes')
         .insert({ user_id: uid, name: payload.name, content: payload.content, color: payload.color ?? null })
-        .select('id, name, content, color')
+        .select('id, name, content, color, pinned')
         .single()
       if (error) throw error
       this.notes.push(toSavedNote(data as NoteRow))
@@ -51,6 +52,23 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
       appStore.loading = false
     }
   },
+  async togglePin(id, pinned) {
+    const appStore = useAppStore()
+    // Optimistic update — pin toggling should feel instant, no global spinner.
+    this.notes = this.notes.map((item: SavedNote) => (item.id === id ? { ...item, pinned } : item))
+    try {
+      // Ownership is enforced by RLS (auth.uid() = user_id).
+      const { error } = await supabase
+        .from('notes')
+        .update({ pinned, updated_at: new Date().toISOString() })
+        .eq('id', id)
+      if (error) throw error
+    } catch (e) {
+      // Revert on failure.
+      this.notes = this.notes.map((item: SavedNote) => (item.id === id ? { ...item, pinned: !pinned } : item))
+      appStore.reportError({ message: getErrorMessage(e) })
+    }
+  },
   async removeNote(id) {
     const appStore = useAppStore()
     appStore.loading = true
@@ -75,7 +93,7 @@ export const actions: PiniaActionAdaptor<Actions, NotesStore> = {
       if (!uid) return
       const { data, error } = await supabase
         .from('notes')
-        .select('id, name, content, color')
+        .select('id, name, content, color, pinned')
         .eq('user_id', uid)
         .order('name')
       if (error) throw error

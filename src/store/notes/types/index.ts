@@ -14,6 +14,7 @@ type Actions = {
   saveNewNote: (payload: Note) => Promise<void>
   editNote: (id: string, note: Note) => Promise<void>
   removeNote: (id: string) => Promise<void>
+  togglePin: (id: string, pinned: boolean) => Promise<void>
   getNotes: () => Promise<void>
 }
 

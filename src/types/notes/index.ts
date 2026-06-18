@@ -2,6 +2,7 @@ type Note = {
   name: string
   content: string
   color?: string | null
+  pinned?: boolean
   user?: string
 }
 
@@ -15,6 +16,7 @@ type NoteRow = {
   name: string
   content: string
   color: string | null
+  pinned: boolean
 }
 
 export type { SavedNote, Note, NoteRow }

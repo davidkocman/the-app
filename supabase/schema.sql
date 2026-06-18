@@ -67,12 +67,16 @@ create table if not exists public.notes (
   name text not null,
   content text not null default '',
   color text,
+  pinned boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
 -- Color label (idempotent for installs created before this column existed).
 alter table public.notes add column if not exists color text;
+
+-- Pin flag (idempotent for installs created before this column existed).
+alter table public.notes add column if not exists pinned boolean not null default false;
 
 create index if not exists notes_user_id_idx on public.notes (user_id);
 
