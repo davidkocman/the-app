@@ -163,8 +163,22 @@ const openNote = (note: SavedNote) => {
 }
 
 .note-dialog {
+  display: flex;
+  flex-direction: column;
+  // Quasar's `column` helper also sets flex-wrap: wrap; with a capped height that
+  // makes the tall note content wrap into a second column on mobile. Force a single column.
+  flex-wrap: nowrap;
   width: 600px;
   max-width: 90vw;
   max-height: 85vh;
+
+  // Long URLs / code blocks in the note must not push the layout sideways on mobile.
+  :deep(.markdown-body) {
+    overflow-wrap: anywhere;
+
+    pre {
+      overflow-x: auto;
+    }
+  }
 }
 </style>
